@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.tdp2.quechuaapp.student.CourseSignUpActivity;
+import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         studentSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent courseSignUpActivity = new Intent(getApplicationContext(), CourseSignUpActivity.class);
+                Intent courseSignUpActivity = new Intent(getApplicationContext(), InscripcionCursoActivity.class);
                 startActivity(courseSignUpActivity);
             }
         });
