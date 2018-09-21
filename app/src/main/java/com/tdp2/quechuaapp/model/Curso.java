@@ -1,9 +1,10 @@
 
 package com.tdp2.quechuaapp.model;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Curso {
 
@@ -18,7 +19,7 @@ public class Curso {
     public Integer vacantes;
     @SerializedName("horarios")
     @Expose
-    public List<Horario> horarios = null;
+    public List<Horario> horarios;
     @SerializedName("profesor")
     @Expose
     public Profesor profesor;

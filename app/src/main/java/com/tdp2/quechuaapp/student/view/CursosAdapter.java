@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
@@ -17,8 +18,15 @@ import java.util.ArrayList;
 
 public class CursosAdapter extends ArrayAdapter<Curso> {
 
+    private CursosAdapterCallback adapterCallback;
+
     public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos) {
         super(context, 0,  listaCursos);
+        try {
+            this.adapterCallback = ((CursosAdapterCallback) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement CursosAdapterCallback.");
+        }
     }
 
     @NonNull
@@ -43,6 +51,14 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         TextView diaTextView = convertView.findViewById(R.id.dia_horario);
         TextView horasTextView = convertView.findViewById(R.id.horas_horario);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horario);
+        Button inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
+
+        inscribirseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapterCallback.inscribirAlumno(2,curso.id);
+            }
+        });
 
         TextView vacantesTextView = convertView.findViewById(R.id.cantVacantes);
 

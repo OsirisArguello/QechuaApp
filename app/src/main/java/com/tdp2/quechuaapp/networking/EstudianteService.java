@@ -3,6 +3,7 @@ package com.tdp2.quechuaapp.networking;
 import android.util.Log;
 
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Inscripcion;
 
 import java.util.ArrayList;
 
@@ -37,11 +38,43 @@ public class EstudianteService {
                     }else {
                         Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
                     }
-                    client.onResponseError();                }
+                    client.onResponseError();
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Curso>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError();
+            }
+        });
+    }
+
+    public void inscribirAlumno(Integer idAlumno, Integer idCurso, final Client client){
+        estudianteApi.inscribirAlumno(idAlumno,idCurso).enqueue(new Callback<Inscripcion>() {
+
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError();
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
                 client.onResponseError();
             }
