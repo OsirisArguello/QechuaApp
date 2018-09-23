@@ -1,8 +1,6 @@
 package com.tdp2.quechuaapp.professor;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,21 +16,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
-import com.tdp2.quechuaapp.student.view.CursosAdapter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class DetalleCursoActivity extends AppCompatActivity {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +40,60 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
     }
 
+    private void setupInitials() {
+        DocenteService service = new DocenteService();
+        service.getCurso(0, new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                // TODO: get list of students from curso
+                Curso curso =(Curso) responseBody;
+
+                Alumno alum0 = new Alumno();
+                alum0.nombre = "Lucia";
+                alum0.apellido = "Capon";
+
+                Alumno alum1 = new Alumno();
+                alum1.nombre = "Juan";
+                alum1.apellido = "Gonzalez";
+
+                ArrayList<Alumno> regList = new ArrayList<>();
+                regList.add(alum0);
+
+                ArrayList<Alumno> condList = new ArrayList<>();
+                condList.add(alum1);
+
+                sectionsPagerAdapter.regular = regList;
+                sectionsPagerAdapter.condicional = condList;
+
+                /*
+                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_detalle_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+                */
+                viewPager.refreshDrawableState();
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                /*
+                ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+                */
+                Toast.makeText(DetalleCursoActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,12 +154,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             StudentsFragment fragment = new StudentsFragment();
-            if (position == 0) {
-                // Regular students
-                fragment.alumnos = regular;
-            } else {
-                fragment.alumnos = condicional;
-            }
+            fragment.alumnos = position == 0 ? regular : condicional;
             return fragment;
         }
 
