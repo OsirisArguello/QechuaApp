@@ -36,6 +36,10 @@ public class ApiClient {
         return retrofit.create(EstudianteApi.class);
     }
 
+    public DocenteApi getDocenteClient() {
+        return retrofit.create(DocenteApi.class);
+    }
+
     public Retrofit getRetrofit() {
         return retrofit;
     }
