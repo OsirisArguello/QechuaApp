@@ -149,6 +149,8 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            regular = new ArrayList<>();
+            condicional = new ArrayList<>();
         }
 
         @Override
