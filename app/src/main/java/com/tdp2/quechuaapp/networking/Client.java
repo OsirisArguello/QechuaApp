@@ -4,5 +4,5 @@ public interface Client<T> {
 
     void onResponseSuccess(T responseBody);
 
-    void onResponseError();
+    void onResponseError(String errorMessage);
 }

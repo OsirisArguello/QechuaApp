@@ -37,7 +37,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        />
 
     <include layout="@layout/content_inscripcion_curso" />
 

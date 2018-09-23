@@ -1,14 +1,19 @@
 package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
 
 public class EstudianteService {
@@ -30,7 +35,7 @@ public class EstudianteService {
                         client.onResponseSuccess(response.body());
                     }else {
                         Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
-                        client.onResponseError();
+                        client.onResponseError(null);
                     }
                 } else {
                     if(response.body() != null) {
@@ -38,14 +43,14 @@ public class EstudianteService {
                     }else {
                         Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
                     }
-                    client.onResponseError();
+                    client.onResponseError(null);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Curso>> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
-                client.onResponseError();
+                client.onResponseError(null);
             }
         });
     }
@@ -61,7 +66,7 @@ public class EstudianteService {
                         client.onResponseSuccess(response.body());
                     }else {
                         Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
-                        client.onResponseError();
+                        client.onResponseError(null);
                     }
                 } else {
                     if(response.body() != null) {
@@ -69,14 +74,30 @@ public class EstudianteService {
                     }else {
                         Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
                     }
-                    client.onResponseError();
+                    if (response.code() == 400) {
+                        Converter<ResponseBody, ApiError> converter =
+                                ApiClient.getInstance().getRetrofit().responseBodyConverter(ApiError.class, new Annotation[0]);
+
+                        ApiError error;
+
+                        try {
+                            error = converter.convert(response.errorBody());
+                            Log.e("error message", error.message);
+                            client.onResponseError(error.message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        client.onResponseError(null);
+                    }
+
                 }
             }
 
             @Override
             public void onFailure(Call<Inscripcion> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
-                client.onResponseError();
+                client.onResponseError(null);
             }
         });
     }

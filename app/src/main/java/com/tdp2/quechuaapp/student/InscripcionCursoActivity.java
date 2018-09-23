@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -47,8 +48,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
             }
 
             @Override
-            public void onResponseError() {
-                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
                 loadingView.setVisibility(View.INVISIBLE);
                 Toast.makeText(InscripcionCursoActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
@@ -65,42 +66,65 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
     @Override
     public void inscribirAlumno(Integer idAlumno, Integer idCurso) {
 
+        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.bringToFront();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
         estudianteService.inscribirAlumno(idAlumno, idCurso, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 Inscripcion inscripcion = (Inscripcion) responseBody;
 
-                AlertDialog alertDialog = new AlertDialog.Builder(InscripcionCursoActivity.this).create();
-                alertDialog.setTitle("Inscripción Satisfactoria");
-                alertDialog.setMessage("Usted ha quedado inscripto como "+inscripcion.estado.toUpperCase()+
-                        " en el curso de la materia "+inscripcion.curso.materia.nombre+" del docente"+inscripcion.curso.profesor.apellido);
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-                cursosAdapter.notifyDataSetChanged();
+                //String messageToDisplay="Usted ha quedado inscripto como "+inscripcion.estado.toUpperCase()+
+                //        " en el curso de la materia "+inscripcion.curso.materia.nombre+" del docente "+inscripcion.curso.profesor.apellido;
+
+                String messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.estado.toUpperCase(), inscripcion.curso.materia.nombre,
+                        inscripcion.curso.profesor.apellido);
+
+                showAlert(messageToDisplay, "Inscripción Satisfactoria");
             }
 
             @Override
-            public void onResponseError() {
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                 //TODO manejar los distintos problemas de inscripcion y cual es el mensaje que se va a mostrar al usuario
-                AlertDialog alertDialog = new AlertDialog.Builder(InscripcionCursoActivity.this).create();
-                alertDialog.setTitle("Inscripción Fallida");
-                alertDialog.setMessage("Usted no ha podido ser inscripto en esta materia. Por favor, intente nuevamente.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-                cursosAdapter.notifyDataSetChanged();
+                String messageToDisplay;
+                if(errorMessage!=null){
+                    Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
+                    messageToDisplay=getString(idError);
+                } else {
+                    messageToDisplay=getString(R.string.inscripcion_error_generico);
+                }
+
+                showAlert(messageToDisplay, "Inscripción Fallida");
             }
         });
 
+    }
+
+    private void showAlert(String messageToDisplay, String title) {
+        AlertDialog alertDialog = new AlertDialog.Builder(InscripcionCursoActivity.this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(messageToDisplay);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+        cursosAdapter.notifyDataSetChanged();
     }
 }

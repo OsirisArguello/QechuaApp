@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">QuechuaApp</string>
+    <string name="error.idexists">Usted no ha podido ser inscripto porque ya tiene una inscripción previa en este curso.</string>
+    <string name="inscripcion.exito">Usted ha quedado inscripto como %1$s en el curso de la materia %2$s del docente %3$s</string>
+    <string name="inscripcion.error.generico">Ha ocurrido un error al inscribirse. Por favor, reintente más tarde.</string>
 </resources>
