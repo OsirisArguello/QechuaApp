@@ -14,7 +14,7 @@ public class DocenteService {
     static final String SERVICE_TAG = "DOCENTESERVICE";
 
     public DocenteService() {
-//        this.docenteApi = ApiClient.getInstance().getDocenteClient();
+        this.docenteApi = ApiClient.getInstance().getDocenteClient();
     }
 
     public void getCurso(Integer cursoId, final Client client) {
