@@ -25,14 +25,19 @@ public class DocenteService {
     public static Curso getCursoMock(Integer cursoId) {
         Curso curso = new Curso();
         curso.id = cursoId;
+        curso.vacantes = 30;
+
+
         curso.materia = new Materia();
         curso.materia.nombre = "Materia 1";
 
         Alumno alum0 = new Alumno();
+        alum0.padron = "1234";
         alum0.nombre = "Lucia";
         alum0.apellido = "Capon";
 
         Alumno alum1 = new Alumno();
+        alum1.padron = "345578";
         alum1.nombre = "Juan";
         alum1.apellido = "Gonzalez";
 
