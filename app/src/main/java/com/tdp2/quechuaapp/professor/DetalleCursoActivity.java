@@ -1,5 +1,7 @@
 package com.tdp2.quechuaapp.professor;
 
+import java.util.List;
+
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,13 +44,21 @@ public class DetalleCursoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        // Load tabs
+        StudentsFragment fragment0 = new StudentsFragment();
+        sectionsPagerAdapter.addFragment(fragment0, "@string/curso.alumnos.regulares");
+        StudentsFragment fragment1 = new StudentsFragment();
+        sectionsPagerAdapter.addFragment(fragment1, "@string/curso.alumnos.condicionales");
+
+
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+        setupInitials();
     }
 
     private void setupInitials() {
@@ -56,25 +66,9 @@ public class DetalleCursoActivity extends AppCompatActivity {
         service.getCurso(0, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                // TODO: get list of students from curso
-                Curso curso =(Curso) responseBody;
-
-                Alumno alum0 = new Alumno();
-                alum0.nombre = "Lucia";
-                alum0.apellido = "Capon";
-
-                Alumno alum1 = new Alumno();
-                alum1.nombre = "Juan";
-                alum1.apellido = "Gonzalez";
-
-                ArrayList<Alumno> regList = new ArrayList<>();
-                regList.add(alum0);
-
-                ArrayList<Alumno> condList = new ArrayList<>();
-                condList.add(alum1);
-
-                sectionsPagerAdapter.regular = regList;
-                sectionsPagerAdapter.condicional = condList;
+                Curso curso = (Curso)responseBody;
+                sectionsPagerAdapter.setRegulares(curso.est_regulares);
+                sectionsPagerAdapter.setCondicionales(curso.est_condicionales);
 
                 /*
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_detalle_curso);
@@ -89,6 +83,11 @@ public class DetalleCursoActivity extends AppCompatActivity {
                 ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
                 loadingView.setVisibility(View.INVISIBLE);
                 */
+
+                Curso curso = DocenteService.getCursoMock(0);
+                sectionsPagerAdapter.setRegulares(curso.est_regulares);
+                sectionsPagerAdapter.setCondicionales(curso.est_condicionales);
+
                 Toast.makeText(DetalleCursoActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
             }
@@ -122,7 +121,18 @@ public class DetalleCursoActivity extends AppCompatActivity {
      */
     public static class StudentsFragment extends Fragment {
 
-        ArrayList<Alumno> alumnos;
+        List<Alumno> alumnos = new ArrayList<>();
+        private AlumnosAdapter adapter;
+
+        public void setAlumnos(List<Alumno> alumnos) {
+            this.alumnos = alumnos;
+
+            if (adapter != null) {
+                adapter.clear();
+                adapter.addAll(alumnos);
+                adapter.notifyDataSetChanged();
+            }
+        }
 
         public StudentsFragment() {
         }
@@ -132,7 +142,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_course_view, container, false);
 
             final ListView listView = rootView.findViewById(R.id.lista_estudiantes);
-            AlumnosAdapter adapter = new AlumnosAdapter(
+            adapter = new AlumnosAdapter(
                     getActivity(),
                     alumnos
             );
@@ -144,25 +154,46 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        ArrayList<Alumno> regular;
-        ArrayList<Alumno> condicional;
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        List<Alumno> regulares = new ArrayList<>();
+        List<Alumno> condicionales = new ArrayList<>();
+
+        public void setRegulares(List<Alumno> regulares) {
+            this.regulares = regulares;
+            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(0);
+            fragment.setAlumnos(regulares);
+        }
+
+        public void setCondicionales(List<Alumno> condicionales) {
+            this.condicionales = condicionales;
+            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(1);
+            fragment.setAlumnos(condicionales);
+        }
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            regular = new ArrayList<>();
-            condicional = new ArrayList<>();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
         }
 
         @Override
         public Fragment getItem(int position) {
-            StudentsFragment fragment = new StudentsFragment();
-            fragment.alumnos = position == 0 ? regular : condicional;
-            return fragment;
+            return mFragmentList.get(position);
         }
 
         @Override
         public int getCount () {
-            return 2;
+            return mFragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 
