@@ -2,7 +2,12 @@ package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
 
+import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.Profesor;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,6 +20,29 @@ public class DocenteService {
 
     public DocenteService() {
         this.docenteApi = ApiClient.getInstance().getDocenteClient();
+    }
+
+    public static Curso getCursoMock(Integer cursoId) {
+        Curso curso = new Curso();
+        curso.id = cursoId;
+        curso.materia = new Materia();
+        curso.materia.nombre = "Materia 1";
+
+        Alumno alum0 = new Alumno();
+        alum0.nombre = "Lucia";
+        alum0.apellido = "Capon";
+
+        Alumno alum1 = new Alumno();
+        alum1.nombre = "Juan";
+        alum1.apellido = "Gonzalez";
+
+        curso.est_regulares = new ArrayList<>();
+        curso.est_regulares.add(alum0);
+
+        curso.est_condicionales = new ArrayList<>();
+        curso.est_condicionales.add(alum1);
+
+        return curso;
     }
 
     public void getCurso(Integer cursoId, final Client client) {

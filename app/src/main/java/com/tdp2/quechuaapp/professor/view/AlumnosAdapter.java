@@ -1,5 +1,7 @@
 package com.tdp2.quechuaapp.professor.view;
 
+import java.util.List;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,22 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
-
-import java.util.ArrayList;
 
 public class AlumnosAdapter extends ArrayAdapter<Alumno> {
 
-//    private AlumnosAdapterCallback adapterCallback;
-
-    public AlumnosAdapter(@NonNull Context context, @NonNull ArrayList<Alumno> listaAlumnos) {
+    public AlumnosAdapter(@NonNull Context context, @NonNull List<Alumno> listaAlumnos) {
         super(context, 0,  listaAlumnos);
-        try {
-  //          this.adapterCallback = ((AlumnosAdapterCallback) context);
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement AlumnosAdapterCallback.");
-        }
     }
 
     @NonNull

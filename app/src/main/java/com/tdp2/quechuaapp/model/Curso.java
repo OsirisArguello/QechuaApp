@@ -27,4 +27,6 @@ public class Curso {
     @Expose
     public Materia materia;
 
+    public List<Alumno> est_regulares;
+    public List<Alumno> est_condicionales;
 }
