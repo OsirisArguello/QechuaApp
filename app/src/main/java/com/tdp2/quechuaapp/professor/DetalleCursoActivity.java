@@ -47,13 +47,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Load tabs
-        StudentsFragment fragment0 = new StudentsFragment();
-        sectionsPagerAdapter.addFragment(fragment0, "@string/curso.alumnos.regulares");
-        StudentsFragment fragment1 = new StudentsFragment(true);
-        sectionsPagerAdapter.addFragment(fragment1, "@string/curso.alumnos.condicionales");
-
-
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
@@ -66,6 +59,11 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
     private void setupInitials() {
         DocenteService service = new DocenteService();
+
+        ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+        loadingView.bringToFront();
+        loadingView.setVisibility(View.VISIBLE);
+
         service.getCurso(0, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
@@ -73,19 +71,17 @@ public class DetalleCursoActivity extends AppCompatActivity {
                 sectionsPagerAdapter.setRegulares(curso.est_regulares);
                 sectionsPagerAdapter.setCondicionales(curso.est_condicionales);
 
-                /*
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_detalle_curso);
                 loadingView.setVisibility(View.INVISIBLE);
-                */
+
                 viewPager.refreshDrawableState();
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                /*
+
                 ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
                 loadingView.setVisibility(View.INVISIBLE);
-                */
 
                 Curso curso = DocenteService.getCursoMock(0);
                 sectionsPagerAdapter.setRegulares(curso.est_regulares);
@@ -173,7 +169,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
         private final Map<Integer, List<Alumno>> mDataSource = new HashMap<>();
 
         public void setRegulares(List<Alumno> regulares) {
-            mDataSource.remove(INDEX_REGULARES);
             mDataSource.put(INDEX_REGULARES, regulares);
 
             StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_REGULARES);
@@ -181,7 +176,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
         }
 
         public void setCondicionales(List<Alumno> condicionales) {
-            mDataSource.remove(INDEX_CONDICIONALES);
             mDataSource.put(INDEX_CONDICIONALES, condicionales);
 
             StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_CONDICIONALES);
@@ -190,13 +184,17 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            // Load tabs
+            addFragment(new StudentsFragment(), INDEX_REGULARES,"@string/curso.alumnos.regulares");
+            addFragment(new StudentsFragment(true), INDEX_CONDICIONALES,"@string/curso.alumnos.condicionales");
+
             mDataSource.put(INDEX_REGULARES, new ArrayList<Alumno>());
             mDataSource.put(INDEX_CONDICIONALES, new ArrayList<Alumno>());
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+        private void addFragment(Fragment fragment, Integer index, String title) {
+            mFragmentList.add(index, fragment);
+            mFragmentTitleList.add(index, title);
         }
 
         @Override
