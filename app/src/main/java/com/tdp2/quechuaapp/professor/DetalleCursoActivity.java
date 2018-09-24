@@ -1,7 +1,9 @@
 package com.tdp2.quechuaapp.professor;
 
+import java.util.HashMap;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +31,7 @@ import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DetalleCursoActivity extends AppCompatActivity {
 
@@ -47,7 +50,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
         // Load tabs
         StudentsFragment fragment0 = new StudentsFragment();
         sectionsPagerAdapter.addFragment(fragment0, "@string/curso.alumnos.regulares");
-        StudentsFragment fragment1 = new StudentsFragment();
+        StudentsFragment fragment1 = new StudentsFragment(true);
         sectionsPagerAdapter.addFragment(fragment1, "@string/curso.alumnos.condicionales");
 
 
@@ -123,6 +126,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
         List<Alumno> alumnos = new ArrayList<>();
         private AlumnosAdapter adapter;
+        private Boolean condicional;
 
         public void setAlumnos(List<Alumno> alumnos) {
             this.alumnos = alumnos;
@@ -135,6 +139,12 @@ public class DetalleCursoActivity extends AppCompatActivity {
         }
 
         public StudentsFragment() {
+            condicional = false;
+        }
+
+        @SuppressLint("ValidFragment")
+        public StudentsFragment(Boolean conditionalStudents) {
+            condicional = conditionalStudents;
         }
 
         @Override
@@ -146,6 +156,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
                     getActivity(),
                     alumnos
             );
+            adapter.condicionales = condicional;
             listView.setAdapter(adapter);
 
             return rootView;
@@ -153,27 +164,34 @@ public class DetalleCursoActivity extends AppCompatActivity {
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        public final Integer INDEX_REGULARES = 0;
+        public final Integer INDEX_CONDICIONALES = 1;
 
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        List<Alumno> regulares = new ArrayList<>();
-        List<Alumno> condicionales = new ArrayList<>();
+        private final Map<Integer, List<Alumno>> mDataSource = new HashMap<>();
 
         public void setRegulares(List<Alumno> regulares) {
-            this.regulares = regulares;
-            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(0);
+            mDataSource.remove(INDEX_REGULARES);
+            mDataSource.put(INDEX_REGULARES, regulares);
+
+            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_REGULARES);
             fragment.setAlumnos(regulares);
         }
 
         public void setCondicionales(List<Alumno> condicionales) {
-            this.condicionales = condicionales;
-            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(1);
+            mDataSource.remove(INDEX_CONDICIONALES);
+            mDataSource.put(INDEX_CONDICIONALES, condicionales);
+
+            StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_CONDICIONALES);
             fragment.setAlumnos(condicionales);
         }
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            mDataSource.put(INDEX_REGULARES, new ArrayList<Alumno>());
+            mDataSource.put(INDEX_CONDICIONALES, new ArrayList<Alumno>());
         }
 
         public void addFragment(Fragment fragment, String title) {
