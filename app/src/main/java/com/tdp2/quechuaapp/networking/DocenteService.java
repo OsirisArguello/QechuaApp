@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.Profesor;
 
@@ -41,11 +42,18 @@ public class DocenteService {
         alum1.nombre = "Juan";
         alum1.apellido = "Gonzalez";
 
-        curso.est_regulares = new ArrayList<>();
-        curso.est_regulares.add(alum0);
+        Inscripcion inscripcion0 = new Inscripcion();
+        inscripcion0.alumno = alum0;
+        inscripcion0.estado = "REGULAR";
 
-        curso.est_condicionales = new ArrayList<>();
-        curso.est_condicionales.add(alum1);
+        Inscripcion inscripcion1 = new Inscripcion();
+        inscripcion1.alumno = alum1;
+        inscripcion1.estado = "CONDICIONAL";
+
+        curso.inscripciones = new ArrayList<>();
+
+        curso.inscripciones.add(inscripcion0);
+        curso.inscripciones.add(inscripcion1);
 
         return curso;
     }

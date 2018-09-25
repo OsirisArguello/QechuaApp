@@ -10,6 +10,6 @@ import retrofit2.http.Path;
 
 public interface DocenteApi {
 
-    @GET("/public/cursos/{cursoID}")
+    @GET("/public/cursos/{cursoID}/inscripciones")
     Call<Curso> getCurso(@Path("cursoID")Integer cursoId);
 }

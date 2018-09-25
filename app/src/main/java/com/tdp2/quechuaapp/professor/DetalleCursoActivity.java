@@ -36,10 +36,11 @@ import java.util.Map;
 
 public class DetalleCursoActivity extends AppCompatActivity {
 
-    public Curso curso = DocenteService.getCursoMock(0);
+    public Curso curso;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+    private DocenteService docenteService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +63,21 @@ public class DetalleCursoActivity extends AppCompatActivity {
     }
 
     private void setupInitials() {
-        TextView title = ((Toolbar)findViewById(R.id.toolbar)).findViewById(R.id.toolbar_title);
-        title.setText("Curso " + curso.id.toString() + "\n \n" + "Vacantes: " + curso.vacantes.toString() + "\n");
+        //TextView title = ((Toolbar)findViewById(R.id.toolbar)).findViewById(R.id.toolbar_title);
+        //title.setText("Curso " + curso.id.toString() + "\n \n" + "Vacantes: " + curso.vacantes.toString() + "\n");
 
         ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
         loadingView.bringToFront();
         loadingView.setVisibility(View.VISIBLE);
 
-        DocenteService service = new DocenteService();
-        service.getCurso(curso.id, new Client() {
+        docenteService = new DocenteService();
+        //TODO REEMPLAZAR ESTE VALOR CON EL ID DEL CURSO DEL DOCENTE
+        docenteService.getCurso(1, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 Curso curso = (Curso)responseBody;
-                sectionsPagerAdapter.setRegulares(curso.est_regulares);
-                sectionsPagerAdapter.setCondicionales(curso.est_condicionales);
+                sectionsPagerAdapter.setRegulares(curso.getInscriptosRegulares());
+                sectionsPagerAdapter.setCondicionales(curso.getInscriptosCondicionales());
 
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_detalle_curso);
                 loadingView.setVisibility(View.INVISIBLE);
@@ -85,12 +87,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
             public void onResponseError(String errorMessage) {
                 ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
                 loadingView.setVisibility(View.INVISIBLE);
-
-                // TODO: Remove this, just for testing
-                Curso curso = DocenteService.getCursoMock(0);
-                sectionsPagerAdapter.setRegulares(curso.est_regulares);
-                sectionsPagerAdapter.setCondicionales(curso.est_condicionales);
-                /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
                 Toast.makeText(DetalleCursoActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();

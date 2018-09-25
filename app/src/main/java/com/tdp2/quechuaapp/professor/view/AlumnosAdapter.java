@@ -37,6 +37,7 @@ public class AlumnosAdapter extends ArrayAdapter<Alumno> {
         textView.setText(alumno.padron + " - " + alumno.apellido + ", " + alumno.nombre);
 
         Button button = convertView.findViewById(R.id.inscribirButton);
+
         button.setVisibility(condicionales ? View.VISIBLE : View.INVISIBLE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
