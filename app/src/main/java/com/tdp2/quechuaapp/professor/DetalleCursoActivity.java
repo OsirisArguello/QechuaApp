@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
@@ -45,10 +47,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_view);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_profesor_cursos);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -63,8 +62,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
     }
 
     private void setupInitials() {
-        //TextView title = ((Toolbar)findViewById(R.id.toolbar)).findViewById(R.id.toolbar_title);
-        //title.setText("Curso " + curso.id.toString() + "\n \n" + "Vacantes: " + curso.vacantes.toString() + "\n");
 
         ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
         loadingView.bringToFront();
@@ -76,6 +73,31 @@ public class DetalleCursoActivity extends AppCompatActivity {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 Curso curso = (Curso)responseBody;
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                tabLayout.getTabAt(0).setText("Regulares("+curso.getInscriptosRegulares().size()+")");
+                tabLayout.getTabAt(1).setText("Condicionales("+curso.getInscriptosCondicionales().size()+")");
+
+                TextView title = findViewById(R.id.id_curso_profesor);
+                title.setText("Curso " + curso.id.toString());
+
+                StringBuilder horarioString=new StringBuilder();
+                Integer cantHorarios=1;
+
+                if(curso.horarios!=null){
+                    for (Horario horario : curso.horarios) {
+                        horarioString.append(horario.dia+"\t");
+                        horarioString.append(horario.horaInicio+"-"+horario.horaFin);
+                        if(cantHorarios<curso.horarios.size()){
+                            horarioString.append("\n");
+                        }
+                        cantHorarios++;
+                    }
+
+                    TextView horario = findViewById(R.id.id_curso_profesor);
+                    horario.setText("\n"+horarioString);
+                }
+
                 sectionsPagerAdapter.setRegulares(curso.getInscriptosRegulares());
                 sectionsPagerAdapter.setCondicionales(curso.getInscriptosCondicionales());
 
@@ -170,6 +192,9 @@ public class DetalleCursoActivity extends AppCompatActivity {
         private final Map<Integer, List<Alumno>> mDataSource = new HashMap<>();
 
         public void setRegulares(List<Alumno> regulares) {
+
+            TabItem tabItem = findViewById(R.id.tabItem);
+
             mDataSource.put(INDEX_REGULARES, regulares);
 
             StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_REGULARES);

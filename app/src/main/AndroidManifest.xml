@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".professor.DetalleCursoActivity"
-            android:label="@string/curso.alumnos.titulo"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

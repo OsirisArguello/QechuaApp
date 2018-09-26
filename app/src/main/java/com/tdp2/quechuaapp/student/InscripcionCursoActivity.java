@@ -83,9 +83,6 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
                 Inscripcion inscripcion = (Inscripcion) responseBody;
 
-                //String messageToDisplay="Usted ha quedado inscripto como "+inscripcion.estado.toUpperCase()+
-                //        " en el curso de la materia "+inscripcion.curso.materia.nombre+" del docente "+inscripcion.curso.profesor.apellido;
-
                 String messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.estado.toUpperCase(), inscripcion.curso.materia.nombre,
                         inscripcion.curso.profesor.apellido);
 
