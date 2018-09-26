@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.tdp2.quechuaapp.student.CourseSignUpActivity;
+import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
+import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,12 +23,20 @@ public class MainActivity extends AppCompatActivity {
     private void attachEvents() {
 
         Button studentSignUpButton = findViewById(R.id.student_signup_button);
-
         studentSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent courseSignUpActivity = new Intent(getApplicationContext(), CourseSignUpActivity.class);
+                Intent courseSignUpActivity = new Intent(getApplicationContext(), InscripcionCursoActivity.class);
                 startActivity(courseSignUpActivity);
+            }
+        });
+
+        Button professorSignUpButton = findViewById(R.id.professor_course_view_button);
+        professorSignUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent courseViewActivity = new Intent(getApplicationContext(), DetalleCursoActivity.class);
+                startActivity(courseViewActivity);
             }
         });
     }
