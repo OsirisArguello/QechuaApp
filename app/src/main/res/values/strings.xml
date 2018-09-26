@@ -3,4 +3,9 @@
     <string name="error.idexists">Usted no ha podido ser inscripto porque ya tiene una inscripción previa en este curso.</string>
     <string name="inscripcion.exito">Usted ha quedado inscripto como %1$s en el curso de la materia %2$s del docente %3$s</string>
     <string name="inscripcion.error.generico">Ha ocurrido un error al inscribirse. Por favor, reintente más tarde.</string>
+    <string name="curso.alumnos.titulo">Curso actual</string>
+    <string name="curso.alumnos.regulares">Regulares</string>
+    <string name="curso.alumnos.condicionales">Condicionales</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

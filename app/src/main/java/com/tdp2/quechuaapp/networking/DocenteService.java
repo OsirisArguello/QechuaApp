@@ -1,0 +1,90 @@
+package com.tdp2.quechuaapp.networking;
+
+import android.util.Log;
+
+import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.Profesor;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class DocenteService {
+    private DocenteApi docenteApi;
+
+    static final String SERVICE_TAG = "DOCENTESERVICE";
+
+    public DocenteService() {
+        this.docenteApi = ApiClient.getInstance().getDocenteClient();
+    }
+
+    public static Curso getCursoMock(Integer cursoId) {
+        Curso curso = new Curso();
+        curso.id = cursoId;
+        curso.vacantes = 30;
+
+
+        curso.materia = new Materia();
+        curso.materia.nombre = "Materia 1";
+
+        Alumno alum0 = new Alumno();
+        alum0.padron = "1234";
+        alum0.nombre = "Lucia";
+        alum0.apellido = "Capon";
+
+        Alumno alum1 = new Alumno();
+        alum1.padron = "345578";
+        alum1.nombre = "Juan";
+        alum1.apellido = "Gonzalez";
+
+        Inscripcion inscripcion0 = new Inscripcion();
+        inscripcion0.alumno = alum0;
+        inscripcion0.estado = "REGULAR";
+
+        Inscripcion inscripcion1 = new Inscripcion();
+        inscripcion1.alumno = alum1;
+        inscripcion1.estado = "CONDICIONAL";
+
+        curso.inscripciones = new ArrayList<>();
+
+        curso.inscripciones.add(inscripcion0);
+        curso.inscripciones.add(inscripcion1);
+
+        return curso;
+    }
+
+    public void getCurso(Integer cursoId, final Client client) {
+        docenteApi.getCurso(cursoId).enqueue(new Callback<Curso>() {
+            @Override
+            public void onResponse(Call<Curso> call, Response<Curso> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Curso> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+}
