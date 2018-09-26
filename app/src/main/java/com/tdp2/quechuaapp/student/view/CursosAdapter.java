@@ -56,6 +56,7 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         inscribirseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO reemplazar con el id de alumno del usuario en uso!
                 adapterCallback.inscribirAlumno(1,curso.id);
             }
         });
