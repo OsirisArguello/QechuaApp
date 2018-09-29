@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
 
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 public class CursosAdapter extends ArrayAdapter<Curso> {
 
     private CursosAdapterCallback adapterCallback;
+    Alumno alumno;
 
-    public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos) {
+    public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Alumno alumno) {
         super(context, 0,  listaCursos);
+        alumno=alumno;
         try {
             this.adapterCallback = ((CursosAdapterCallback) context);
         } catch (ClassCastException e) {
@@ -51,15 +54,25 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         TextView diaTextView = convertView.findViewById(R.id.dia_horario);
         TextView horasTextView = convertView.findViewById(R.id.horas_horario);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horario);
-        Button inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
+
+        //TODO reemplazar con el id de alumno del usuario en uso!
+
+        final Button inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
 
         inscribirseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO reemplazar con el id de alumno del usuario en uso!
-                adapterCallback.inscribirAlumno(1,curso.id);
+                adapterCallback.inscribirAlumno(alumno.id,curso.id, inscribirseButton);
             }
         });
+
+/*
+        if(curso.estaInscripto(alumno)) {
+            inscribirseButton.setVisibility(View.INVISIBLE);
+        }
+*/
+
 
         TextView vacantesTextView = convertView.findViewById(R.id.cantVacantes);
 
@@ -91,4 +104,5 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
 
         return convertView;
     }
+
 }

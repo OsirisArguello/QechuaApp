@@ -51,4 +51,14 @@ public class Curso {
 
         return listaAlumnos;
     }
+
+    public boolean estaInscripto(Alumno alumno){
+        boolean estaInscripto=false;
+        for (Inscripcion inscripcion : inscripciones) {
+            if(alumno.id == inscripcion.alumno.id){
+                estaInscripto=true;
+            }
+        }
+        return estaInscripto;
+    }
 }

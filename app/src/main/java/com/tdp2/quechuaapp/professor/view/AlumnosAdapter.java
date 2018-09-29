@@ -33,6 +33,12 @@ public class AlumnosAdapter extends ArrayAdapter<Alumno> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.estudiante_view, parent, false);
         }
 
+        if (position % 2 == 1) {
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground1));
+        } else {
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground2));
+        }
+
         TextView textView = convertView.findViewById(R.id.idEstudiante);
         textView.setText(alumno.padron + " - " + alumno.apellido + ", " + alumno.nombre);
 

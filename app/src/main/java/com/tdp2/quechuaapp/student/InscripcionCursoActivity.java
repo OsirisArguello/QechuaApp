@@ -6,11 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.tdp2.quechuaapp.MainActivity;
+import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 import com.tdp2.quechuaapp.R;
@@ -23,12 +24,16 @@ import java.util.ArrayList;
 
 public class InscripcionCursoActivity extends AppCompatActivity implements CursosAdapterCallback {
 
+    Alumno alumno;
     ArrayList<Curso> cursos;
     EstudianteService estudianteService;
     CursosAdapter cursosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO REEMPLAZAR CON EL ALUMNO REAL
+        alumno = new Alumno();
+        alumno.id=1;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscripcion_curso);
 
@@ -59,12 +64,12 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
     private void displayCursos() {
         final ListView cursosListView = findViewById(R.id.lista_cursos);
-        cursosAdapter = new CursosAdapter(this,cursos);
+        cursosAdapter = new CursosAdapter(this, cursos, alumno);
         cursosListView.setAdapter(cursosAdapter);
     }
 
     @Override
-    public void inscribirAlumno(Integer idAlumno, Integer idCurso) {
+    public void inscribirAlumno(Integer idAlumno, Integer idCurso, final Button inscribirseButton) {
 
         ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
         loadingView.setVisibility(View.VISIBLE);
@@ -87,6 +92,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                         inscripcion.curso.profesor.apellido);
 
                 showAlert(messageToDisplay, "Inscripción Satisfactoria");
+
+                inscribirseButton.setVisibility(View.INVISIBLE);
             }
 
             @Override
