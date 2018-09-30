@@ -24,7 +24,7 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
 
     public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Alumno alumno) {
         super(context, 0,  listaCursos);
-        alumno=alumno;
+        this.alumno=alumno;
         try {
             this.adapterCallback = ((CursosAdapterCallback) context);
         } catch (ClassCastException e) {
