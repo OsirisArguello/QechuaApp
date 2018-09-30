@@ -14,6 +14,7 @@ import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
+import com.tdp2.quechuaapp.model.Materia;
 
 import java.util.ArrayList;
 
@@ -55,23 +56,21 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         TextView horasTextView = convertView.findViewById(R.id.horas_horario);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horario);
 
-        //TODO reemplazar con el id de alumno del usuario en uso!
 
         final Button inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
 
         inscribirseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO reemplazar con el id de alumno del usuario en uso!
                 adapterCallback.inscribirAlumno(alumno.id,curso.id, inscribirseButton);
             }
         });
 
-/*
+
         if(curso.estaInscripto(alumno)) {
             inscribirseButton.setVisibility(View.INVISIBLE);
         }
-*/
+
 
 
         TextView vacantesTextView = convertView.findViewById(R.id.cantVacantes);
@@ -100,7 +99,7 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         horasTextView.setText(horasString.toString());
         aulaTextView.setText(aulaString.toString());
 
-        vacantesTextView.setText("Vacantes: "+curso.vacantes.toString());
+        vacantesTextView.setText("Vacantes: "+curso.getVacantes().toString());
 
         return convertView;
     }

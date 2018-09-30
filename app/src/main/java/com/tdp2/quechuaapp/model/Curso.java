@@ -4,10 +4,11 @@ package com.tdp2.quechuaapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Curso {
+public class Curso implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -17,7 +18,7 @@ public class Curso {
     public String estado;
     @SerializedName("vacantes")
     @Expose
-    public Integer vacantes;
+    public Integer capacidadCurso;
     @SerializedName("horarios")
     @Expose
     public List<Horario> horarios;
@@ -34,9 +35,11 @@ public class Curso {
 
     public List<Alumno> getInscriptosRegulares(){
         List<Alumno> listaAlumnos = new ArrayList<>();
-        for (Inscripcion inscripcion : inscripciones) {
-            if(inscripcion.estado.equals("REGULAR"))
-                listaAlumnos.add(inscripcion.alumno);
+        if(inscripciones!=null) {
+            for (Inscripcion inscripcion : inscripciones) {
+                if (inscripcion.estado.equals("REGULAR"))
+                    listaAlumnos.add(inscripcion.alumno);
+            }
         }
 
         return listaAlumnos;
@@ -44,21 +47,28 @@ public class Curso {
 
     public List<Alumno> getInscriptosCondicionales(){
         List<Alumno> listaAlumnos = new ArrayList<>();
-        for (Inscripcion inscripcion : inscripciones) {
-            if(inscripcion.estado.equals("CONDICIONAL"))
-                listaAlumnos.add(inscripcion.alumno);
+        if(inscripciones!=null) {
+            for (Inscripcion inscripcion : inscripciones) {
+                if (inscripcion.estado.equals("CONDICIONAL"))
+                    listaAlumnos.add(inscripcion.alumno);
+            }
         }
-
         return listaAlumnos;
     }
 
     public boolean estaInscripto(Alumno alumno){
         boolean estaInscripto=false;
-        for (Inscripcion inscripcion : inscripciones) {
-            if(alumno.id == inscripcion.alumno.id){
-                estaInscripto=true;
+        if(inscripciones!=null) {
+            for (Inscripcion inscripcion : inscripciones) {
+                if(alumno.id.equals(inscripcion.alumno.id)){
+                    estaInscripto=true;
+                }
             }
         }
         return estaInscripto;
+    }
+
+    public Integer getVacantes(){
+        return capacidadCurso - getInscriptosRegulares().size();
     }
 }

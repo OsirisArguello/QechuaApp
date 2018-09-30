@@ -26,7 +26,7 @@ public class DocenteService {
     public static Curso getCursoMock(Integer cursoId) {
         Curso curso = new Curso();
         curso.id = cursoId;
-        curso.vacantes = 30;
+        curso.capacidadCurso = 30;
 
 
         curso.materia = new Materia();

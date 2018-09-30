@@ -4,7 +4,9 @@ package com.tdp2.quechuaapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Departamento {
+import java.io.Serializable;
+
+public class Departamento implements Serializable{
 
     @SerializedName("id")
     @Expose
@@ -14,6 +16,6 @@ public class Departamento {
     public String nombre;
     @SerializedName("codigo")
     @Expose
-    public Object codigo;
+    public String codigo;
 
 }

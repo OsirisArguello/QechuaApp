@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
@@ -25,15 +26,15 @@ import java.util.ArrayList;
 public class InscripcionCursoActivity extends AppCompatActivity implements CursosAdapterCallback {
 
     Alumno alumno;
+    Materia materia;
     ArrayList<Curso> cursos;
     EstudianteService estudianteService;
     CursosAdapter cursosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO REEMPLAZAR CON EL ALUMNO REAL
-        alumno = new Alumno();
-        alumno.id=1;
+        alumno = (Alumno) getIntent().getSerializableExtra("alumno");
+        materia = (Materia) getIntent().getSerializableExtra("materia");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscripcion_curso);
 
@@ -43,7 +44,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
     private void setupInitials() {
         cursos=new ArrayList<>();
         estudianteService=new EstudianteService();
-        estudianteService.getCursos(0, new Client() {
+        estudianteService.getCursosPorMateria(alumno.id, materia.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
@@ -69,7 +70,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
     }
 
     @Override
-    public void inscribirAlumno(Integer idAlumno, Integer idCurso, final Button inscribirseButton) {
+    public void inscribirAlumno(Integer idAlumno, final Integer idCurso, final Button inscribirseButton) {
 
         ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
         loadingView.setVisibility(View.VISIBLE);
@@ -91,9 +92,15 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 String messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.estado.toUpperCase(), inscripcion.curso.materia.nombre,
                         inscripcion.curso.profesor.apellido);
 
+                //Actualizo el curso con la inscripcion realizada
+                for (Curso curso : cursos) {
+                    if(curso.id.equals(idCurso)){
+                        curso.inscripciones.add(inscripcion);
+                    }
+                }
+
                 showAlert(messageToDisplay, "Inscripción Satisfactoria");
 
-                inscribirseButton.setVisibility(View.INVISIBLE);
             }
 
             @Override

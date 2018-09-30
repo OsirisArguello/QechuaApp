@@ -49,6 +49,8 @@ public class DetalleCursoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_cursos);
 
+        curso = (Curso) getIntent().getSerializableExtra("curso");
+
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         viewPager = (ViewPager) findViewById(R.id.container);
@@ -68,8 +70,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
         loadingView.setVisibility(View.VISIBLE);
 
         docenteService = new DocenteService();
-        //TODO REEMPLAZAR ESTE VALOR CON EL ID DEL CURSO DEL DOCENTE
-        docenteService.getCurso(1, new Client() {
+        docenteService.getCurso(curso.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 Curso curso = (Curso)responseBody;
@@ -81,12 +82,35 @@ public class DetalleCursoActivity extends AppCompatActivity {
                 TextView title = findViewById(R.id.id_curso_profesor);
                 title.setText("Curso " + curso.id.toString());
 
-                StringBuilder horarioString=new StringBuilder();
+                TextView capacidadCurso = findViewById(R.id.capacidad_curso_profesor);
+                capacidadCurso.setText("Capacidad: " + curso.capacidadCurso);
+
+                StringBuilder diaString=new StringBuilder();
+                StringBuilder horasString=new StringBuilder();
+                Integer cantHorarios=1;
+
+                for (Horario horario : curso.horarios) {
+                    diaString.append(horario.dia);
+                    horasString.append(horario.horaInicio+"-"+horario.horaFin);
+                    if(cantHorarios<curso.horarios.size()){
+                        diaString.append("\n");
+                        horasString.append("\n");
+                    }
+                    cantHorarios++;
+                }
+
+                TextView dias = findViewById(R.id.dias_curso_profesor);
+                dias.setText(diaString);
+
+                TextView horario = findViewById(R.id.horarios_curso_profesor);
+                horario.setText(horasString);
+
+                /*StringBuilder horarioString=new StringBuilder();
                 Integer cantHorarios=1;
 
                 if(curso.horarios!=null){
                     for (Horario horario : curso.horarios) {
-                        horarioString.append(horario.dia+"\t");
+                        horarioString.append(horario.dia+"");
                         horarioString.append(horario.horaInicio+"-"+horario.horaFin);
                         if(cantHorarios<curso.horarios.size()){
                             horarioString.append("\n");
@@ -94,9 +118,9 @@ public class DetalleCursoActivity extends AppCompatActivity {
                         cantHorarios++;
                     }
 
-                    TextView horario = findViewById(R.id.id_curso_profesor);
-                    horario.setText("\n"+horarioString);
-                }
+                    TextView horario = findViewById(R.id.horarios_curso_profesor);
+                    horario.setText(horarioString);
+                }*/
 
                 sectionsPagerAdapter.setRegulares(curso.getInscriptosRegulares());
                 sectionsPagerAdapter.setCondicionales(curso.getInscriptosCondicionales());
