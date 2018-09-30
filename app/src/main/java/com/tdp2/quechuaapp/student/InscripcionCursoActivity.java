@@ -67,6 +67,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
         final ListView cursosListView = findViewById(R.id.lista_cursos);
         cursosAdapter = new CursosAdapter(this, cursos, alumno);
         cursosListView.setAdapter(cursosAdapter);
+        cursosListView.setEmptyView(findViewById(R.id.emptyElement));
     }
 
     @Override

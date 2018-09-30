@@ -69,6 +69,8 @@ public class Curso implements Serializable {
     }
 
     public Integer getVacantes(){
-        return capacidadCurso - getInscriptosRegulares().size();
+
+        Integer vacantes = capacidadCurso - getInscriptosRegulares().size();
+        return vacantes >= 0 ? vacantes : 0;
     }
 }

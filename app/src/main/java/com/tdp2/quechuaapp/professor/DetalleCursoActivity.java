@@ -33,6 +33,8 @@ import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -104,23 +106,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
 
                 TextView horario = findViewById(R.id.horarios_curso_profesor);
                 horario.setText(horasString);
-
-                /*StringBuilder horarioString=new StringBuilder();
-                Integer cantHorarios=1;
-
-                if(curso.horarios!=null){
-                    for (Horario horario : curso.horarios) {
-                        horarioString.append(horario.dia+"");
-                        horarioString.append(horario.horaInicio+"-"+horario.horaFin);
-                        if(cantHorarios<curso.horarios.size()){
-                            horarioString.append("\n");
-                        }
-                        cantHorarios++;
-                    }
-
-                    TextView horario = findViewById(R.id.horarios_curso_profesor);
-                    horario.setText(horarioString);
-                }*/
 
                 sectionsPagerAdapter.setRegulares(curso.getInscriptosRegulares());
                 sectionsPagerAdapter.setCondicionales(curso.getInscriptosCondicionales());
@@ -202,6 +187,16 @@ public class DetalleCursoActivity extends AppCompatActivity {
             adapter.condicionales = condicional;
             listView.setAdapter(adapter);
 
+            TextView emptyView = rootView.findViewById(R.id.emptyElementInscripciones);
+
+            if(condicional){
+                emptyView.setText("El curso no tiene inscriptos condicionales");
+            } else {
+                emptyView.setText("El curso aún no tiene inscriptos");
+            }
+
+            listView.setEmptyView(emptyView);
+
             return rootView;
         }
     }
@@ -216,8 +211,6 @@ public class DetalleCursoActivity extends AppCompatActivity {
         private final Map<Integer, List<Alumno>> mDataSource = new HashMap<>();
 
         public void setRegulares(List<Alumno> regulares) {
-
-            TabItem tabItem = findViewById(R.id.tabItem);
 
             mDataSource.put(INDEX_REGULARES, regulares);
 
