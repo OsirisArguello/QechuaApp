@@ -56,13 +56,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Button professorSignUpButton = findViewById(R.id.professor_course_view_button);
-        professorSignUpButton.setOnClickListener(new View.OnClickListener() {
+        Button professorCoursesView1 = findViewById(R.id.professor_course_view_button1);
+        professorCoursesView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent courseViewActivity = new Intent(getApplicationContext(), DetalleCursoActivity.class);
                 Curso curso = new Curso();
                 curso.id=1;
+                courseViewActivity.putExtra("curso",curso);
+                startActivity(courseViewActivity);
+            }
+        });
+
+        Button professorCoursesView2 = findViewById(R.id.professor_course_view_button2);
+        professorCoursesView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent courseViewActivity = new Intent(getApplicationContext(), DetalleCursoActivity.class);
+                Curso curso = new Curso();
+                curso.id=2;
                 courseViewActivity.putExtra("curso",curso);
                 startActivity(courseViewActivity);
             }

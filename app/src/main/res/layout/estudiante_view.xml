@@ -6,14 +6,17 @@
 
     <TextView
         android:id="@+id/idEstudiante"
-        android:layout_width="166dp"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/inscribirButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,17 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginLeft="74dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginStart="74dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="12dp"
         android:text="Inscribir"
         android:textSize="18sp"
+        android:theme="@style/AppTheme.Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/idEstudiante"
-        app:layout_constraintTop_toTopOf="parent"
-        android:theme="@style/AppTheme.Button"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -40,7 +40,7 @@ public class AlumnosAdapter extends ArrayAdapter<Alumno> {
         }
 
         TextView textView = convertView.findViewById(R.id.idEstudiante);
-        textView.setText(alumno.padron + " - " + alumno.apellido + ", " + alumno.nombre);
+        textView.setText(alumno.apellido + ", " + alumno.nombre + " - " + alumno.padron );
 
         Button button = convertView.findViewById(R.id.inscribirButton);
 
