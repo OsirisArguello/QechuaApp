@@ -3,9 +3,11 @@ package com.tdp2.quechuaapp.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.tdp2.quechuaapp.student.view.AlumnoPrioridadComparator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Curso implements Serializable {
@@ -53,6 +55,9 @@ public class Curso implements Serializable {
                     listaAlumnos.add(inscripcion.alumno);
             }
         }
+
+        Collections.sort(listaAlumnos,new AlumnoPrioridadComparator());
+
         return listaAlumnos;
     }
 

@@ -20,5 +20,8 @@ public class Alumno implements Serializable {
     @SerializedName("padron")
     @Expose
     public String padron;
+    @SerializedName("prioridad")
+    @Expose
+    public Integer prioridad;
 
 }
