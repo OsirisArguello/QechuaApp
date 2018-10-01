@@ -1,6 +1,7 @@
 package com.tdp2.quechuaapp.student;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
@@ -59,6 +61,20 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 loadingView.setVisibility(View.INVISIBLE);
                 Toast.makeText(InscripcionCursoActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
+
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                            Intent mainActivityIntent = new Intent(InscripcionCursoActivity.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
             }
         });
     }
@@ -90,13 +106,22 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
                 Inscripcion inscripcion = (Inscripcion) responseBody;
 
-                String messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.estado.toUpperCase(), inscripcion.curso.materia.nombre,
-                        inscripcion.curso.profesor.apellido);
+                String messageToDisplay;
+
+                if (inscripcion.estado.equals("REGULAR")){
+                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.curso.id);
+                } else {
+                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito_condicional), inscripcion.curso.id);
+                }
 
                 //Actualizo el curso con la inscripcion realizada
                 for (Curso curso : cursos) {
                     if(curso.id.equals(idCurso)){
                         curso.inscripciones.add(inscripcion);
+                        //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
+                        if (curso.getVacantes()>0 && inscripcion.estado.equals("CONDICIONAL")){
+                            curso.capacidadCurso=0;
+                        }
                     }
                 }
 
@@ -121,6 +146,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 }
 
                 showAlert(messageToDisplay, "Inscripción Fallida");
+
             }
         });
 
