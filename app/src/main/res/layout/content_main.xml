@@ -18,7 +18,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Alumno - Inscripción a Materia 1"
+        android:text="Alumno 1 - Inscripción a Materia 1"
         app:layout_constraintBottom_toTopOf="@+id/estudiante_materia2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +33,26 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:text="Alumno - Inscripción a Materia 2"
-        app:layout_constraintBottom_toTopOf="@+id/professor_course_view_button1"
+        android:text="Alumno 1 - Inscripción a Materia 2"
+        app:layout_constraintBottom_toTopOf="@+id/estudiante_materia3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/estudiante_materia1" />
+
+    <Button
+        android:id="@+id/estudiante_materia3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Alumno 2 - Inscripción a Materia 2"
+        app:layout_constraintBottom_toTopOf="@+id/professor_course_view_button1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/estudiante_materia2" />
 
     <Button
         android:id="@+id/professor_course_view_button1"
