@@ -23,12 +23,10 @@ import java.util.ArrayList;
 
 public class InscripcionMateriasActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Alumno alumno;
     ArrayList<String> carreras;
     ArrayList<Materia> materias;
     EstudianteService estudianteService;
     MateriasAdapter materiasAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +56,7 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
     private void setupInitials() {
         materias=new ArrayList<>();
         estudianteService=new EstudianteService();
-        alumno=new Alumno();
-        alumno.id=1;
-        Materia materia =new Materia();
-        materia.id=1;
-        estudianteService.getMateriasPorCarrera(alumno.id, materia.id, new Client() {
+        estudianteService.getMaterias(new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 materias=(ArrayList<Materia>) responseBody;
