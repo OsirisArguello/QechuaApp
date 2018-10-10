@@ -57,13 +57,41 @@
 
         </LinearLayout>
 
-        <SearchView
-            android:id="@+id/materias_search"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
             android:background="?attr/colorPrimaryDark"
-            android:gravity="center_horizontal"
-            android:visibility="visible" />
+            android:orientation="horizontal"
+            android:focusableInTouchMode="true"
+            app:layout_anchorGravity="left|bottom">
+
+            <EditText
+                android:id="@+id/materias_search"
+                android:layout_width="274dp"
+                android:layout_height="match_parent"
+                android:hint="@string/hint_search"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textColorLink="@color/white"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="0dp"
+                android:gravity="center_vertical"
+                android:tint="@color/white"
+                android:src="@android:drawable/ic_menu_search" />
+
+        </LinearLayout>
 
         <include
             layout="@layout/content_inscripcion_materias"

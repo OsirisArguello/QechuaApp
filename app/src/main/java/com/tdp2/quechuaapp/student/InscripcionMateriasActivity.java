@@ -1,12 +1,17 @@
 package com.tdp2.quechuaapp.student;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,9 +26,6 @@ import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.MateriasAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class InscripcionMateriasActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -36,11 +38,14 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
 
     Spinner carrerasSpinner;
 
+    EditText materiaBuscada;
+    ArrayList<Materia> materiasFiltradas = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscripcion_materias);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         carrerasAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
@@ -48,6 +53,28 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
 
         carrerasSpinner = findViewById(R.id.carreras_spinner);
         carrerasSpinner.setOnItemSelectedListener(this);
+
+        materiaBuscada = findViewById(R.id.materias_search);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(materiaBuscada.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        materiaBuscada.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() >= 3) {
+                    filtrarMaterias(s.toString());
+                } else if (s.length() == 0) {
+                    materiasFiltradas.clear();
+                    displayMaterias();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
 
         estudianteService=new EstudianteService();
 
@@ -59,7 +86,8 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
                 Alumno alumno = new Alumno();
                 alumno.id = 1;
                 courseSignUpActivity.putExtra("alumno", alumno);
-                courseSignUpActivity.putExtra("materia", materias.get(position));
+                ArrayList<Materia> materiasToShow = materiaBuscada.getText().length() == 0 ? materias : materiasFiltradas;
+                courseSignUpActivity.putExtra("materia", materiasToShow.get(position));
                 startActivity(courseSignUpActivity);
             }
         });
@@ -124,9 +152,29 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
         carrerasSpinner.setAdapter(carrerasAdapter);
     }
 
+    private void filtrarMaterias(String texto) {
+        materiasFiltradas.clear();
+        texto = texto.toLowerCase();
+        for (Materia materia: materias) {
+            if (materia.nombre.toLowerCase().contains(texto)
+                    || materia.codigo.toLowerCase().contains(texto)) {
+                materiasFiltradas.add(materia);
+            }
+        }
+/*        materiasFiltradas = materias.stream().filter(new Predicate<Materia>() {
+            @Override
+            public boolean test(Materia materia) {
+                return false;
+            }
+        })
+*/      displayMaterias();
+    }
+
     private void displayMaterias() {
         final ListView materiasListView = findViewById(R.id.lista_materias);
-        materiasAdapter = new MateriasAdapter(this, materias);
+
+        ArrayList<Materia> materiasToShow = materiaBuscada.getText().length() == 0 ? materias : materiasFiltradas;
+        materiasAdapter = new MateriasAdapter(this, materiasToShow);
         materiasListView.setAdapter(materiasAdapter);
         materiasListView.setEmptyView(findViewById(R.id.lista_materias_vacia));
     }
