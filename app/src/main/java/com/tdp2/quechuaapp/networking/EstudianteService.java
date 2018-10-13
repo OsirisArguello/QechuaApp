@@ -132,4 +132,35 @@ public class EstudianteService {
             }
         });
     }
+
+    public void getCursadas(Integer idEstudiante, final Client client){
+        estudianteApi.getCursadas(idEstudiante).enqueue(new Callback<ArrayList<Curso>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Curso>> call, Response<ArrayList<Curso>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Curso>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
 }

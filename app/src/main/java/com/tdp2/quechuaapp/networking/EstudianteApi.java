@@ -18,6 +18,9 @@ public interface EstudianteApi {
     @GET("/public/materias/{materiaId}/cursos")
     Call<ArrayList<Curso>> getCursosPorMateria(@Path("materiaId")Integer materiaId);
 
+    @GET("/public/alumnos/{alumnoId}/cursadasActivas")
+    Call<ArrayList<Curso>> getCursadas(@Path("alumnoId")Integer alumnoId);
+
     @POST("/public/inscripcion-cursos/{cursoId}/{alumnoId}")
     Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);
 }

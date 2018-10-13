@@ -70,6 +70,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button studentCursadasButton = findViewById(R.id.estudiante_cursadas_view);
+        studentCursadasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent courseSignUpActivity = new Intent(getApplicationContext(), InscripcionCursoActivity.class);
+                Alumno alumno=new Alumno();
+                alumno.id=1;
+                courseSignUpActivity.putExtra("alumno",alumno);
+                startActivity(courseSignUpActivity);
+            }
+        });
 
         Button professorCoursesView1 = findViewById(R.id.professor_course_view_button1);
         professorCoursesView1.setOnClickListener(new View.OnClickListener() {

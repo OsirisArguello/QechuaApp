@@ -49,10 +49,28 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="Alumno 2 - Inscripción a Materia 2"
-        app:layout_constraintBottom_toTopOf="@+id/professor_course_view_button1"
+        app:layout_constraintBottom_toTopOf="@+id/estudiante_cursadas_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/estudiante_materia2" />
+
+    <Button
+        android:id="@+id/estudiante_cursadas_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Alumno 1 - Mis Cursos"
+        app:layout_constraintBottom_toTopOf="@+id/professor_course_view_button1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/estudiante_materia3"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/professor_course_view_button1"
@@ -67,7 +85,8 @@
         app:layout_constraintBottom_toTopOf="@+id/professor_course_view_button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/estudiante_materia2" />
+        app:layout_constraintTop_toBottomOf="@+id/estudiante_cursadas_view"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <Button
         android:id="@+id/professor_course_view_button2"
@@ -77,7 +96,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:text="Docente - Ver curso 2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
