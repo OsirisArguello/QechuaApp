@@ -26,11 +26,13 @@ import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.MateriasAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InscripcionMateriasActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    Carrera carreraSeleccionada;
     ArrayList<Carrera> carreras;
-    ArrayList<Materia> materias;
+    HashMap<Carrera, ArrayList<Materia>> materiasPorCarrera = new HashMap<>();
     EstudianteService estudianteService;
 
     ArrayAdapter<CharSequence> carrerasAdapter;
@@ -47,6 +49,8 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
         setContentView(R.layout.activity_inscripcion_materias);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        estudianteService = new EstudianteService();
 
         carrerasAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         carrerasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -66,7 +70,7 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() >= 3) {
                     filtrarMaterias(s.toString());
-                } else if (s.length() == 0) {
+                } else if (s.length() == 0 && materiasFiltradas.size() > 0) {
                     materiasFiltradas.clear();
                     displayMaterias();
                 }
@@ -76,7 +80,6 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
             public void afterTextChanged(Editable s) { }
         });
 
-        estudianteService=new EstudianteService();
 
         final ListView materiasListView = findViewById(R.id.lista_materias);
         materiasListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,75 +89,50 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
                 Alumno alumno = new Alumno();
                 alumno.id = 1;
                 courseSignUpActivity.putExtra("alumno", alumno);
-                ArrayList<Materia> materiasToShow = materiaBuscada.getText().length() == 0 ? materias : materiasFiltradas;
-                courseSignUpActivity.putExtra("materia", materiasToShow.get(position));
+                courseSignUpActivity.putExtra("materia", materias().get(position));
                 startActivity(courseSignUpActivity);
             }
         });
+        materiasListView.setEmptyView(findViewById(R.id.lista_materias_vacia));
 
         setupInitials();
     }
 
+    private Boolean filtroActivo() {
+        return materiaBuscada.getText().length() != 0;
+    }
+
+    private ArrayList<Materia> materias() {
+        return filtroActivo() ? materiasFiltradas : materiasPorCarrera.get(carreraSeleccionada);
+    }
+
     private void setupInitials() {
-        loadCarreras();
-
-        materias=new ArrayList<>();
-
-        estudianteService.getMaterias(new Client() {
+        estudianteService.getCarreras(new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                materias=(ArrayList<Materia>) responseBody;
-                displayMaterias();
+                carreras = (ArrayList<Carrera>) responseBody;
+                carreraSeleccionada = carreras.get(0);
+
+                ArrayList<CharSequence> aux = new ArrayList<>();
+                for (Carrera carrera : carreras) {
+                    aux.add(carrera.nombre);
+                }
+
+                carrerasAdapter.addAll(aux);
+                carrerasSpinner.setAdapter(carrerasAdapter);
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                Toast.makeText(InscripcionMateriasActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
-                        Toast.LENGTH_LONG).show();
-
-                Thread thread = new Thread(){
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                            Intent mainActivityIntent = new Intent(InscripcionMateriasActivity.this, MainActivity.class);
-                            startActivity(mainActivityIntent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                thread.start();
+                showMensajeError(errorMessage);
             }
         });
-    }
-
-    private void loadCarreras() {
-        // TODO: obtener las carreras del BE
-        carreras = new ArrayList<>();
-        ArrayList<CharSequence> aux = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Carrera carrera = new Carrera();
-            carrera.id = i;
-            carrera.nombre = "Carrera " + i;
-
-            aux.add("Carrera " + i);
-            carreras.add(carrera);
-        }
-
-/*        carrerasAdapter.addAll(carreras.stream().map(new Function<Carrera, String>() {
-            public String apply(final Carrera carrera){
-                return carrera.nombre;
-            }
-        }).collect(Collectors.toCollection()));
-*/
-        carrerasAdapter.addAll(aux);
-        carrerasSpinner.setAdapter(carrerasAdapter);
     }
 
     private void filtrarMaterias(String texto) {
         materiasFiltradas.clear();
         texto = texto.toLowerCase();
+        final ArrayList<Materia> materias = materiasPorCarrera.get(carreraSeleccionada);
         for (Materia materia: materias) {
             if (materia.nombre.toLowerCase().contains(texto)
                     || materia.codigo.toLowerCase().contains(texto)) {
@@ -173,18 +151,52 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
     private void displayMaterias() {
         final ListView materiasListView = findViewById(R.id.lista_materias);
 
-        ArrayList<Materia> materiasToShow = materiaBuscada.getText().length() == 0 ? materias : materiasFiltradas;
-        materiasAdapter = new MateriasAdapter(this, materiasToShow);
+        materiasAdapter = new MateriasAdapter(this, materias());
         materiasListView.setAdapter(materiasAdapter);
-        materiasListView.setEmptyView(findViewById(R.id.lista_materias_vacia));
     }
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // TODO: obtener las MATERIAS de la CARRERA elegida
-        Carrera carrera = carreras.get(pos);
+        materiasFiltradas.clear();
+        materiaBuscada.setText("");
+
+        carreraSeleccionada = carreras.get(pos);
+        if (materiasPorCarrera.containsKey(carreraSeleccionada) && materiasPorCarrera.get(carreraSeleccionada) != null) {
+            displayMaterias();
+        } else {
+            estudianteService.getMateriasPorCarrera(carreraSeleccionada.id, new Client() {
+                @Override
+                public void onResponseSuccess(Object responseBody) {
+                    materiasPorCarrera.put(carreraSeleccionada, (ArrayList<Materia>) responseBody);
+                    displayMaterias();
+                }
+
+                @Override
+                public void onResponseError(String errorMessage) {
+                    showMensajeError(errorMessage);
+                }
+            });
+        }
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
+    }
+
+    private void showMensajeError(String mensaje) {
+        Toast.makeText(InscripcionMateriasActivity.this, mensaje, Toast.LENGTH_LONG).show();
+
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                    Intent mainActivityIntent = new Intent(InscripcionMateriasActivity.this, MainActivity.class);
+                    startActivity(mainActivityIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
 }
