@@ -4,11 +4,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.Profesor;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -134,7 +137,7 @@ public class EstudianteService {
     }
 
     public void getCursadas(Integer idEstudiante, final Client client){
-        estudianteApi.getCursadas(idEstudiante).enqueue(new Callback<ArrayList<Curso>>() {
+        estudianteApi.getCursadas().enqueue(new Callback<ArrayList<Curso>>() {
 
             @Override
             public void onResponse(Call<ArrayList<Curso>> call, Response<ArrayList<Curso>> response) {
@@ -162,5 +165,43 @@ public class EstudianteService {
                 client.onResponseError(null);
             }
         });
+    }
+
+    public ArrayList<Curso> getCursadasMock() {
+        Curso curso1 = new Curso();
+        Profesor prof = new Profesor();
+        Horario hor = new Horario();
+        Horario hor2 = new Horario();
+        hor.aula = "1";
+        hor.dia = "Viernes";
+        hor.horaFin = "17:00";
+        hor.horaFin = "19:00";
+        hor2.aula = "1";
+        hor2.dia = "Viernes";
+        hor2.horaInicio = "17:00";
+        hor2.horaFin = "19:00";
+        prof.apellido = "Perez";
+        prof.nombre = "Jorge";
+        curso1.id=1;
+        curso1.capacidadCurso=3;
+        curso1.profesor = prof;
+        List<Horario> listHor = new ArrayList<>();
+        listHor.add(hor);
+        listHor.add(hor2);
+        curso1.horarios = listHor ;
+
+
+        Curso curso2 = new Curso();
+        curso2.id=2;
+        curso2.capacidadCurso=3;
+        curso2.profesor = prof;
+        curso2.horarios = listHor;
+
+
+        ArrayList<Curso> listaCursos = new ArrayList<>();
+        listaCursos.add(curso1);
+        listaCursos.add(curso2);
+
+        return listaCursos;
     }
 }

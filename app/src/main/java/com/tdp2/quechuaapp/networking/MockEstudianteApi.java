@@ -35,6 +35,22 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
+    public Call<ArrayList<Curso>> getCursadas() {
+        Curso curso1 = new Curso();
+        curso1.id=1;
+
+        Curso curso2 = new Curso();
+        curso2.id=2;
+
+        ArrayList<Curso> listaCursos = new ArrayList<>();
+        listaCursos.add(curso1);
+        listaCursos.add(curso2);
+
+        return delegate.returningResponse(listaCursos).getCursadas();
+
+    }
+
+    @Override
     public Call<ArrayList<Curso>> getCursosPorMateria(Integer materiaId) {
         Curso curso = new Curso();
         curso.id=1;

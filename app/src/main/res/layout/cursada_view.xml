@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idCurso" />
+        app:layout_constraintTop_toBottomOf="@+id/idCursada" />
 
     <TextView
         android:id="@+id/dia_horarioCursada"
@@ -41,9 +41,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/horas_horario"
+        app:layout_constraintEnd_toStartOf="@+id/horas_horarioCursada"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocente"
+        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada"
         />
 
     <TextView
@@ -54,8 +54,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/horas_horario"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocente" />
+        app:layout_constraintStart_toEndOf="@+id/horas_horarioCursada"
+        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada" />
 
     <TextView
         android:id="@+id/horas_horarioCursada"
@@ -63,10 +63,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/aula_horario"
+        app:layout_constraintEnd_toStartOf="@+id/aula_horarioCursada"
         app:layout_constraintHorizontal_bias="0.523"
-        app:layout_constraintStart_toEndOf="@+id/dia_horario"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocente" />
+        app:layout_constraintStart_toEndOf="@+id/dia_horarioCursada"
+        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada" />
 
 
     <Button
@@ -79,7 +79,7 @@
         android:text="Desinscribirse"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dia_horario"
+        app:layout_constraintTop_toBottomOf="@+id/dia_horarioCursada"
         android:theme="@style/AppTheme.Button"
         />
 </android.support.constraint.ConstraintLayout>

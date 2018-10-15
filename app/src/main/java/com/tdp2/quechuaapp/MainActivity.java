@@ -10,6 +10,7 @@ import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
+import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         studentCursadasButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent courseSignUpActivity = new Intent(getApplicationContext(), InscripcionCursoActivity.class);
+                Intent courseSignUpActivity = new Intent(getApplicationContext(), CursadasActivity.class);
                 Alumno alumno=new Alumno();
                 alumno.id=1;
                 courseSignUpActivity.putExtra("alumno",alumno);

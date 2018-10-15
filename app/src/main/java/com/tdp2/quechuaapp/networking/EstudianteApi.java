@@ -15,11 +15,11 @@ public interface EstudianteApi {
     @GET("/public/cursos")
     Call<ArrayList<Curso>> getCursos();
 
-    @GET("/public/materias/{materiaId}/cursos")
+        @GET("/public/materias/{materiaId}/cursos")
     Call<ArrayList<Curso>> getCursosPorMateria(@Path("materiaId")Integer materiaId);
 
-    @GET("/public/alumnos/{alumnoId}/cursadasActivas")
-    Call<ArrayList<Curso>> getCursadas(@Path("alumnoId")Integer alumnoId);
+    @GET("/public/alumnos/cursadasActivas")
+    Call<ArrayList<Curso>> getCursadas();
 
     @POST("/public/inscripcion-cursos/{cursoId}/{alumnoId}")
     Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);

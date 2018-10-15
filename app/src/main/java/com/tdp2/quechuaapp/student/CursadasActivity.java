@@ -19,23 +19,24 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
-import com.tdp2.quechuaapp.student.view.CursosAdapter;
+import com.tdp2.quechuaapp.student.view.CursadasAdapter;
 import com.tdp2.quechuaapp.student.view.CursadasAdapterCallback;
+import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 
 import java.util.ArrayList;
 
-public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback {
+public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback, CursosAdapterCallback {
 
     Alumno alumno;
     ArrayList<Curso> cursos;
     EstudianteService estudianteService;
-    CursosAdapter cursosAdapter;
+    CursadasAdapter cursadasAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         alumno = (Alumno) getIntent().getSerializableExtra("alumno");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inscripcion_curso);
+        setContentView(R.layout.activity_cursadas);
 
         setupInitials();
     }
@@ -43,6 +44,10 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
     private void setupInitials() {
         cursos=new ArrayList<>();
         estudianteService=new EstudianteService();
+        /*cursos = estudianteService.getCursadasMock();
+        ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
+        loadingView.setVisibility(View.INVISIBLE);
+        displayCursos();*/
         estudianteService.getCursadas(alumno.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
@@ -78,8 +83,8 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
 
     private void displayCursos() {
         final ListView cursosListView = findViewById(R.id.lista_cursadas);
-        cursosAdapter = new CursosAdapter(this, cursos, alumno);
-        cursosListView.setAdapter(cursosAdapter);
+        cursadasAdapter = new CursadasAdapter(this, cursos, alumno);
+        cursosListView.setAdapter(cursadasAdapter);
         cursosListView.setEmptyView(findViewById(R.id.emptyElementCursadas));
     }
 
@@ -160,6 +165,73 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
                     }
                 });
         alertDialog.show();
-        cursosAdapter.notifyDataSetChanged();
+        cursadasAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void inscribirAlumno(Integer idAlumno, final Integer idCurso, final Button inscribirseButton) {
+
+        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.bringToFront();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
+        estudianteService.inscribirAlumno(idAlumno, idCurso, new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                Inscripcion inscripcion = (Inscripcion) responseBody;
+
+                String messageToDisplay;
+
+                if (inscripcion.estado.equals("REGULAR")){
+                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.curso.id);
+                } else {
+                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito_condicional), inscripcion.curso.id);
+                }
+
+                //Actualizo el curso con la inscripcion realizada
+                for (Curso curso : cursos) {
+                    if(curso.id.equals(idCurso)){
+                        curso.inscripciones.add(inscripcion);
+                        //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
+                        if (curso.getVacantes()>0 && inscripcion.estado.equals("CONDICIONAL")){
+                            curso.capacidadCurso=0;
+                        }
+                    }
+                }
+
+                showAlert(messageToDisplay, "Inscripción Satisfactoria");
+
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                //TODO manejar los distintos problemas de inscripcion y cual es el mensaje que se va a mostrar al usuario
+                String messageToDisplay;
+                if(errorMessage!=null){
+                    Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
+                    messageToDisplay=getString(idError);
+                } else {
+                    messageToDisplay=getString(R.string.inscripcion_error_generico);
+                }
+
+                showAlert(messageToDisplay, "Inscripción Fallida");
+
+            }
+        });
+
     }
 }
