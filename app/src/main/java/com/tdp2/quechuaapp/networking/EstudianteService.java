@@ -3,6 +3,7 @@ package com.tdp2.quechuaapp.networking;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
@@ -23,6 +24,37 @@ public class EstudianteService {
 
     public EstudianteService() {
         this.estudianteApi = ApiClient.getInstance().getEstudianteClient();
+    }
+
+    public void getCarreras(final Client client){
+        estudianteApi.getCarreras().enqueue(new Callback<ArrayList<Carrera>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Carrera>> call, Response<ArrayList<Carrera>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Carrera>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
     }
 
     public void getCursos(Integer idEstudiante, final Client client){
@@ -59,6 +91,36 @@ public class EstudianteService {
     public void getMaterias(final Client client) {
         estudianteApi.getMaterias().enqueue(new Callback<ArrayList<Materia>>() {
 
+            @Override
+            public void onResponse(Call<ArrayList<Materia>> call, Response<ArrayList<Materia>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Materia>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
+    public void getMateriasPorCarrera(Integer idCarrera, final Client client) {
+        estudianteApi.getMateriasPorCarrera(idCarrera).enqueue(new Callback<ArrayList<Materia>>() {
             @Override
             public void onResponse(Call<ArrayList<Materia>> call, Response<ArrayList<Materia>> response) {
                 if (response.code() > 199 && response.code() < 300) {
