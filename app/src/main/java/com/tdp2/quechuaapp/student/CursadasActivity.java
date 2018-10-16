@@ -25,7 +25,7 @@ import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 
 import java.util.ArrayList;
 
-public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback, CursosAdapterCallback {
+public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback {
 
     Alumno alumno;
     ArrayList<Curso> cursos;
@@ -52,14 +52,14 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
-                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
+                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
                 displayCursos();
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                ProgressBar loadingView = findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
                 Toast.makeText(CursadasActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
@@ -91,17 +91,16 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
     @Override
     public void desinscribirAlumno(Integer idAlumno, final Integer idCurso, final Button desinscribirseButton) {
 
-        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+        ProgressBar loadingView = findViewById(R.id.loading_cursadas);
         loadingView.setVisibility(View.VISIBLE);
         loadingView.bringToFront();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        //TODO Desinscripcion US8
-        estudianteService.inscribirAlumno(idAlumno, idCurso, new Client() {
+        estudianteService.desinscribirAlumno(idAlumno, idCurso, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                ProgressBar loadingView = findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
 
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -110,44 +109,35 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
 
                 String messageToDisplay;
 
-                if (inscripcion.estado.equals("REGULAR")){
-                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.curso.id);
-                } else {
-                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito_condicional), inscripcion.curso.id);
-                }
+                messageToDisplay = String.format(getResources().getString(R.string.desinscripcion_exito), inscripcion.curso.id);
 
-                //Actualizo el curso con la inscripcion realizada
+
+                //Actualizo el curso con la desinscripcion realizada
                 for (Curso curso : cursos) {
                     if(curso.id.equals(idCurso)){
-                        curso.inscripciones.add(inscripcion);
-                        //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
-                        if (curso.getVacantes()>0 && inscripcion.estado.equals("CONDICIONAL")){
-                            curso.capacidadCurso=0;
-                        }
+                        curso.inscripciones.remove(inscripcion);
                     }
                 }
 
-                showAlert(messageToDisplay, "Inscripción Satisfactoria");
-
+                showAlert(messageToDisplay, "Desinscripción Satisfactoria");
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                ProgressBar loadingView = findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
 
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                //TODO manejar los distintos problemas de inscripcion y cual es el mensaje que se va a mostrar al usuario
                 String messageToDisplay;
                 if(errorMessage!=null){
                     Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
                     messageToDisplay=getString(idError);
                 } else {
-                    messageToDisplay=getString(R.string.inscripcion_error_generico);
+                    messageToDisplay=getString(R.string.desinscripcion_error_generico);
                 }
 
-                showAlert(messageToDisplay, "Inscripción Fallida");
+                showAlert(messageToDisplay, "Desinscripción Fallida");
 
             }
         });
@@ -166,72 +156,5 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
                 });
         alertDialog.show();
         cursadasAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void inscribirAlumno(Integer idAlumno, final Integer idCurso, final Button inscribirseButton) {
-
-        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
-        loadingView.setVisibility(View.VISIBLE);
-        loadingView.bringToFront();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
-        estudianteService.inscribirAlumno(idAlumno, idCurso, new Client() {
-            @Override
-            public void onResponseSuccess(Object responseBody) {
-                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
-                loadingView.setVisibility(View.INVISIBLE);
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                Inscripcion inscripcion = (Inscripcion) responseBody;
-
-                String messageToDisplay;
-
-                if (inscripcion.estado.equals("REGULAR")){
-                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito), inscripcion.curso.id);
-                } else {
-                    messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito_condicional), inscripcion.curso.id);
-                }
-
-                //Actualizo el curso con la inscripcion realizada
-                for (Curso curso : cursos) {
-                    if(curso.id.equals(idCurso)){
-                        curso.inscripciones.add(inscripcion);
-                        //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
-                        if (curso.getVacantes()>0 && inscripcion.estado.equals("CONDICIONAL")){
-                            curso.capacidadCurso=0;
-                        }
-                    }
-                }
-
-                showAlert(messageToDisplay, "Inscripción Satisfactoria");
-
-            }
-
-            @Override
-            public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
-                loadingView.setVisibility(View.INVISIBLE);
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                //TODO manejar los distintos problemas de inscripcion y cual es el mensaje que se va a mostrar al usuario
-                String messageToDisplay;
-                if(errorMessage!=null){
-                    Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
-                    messageToDisplay=getString(idError);
-                } else {
-                    messageToDisplay=getString(R.string.inscripcion_error_generico);
-                }
-
-                showAlert(messageToDisplay, "Inscripción Fallida");
-
-            }
-        });
-
     }
 }

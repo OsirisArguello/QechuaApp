@@ -167,6 +167,53 @@ public class EstudianteService {
         });
     }
 
+    public void desinscribirAlumno(Integer idAlumno, Integer idCurso, final Client client){
+        estudianteApi.desinscribirAlumno(idAlumno,idCurso).enqueue(new Callback<Inscripcion>() {
+
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    if (response.code() == 400) {
+                        Converter<ResponseBody, ApiError> converter =
+                                ApiClient.getInstance().getRetrofit().responseBodyConverter(ApiError.class, new Annotation[0]);
+
+                        ApiError error;
+
+                        try {
+                            error = converter.convert(response.errorBody());
+                            Log.e("error message", error.message);
+                            client.onResponseError(error.message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        client.onResponseError(null);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
     public ArrayList<Curso> getCursadasMock() {
         Curso curso1 = new Curso();
         Profesor prof = new Profesor();
