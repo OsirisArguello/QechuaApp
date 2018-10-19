@@ -2,9 +2,9 @@ package com.tdp2.quechuaapp.student;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,22 +13,21 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
-import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.R;
-import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.CursadasAdapter;
 import com.tdp2.quechuaapp.student.view.CursadasAdapterCallback;
-import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 
 import java.util.ArrayList;
 
 public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback {
 
     Alumno alumno;
-    ArrayList<Curso> cursos;
+    ArrayList<Cursada> cursadas;
     EstudianteService estudianteService;
     CursadasAdapter cursadasAdapter;
 
@@ -37,12 +36,11 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
         alumno = (Alumno) getIntent().getSerializableExtra("alumno");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cursadas);
-
         setupInitials();
     }
 
     private void setupInitials() {
-        cursos=new ArrayList<>();
+        cursadas=new ArrayList<>();
         estudianteService=new EstudianteService();
         /*cursos = estudianteService.getCursadasMock();
         ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
@@ -51,10 +49,10 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
         estudianteService.getCursadas(alumno.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                cursos=(ArrayList<Curso>) responseBody;
+                cursadas=(ArrayList<Cursada>) responseBody;
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
-                displayCursos();
+                displayCursadas();
             }
 
             @Override
@@ -81,15 +79,15 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
         });
     }
 
-    private void displayCursos() {
-        final ListView cursosListView = findViewById(R.id.lista_cursadas);
-        cursadasAdapter = new CursadasAdapter(this, cursos, alumno);
-        cursosListView.setAdapter(cursadasAdapter);
-        cursosListView.setEmptyView(findViewById(R.id.emptyElementCursadas));
+    private void displayCursadas() {
+        final ListView cursadasListView = findViewById(R.id.lista_cursadas);
+        cursadasAdapter = new CursadasAdapter(this, cursadas, alumno);
+        cursadasListView.setAdapter(cursadasAdapter);
+        cursadasListView.setEmptyView(findViewById(R.id.emptyElementCursadas));
     }
 
     @Override
-    public void desinscribirAlumno(Integer idAlumno, final Integer idCurso, final Button desinscribirseButton) {
+    public void desinscribirAlumno(final Integer idCursada, final Button desinscribirseButton) {
 
         ProgressBar loadingView = findViewById(R.id.loading_cursadas);
         loadingView.setVisibility(View.VISIBLE);
@@ -97,7 +95,7 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        estudianteService.desinscribirAlumno(idAlumno, idCurso, new Client() {
+        estudianteService.desinscribirAlumno(idCursada, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 ProgressBar loadingView = findViewById(R.id.loading_cursadas);
@@ -113,11 +111,11 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
 
 
                 //Actualizo el curso con la desinscripcion realizada
-                for (Curso curso : cursos) {
-                    if(curso.id.equals(idCurso)){
-                        curso.inscripciones.remove(inscripcion);
-                    }
-                }
+                //for (Cursada cursada : cursadas) {
+                //    if(cursadas.curso.id.equals(idCurso)){
+                //        cursadas.curso.inscripciones.remove(inscripcion);
+                //    }
+                //}
 
                 showAlert(messageToDisplay, "Desinscripción Satisfactoria");
             }

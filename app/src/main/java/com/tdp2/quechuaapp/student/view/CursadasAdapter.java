@@ -12,19 +12,18 @@ import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
-import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Horario;
-import com.tdp2.quechuaapp.model.Materia;
 
 import java.util.ArrayList;
 
-public class CursadasAdapter extends ArrayAdapter<Curso> {
+public class CursadasAdapter extends ArrayAdapter<Cursada> {
 
     private CursadasAdapterCallback adapterCallback;
     Alumno alumno;
 
-    public CursadasAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Alumno alumno) {
-        super(context, 0,  listaCursos);
+    public CursadasAdapter(@NonNull Context context, @NonNull ArrayList<Cursada> listaCursadas, Alumno alumno) {
+        super(context, 0,  listaCursadas);
         this.alumno=alumno;
         try {
             this.adapterCallback = ((CursadasAdapterCallback) context);
@@ -36,7 +35,7 @@ public class CursadasAdapter extends ArrayAdapter<Curso> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final Curso curso = getItem(position);
+        final Cursada cursada = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -50,8 +49,8 @@ public class CursadasAdapter extends ArrayAdapter<Curso> {
             convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground2));
         }
 
+        TextView idMateriaTextView = convertView.findViewById(R.id.idMateria);
         TextView idCursoTextView = convertView.findViewById(R.id.idCursada);
-        TextView docenteTextView = convertView.findViewById(R.id.nombreDocenteCursada);
         TextView diaTextView = convertView.findViewById(R.id.dia_horarioCursada);
         TextView horasTextView = convertView.findViewById(R.id.horas_horarioCursada);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horarioCursada);
@@ -62,35 +61,34 @@ public class CursadasAdapter extends ArrayAdapter<Curso> {
         desinscribirseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapterCallback.desinscribirAlumno(alumno.id,curso.id, desinscribirseButton);
+                adapterCallback.desinscribirAlumno(cursada.id, desinscribirseButton);
             }
         });
 
-        idCursoTextView.setText("Curso: "+curso.id.toString());
-        docenteTextView.setText("Docente: "+curso.profesor.apellido+", "+curso.profesor.nombre);
+        idMateriaTextView.setText("Materia: "+cursada.curso.materia.codigo.toString()+" - " + cursada.curso.materia.nombre.toString());
+        idCursoTextView.setText("Curso: "+cursada.curso.id.toString());
 
         StringBuilder diaString=new StringBuilder();
         StringBuilder horasString=new StringBuilder();
         StringBuilder aulaString=new StringBuilder();
         Integer cantHorarios=1;
-
-        for (Horario horario : curso.horarios) {
-            diaString.append(horario.dia);
-            horasString.append(horario.horaInicio+"-"+horario.horaFin);
-            aulaString.append(horario.aula);
-            if(cantHorarios<curso.horarios.size()){
-                diaString.append("\n");
-                horasString.append("\n");
-                aulaString.append("\n");
+        if (cursada.curso.horarios != null) {
+            for (Horario horario : cursada.curso.horarios) {
+                diaString.append(horario.dia);
+                horasString.append(horario.horaInicio + "-" + horario.horaFin);
+                aulaString.append(horario.aula);
+                if (cantHorarios < cursada.curso.horarios.size()) {
+                    diaString.append("\n");
+                    horasString.append("\n");
+                    aulaString.append("\n");
+                }
+                cantHorarios++;
             }
-            cantHorarios++;
         }
-
         diaTextView.setText(diaString.toString());
         horasTextView.setText(horasString.toString());
         aulaTextView.setText(aulaString.toString());
 
         return convertView;
     }
-
 }

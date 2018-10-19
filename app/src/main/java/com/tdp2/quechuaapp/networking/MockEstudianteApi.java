@@ -1,6 +1,7 @@
 package com.tdp2.quechuaapp.networking;
 
 import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
@@ -35,7 +36,7 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<ArrayList<Curso>> getCursadas() {
+    public Call<ArrayList<Cursada>> getCursadas(String token) {
         Curso curso1 = new Curso();
         curso1.id=1;
 
@@ -46,7 +47,7 @@ public class MockEstudianteApi implements EstudianteApi {
         listaCursos.add(curso1);
         listaCursos.add(curso2);
 
-        return delegate.returningResponse(listaCursos).getCursadas();
+        return delegate.returningResponse(listaCursos).getCursadas("h");
 
     }
 
@@ -77,14 +78,13 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<Inscripcion> desinscribirAlumno(Integer alumnoId, Integer cursoId) {
+    public Call<Inscripcion> desinscribirAlumno(Integer cursoId) {
         Inscripcion inscripcion = new Inscripcion();
         inscripcion.alumno = new Alumno();
-        inscripcion.alumno.id=alumnoId;
 
         inscripcion.curso=new Curso();
         inscripcion.curso.id=cursoId;
 
-        return delegate.returningResponse(inscripcion).desinscribirAlumno(alumnoId,cursoId);
+        return delegate.returningResponse(inscripcion).desinscribirAlumno(cursoId);
     }
 }

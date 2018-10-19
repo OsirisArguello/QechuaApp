@@ -6,18 +6,19 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/idCursada"
+        android:id="@+id/idMateria"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
-        android:id="@+id/nombreDocenteCursada"
+        android:id="@+id/idCursada"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idCursada" />
+        app:layout_constraintTop_toBottomOf="@+id/idMateria" />
 
     <TextView
         android:id="@+id/dia_horarioCursada"
@@ -43,7 +44,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/horas_horarioCursada"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada"
+        app:layout_constraintTop_toBottomOf="@+id/idCursada"
         />
 
     <TextView
@@ -55,31 +56,38 @@
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/horas_horarioCursada"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada" />
+        app:layout_constraintTop_toBottomOf="@+id/dia_horarioCursada" />
 
     <TextView
         android:id="@+id/horas_horarioCursada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/aula_horarioCursada"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toEndOf="@+id/dia_horarioCursada"
-        app:layout_constraintTop_toBottomOf="@+id/nombreDocenteCursada" />
+        app:layout_constraintTop_toBottomOf="@+id/aula_horarioCursada" />
 
+    <Button
+        android:id="@+id/finalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="280dp"
+        android:layout_marginRight="280dp"
+        android:text="Final"
+        android:textSize="18sp"
+        android:theme="@style/AppTheme.Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horas_horarioCursada" /> />
 
     <Button
         android:id="@+id/desinscribirseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="56dp"
         android:text="Desinscribirse"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dia_horarioCursada"
         android:theme="@style/AppTheme.Button"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dia_horarioCursada" />
 </android.support.constraint.ConstraintLayout>

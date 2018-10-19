@@ -1,8 +1,8 @@
 package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
-import android.widget.Toast;
 
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Inscripcion;
@@ -137,10 +137,10 @@ public class EstudianteService {
     }
 
     public void getCursadas(Integer idEstudiante, final Client client){
-        estudianteApi.getCursadas().enqueue(new Callback<ArrayList<Curso>>() {
+        estudianteApi.getCursadas("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcGFlekBmaXViYS5jb20iLCJhdXRoIjoiUk9MRV9BTFVNTk8iLCJleHAiOjE1NDAwNzcxNDJ9.xjPIR8tlbwa1WwFQfPa3yA7UKv0cVPBpsXIEmYcJb7WiJJ2dHou7pOWgLrGJfzNRZhPRd96zQjUdPWXkYbGlHg").enqueue(new Callback<ArrayList<Cursada>>() {
 
             @Override
-            public void onResponse(Call<ArrayList<Curso>> call, Response<ArrayList<Curso>> response) {
+            public void onResponse(Call<ArrayList<Cursada>> call, Response<ArrayList<Cursada>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i("ESTUDIANTESERVICE", response.body().toString());
@@ -160,15 +160,16 @@ public class EstudianteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Curso>> call, Throwable t) {
-                Log.e("ESTUDIANTESERVICE", t.getMessage());
+            public void onFailure(Call<ArrayList<Cursada>> call, Throwable t) {
+                //Log.e("ESTUDIANTESERVICE", t.getMessage());
+                Log.e("ESTUDIANTESERVICE", "No fue posible encontrar cusadas");
                 client.onResponseError(null);
             }
         });
     }
 
-    public void desinscribirAlumno(Integer idAlumno, Integer idCurso, final Client client){
-        estudianteApi.desinscribirAlumno(idAlumno,idCurso).enqueue(new Callback<Inscripcion>() {
+    public void desinscribirAlumno(Integer idCursada, final Client client){
+        estudianteApi.desinscribirAlumno(idCursada).enqueue(new Callback<Inscripcion>() {
 
             @Override
             public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
