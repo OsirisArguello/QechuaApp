@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="12"
+    android:background="@drawable/logofiuba"
     tools:context=".login.LoginActivity">
 
     <!-- Login progress -->
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="QUECHUA"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/grayBlue"
             android:textStyle="bold"
             android:textSize="70sp" />
 
@@ -98,20 +99,29 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/forgotUserLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/email_sign_in"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:background="@color/cream"
         android:gravity="center"
-        android:background="@color/colorAccent"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_sign_in"
-            android:textSize="30sp"
             android:textColor="@color/white"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
     </LinearLayout>

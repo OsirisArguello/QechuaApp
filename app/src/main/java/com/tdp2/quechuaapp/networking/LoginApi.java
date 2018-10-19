@@ -5,9 +5,16 @@ import com.tdp2.quechuaapp.login.model.UserSession;
 import com.tdp2.quechuaapp.login.model.UserSessionRequest;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 
 public interface LoginApi {
-    Call<UserSession> createUserSession(UserSessionRequest userSessionRequest);
 
-    Call<UserLogged> getUserLogged(String accessToken);
+    @POST("/api/authenticate")
+    Call<UserSession> createUserSession(@Body UserSessionRequest userSessionRequest);
+
+    @GET("/api/account")
+    Call<UserLogged> getUserLogged(@Header("Authorization")String apiToken);
 }

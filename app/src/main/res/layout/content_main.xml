@@ -12,7 +12,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,61 +27,197 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
                 android:layout_marginBottom="10dp"
-                android:background="@color/lightBlue">
+                android:layout_weight="1.7"
+                android:background="@color/grayBlue">
 
                 <TextView
-                    android:id="@+id/oupa_assisted"
+                    android:id="@+id/user_logged"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
+                    android:layout_height="68dp"
+                    android:layout_centerInParent="true"
                     android:text="Juan Perez"
-                    android:textSize="25sp"
+                    android:textSize="32sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/oupa_assisted_email"
+                    android:id="@+id/user_logged_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/oupa_assisted"
-                    android:layout_marginLeft="10dp"
+                    android:layout_alignBottom="@+id/user_logged"
+                    android:layout_alignLeft="@+id/user_logged"
+                    android:layout_alignStart="@+id/user_logged"
                     android:text="juan.perez@gmail.com"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/contacts_action"
+                android:id="@+id/miscursos_action"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
-                android:paddingLeft="5dp"
+                android:layout_weight="1.7"
                 android:background="@drawable/shape_circle"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
 
                 <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_marginRight="10dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/graduation_cap" />
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/miscursos" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/grayBlue"
                     android:gravity="center"
-                    android:paddingLeft="5dp"
-                    android:background="@color/lightBlue"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Mis Cursos"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/misfinales_action"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/shape_circle"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/misfinales" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayBlue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mis Finales"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/historiaacademica_action"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/shape_circle"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/historiaacademica" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayBlue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Historia Académica"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/inscripcion_action"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/shape_circle"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/inscripcion" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayBlue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Inscripcion"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/prioridad_action"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/shape_circle"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/prioridad" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayBlue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Prioridad"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

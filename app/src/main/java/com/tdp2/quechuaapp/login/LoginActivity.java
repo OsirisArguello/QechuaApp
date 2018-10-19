@@ -12,11 +12,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -117,6 +119,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void onError() {
         mPasswordView.setError(getString(R.string.error_incorrect_password));
         mPasswordView.requestFocus();
+    }
+
+    @Override
+    public void onServiceUnavailable() {
+        Toast.makeText(LoginActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                Toast.LENGTH_LONG).show();
     }
 
     @Override

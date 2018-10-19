@@ -46,15 +46,15 @@ public class LoginPresenterImpl implements LoginPresenter {
                     loginView.showProgress(false);
                     if (response.code() > 199 && response.code() < 300) {
 
-                        final String accessToken = response.body().accessToken;
-                        Log.i("Session created", response.body().accessToken);
+                        final String idToken = response.body().idToken;
+                        Log.i("Session created", response.body().idToken);
 
-                        loginService.getUserLogged(accessToken).enqueue(new Callback<UserLogged>() {
+                        loginService.getUserLogged("Bearer "+idToken).enqueue(new Callback<UserLogged>() {
 
                             @Override
                             public void onResponse(Call<UserLogged> call, Response<UserLogged> response) {
                                 if (response.code() > 199 && response.code() < 300) {
-                                    loginView.onSuccess(response.body(), accessToken);
+                                    loginView.onSuccess(response.body(), idToken);
                                 } else {
                                     Log.e("getUserLogged", response.message());
                                 }
@@ -76,6 +76,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                 public void onFailure(Call<UserSession> call, Throwable t) {
                     loginView.showProgress(false);
                     Log.e("createUserSession", t.getMessage());
+                    loginView.onServiceUnavailable();
                 }
             });
         }
@@ -89,7 +90,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 3;
     }
 
 }

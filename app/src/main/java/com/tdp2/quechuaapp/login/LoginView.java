@@ -8,4 +8,5 @@ public interface LoginView {
     void showProgress(boolean showLoading);
     void onError();
     void onSuccess(UserLogged body, String accessToken);
+    void onServiceUnavailable();
 }

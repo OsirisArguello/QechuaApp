@@ -1,6 +1,7 @@
 package com.tdp2.quechuaapp.networking;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
@@ -8,6 +9,8 @@ import com.tdp2.quechuaapp.login.model.UserSession;
 import com.tdp2.quechuaapp.login.model.UserSessionRequest;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginService {
 
@@ -19,19 +22,19 @@ public class LoginService {
 
     public Call<UserSession> createUserSession(String email, String password) {
 
-        //String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-        //UserSessionRequest userSessionRequest = getUserSessionRequest(email, password, deviceToken);
+        UserSessionRequest userSessionRequest = new UserSessionRequest();
+        userSessionRequest.username=email;
+        userSessionRequest.password=password;
 
-        //return loginApi.createUserSession(userSessionRequest);
-        return null;
+        return loginApi.createUserSession(userSessionRequest);
     }
 
     public Call<UserLogged> getUserLogged(String accessToken) {
         return loginApi.getUserLogged(accessToken);
     }
 
-    @NonNull
+    /*@NonNull
     private UserSessionRequest getUserSessionRequest(String email, String password, String deviceToken) {
         UserSessionRequest userSessionRequest = new UserSessionRequest();
         userSessionRequest.session = new UserSessionRequest.Session();
@@ -40,5 +43,5 @@ public class LoginService {
         userSessionRequest.session.deviceToken = deviceToken;
         userSessionRequest.session.deviceType = "android";
         return userSessionRequest;
-    }
+    }*/
 }

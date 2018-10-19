@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
 import com.tdp2.quechuaapp.login.LoginActivity;
 
 public class UserSessionManager {
@@ -25,8 +26,8 @@ public class UserSessionManager {
     // All Shared Preferences Keys
     public static final String IS_USER_LOGIN = "isUserLoggedIn";
 
-    public static final String KEY_FIRST_NAME = "firstName";
-    public static final String KEY_LAST_NAME = "lastName";
+    public static final String USER_LOGGED = "userLogged";
+    //public static final String KEY_LAST_NAME = "lastName";
     public static final String KEY_TOKEN = "accessToken";
 
 
@@ -40,8 +41,11 @@ public class UserSessionManager {
     public void saveUserLogged(UserLogged userLogged, String accessToken){
         editor.putBoolean(IS_USER_LOGIN, true);
         // Storing name in preferences
-        editor.putString(KEY_FIRST_NAME, userLogged.firstName);
-        editor.putString(KEY_LAST_NAME, userLogged.lastName);
+        //editor.putString(KEY_FIRST_NAME, userLogged.firstName);
+        //editor.putString(KEY_LAST_NAME, userLogged.lastName);
+        Gson gson = new Gson();
+        String userAsJson = gson.toJson(userLogged);
+        editor.putString(USER_LOGGED, userAsJson);
         editor.putString(KEY_TOKEN, accessToken);
 
         // commit changes
@@ -53,10 +57,16 @@ public class UserSessionManager {
         return accessToken;
     }
 
-    public String getFullName() {
+    /*public String getFullName() {
         String name = pref.getString(KEY_FIRST_NAME, null);
         String lastName = pref.getString(KEY_LAST_NAME, null);
         return name + " " + lastName;
+    }*/
+
+    public UserLogged getUserLogged() {
+        Gson gson = new Gson();
+        String userAsJson = pref.getString(USER_LOGGED, null);
+        return gson.fromJson(userAsJson, UserLogged.class);
     }
 
     public boolean isUserLoggedIn(){

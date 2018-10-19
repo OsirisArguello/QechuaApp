@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserSession {
     @Expose
-    @SerializedName("access_token")
-    public String accessToken;
+    @SerializedName("id_token")
+    public String idToken;
 }
