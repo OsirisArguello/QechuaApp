@@ -3,6 +3,11 @@ package com.tdp2.quechuaapp.student.view;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
+import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
 
 import java.util.ArrayList;
@@ -21,11 +27,13 @@ import java.util.ArrayList;
 public class CursosAdapter extends ArrayAdapter<Curso> {
 
     private CursosAdapterCallback adapterCallback;
-    Alumno alumno;
+    private Alumno alumno;
+    private Context context;
 
     public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Alumno alumno) {
         super(context, 0,  listaCursos);
         this.alumno=alumno;
+        this.context=context;
         try {
             this.adapterCallback = ((CursosAdapterCallback) context);
         } catch (ClassCastException e) {
@@ -57,18 +65,31 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         TextView aulaTextView = convertView.findViewById(R.id.aula_horario);
 
 
-        final Button inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
-
-        inscribirseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapterCallback.inscribirAlumno(alumno.id,curso.id, inscribirseButton);
-            }
-        });
+        AppCompatButton inscribirseButton = convertView.findViewById(R.id.inscribirseButton);
 
 
-        if(curso.estaInscripto(alumno)) {
-            inscribirseButton.setVisibility(View.INVISIBLE);
+        final Inscripcion inscripcion=curso.getInscripcion(alumno);
+        if(inscripcion!=null) {
+            //Esta inscripto
+            inscribirseButton.setText("Desinscribirse");
+            inscribirseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapterCallback.desinscribirAlumno(inscripcion.id);
+                }
+            });
+
+            ViewCompat.setBackgroundTintList(inscribirseButton,
+                    ContextCompat.getColorStateList(getContext(),R.color.red));
+
+        } else {
+            //No esta inscripto
+            inscribirseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapterCallback.inscribirAlumno(curso.id);
+                }
+            });
         }
 
 

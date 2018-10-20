@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
@@ -57,13 +59,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupActions() {
 
-        LinearLayout miscursos = findViewById(R.id.miscursos_action);
+        final LinearLayout miscursos = findViewById(R.id.miscursos_action);
         if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")){
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    Intent miscursosIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+
+                    Alumno alumno = new Alumno();
+                    alumno.id=1;
+
+                    Materia materia = new Materia();
+                    materia.id=1;
+
+                    miscursosIntent.putExtra("alumno",alumno);
+                    miscursosIntent.putExtra("materia",materia);
+
+                    startActivity(miscursosIntent);
                 }
             });
         } else {

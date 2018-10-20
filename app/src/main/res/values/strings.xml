@@ -4,6 +4,8 @@
     <string name="inscripcion.exito">Ha sido inscripto correctamente al curso %1$d.</string>
     <string name="inscripcion.exito.condicional">Ha sido inscripto correctamente al curso %1$d como CONDICIONAL.</string>
     <string name="inscripcion.error.generico">Ha ocurrido un error al inscribirse. Por favor, reintente más tarde.</string>
+    <string name="desinscripcion.exito">Ha sido desinscripto del curso %1$d.</string>
+    <string name="desinscripcion.error.generico">Ha ocurrido un error al desinscribirse. Por favor, reintente más tarde.</string>
     <string name="curso.alumnos.titulo">Curso actual</string>
     <string name="curso.alumnos.regulares">Regulares</string>
     <string name="curso.alumnos.condicionales">Condicionales</string>
