@@ -40,6 +40,10 @@ public class ApiClient {
         return retrofit.create(DocenteApi.class);
     }
 
+    public LoginApi getLoginClient() {
+        return retrofit.create(LoginApi.class);
+    }
+
     public Retrofit getRetrofit() {
         return retrofit;
     }
