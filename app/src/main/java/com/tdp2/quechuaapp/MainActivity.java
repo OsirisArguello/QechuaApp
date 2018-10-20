@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
@@ -82,8 +83,13 @@ public class MainActivity extends AppCompatActivity {
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent measurementIntent = new Intent(MainActivity.this, DetalleCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    Intent detalleCursoIntent = new Intent(MainActivity.this, DetalleCursoActivity.class);
+
+                    Curso curso = new Curso();
+                    curso.id=1;
+                    detalleCursoIntent.putExtra("curso",curso);
+
+                    startActivity(detalleCursoIntent);
                 }
             });
         }
