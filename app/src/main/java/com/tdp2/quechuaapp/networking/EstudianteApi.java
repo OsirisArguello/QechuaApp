@@ -1,6 +1,7 @@
 package com.tdp2.quechuaapp.networking;
 
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
 
 import java.util.ArrayList;
@@ -25,5 +26,9 @@ public interface EstudianteApi {
     @POST("/api/inscripcion-cursos/{cursoId}/accion/desinscribir")
     Call<Inscripcion> desinscribirAlumno(@Header("Authorization")String apiToken, @Path("cursoId")Integer inscripcionId);
 
+    @POST("/public/inscripcion-cursos/{cursoId}/{alumnoId}")
+    Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);
 
+    @GET("/api/cursos/{cursoId}/coloquios")
+    Call<ArrayList<Final>> getFinales(@Header("Authorization")String apiToken, @Path("cursoId")Integer cursoId);
 }

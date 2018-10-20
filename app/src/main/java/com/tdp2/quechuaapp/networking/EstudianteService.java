@@ -5,8 +5,10 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -124,7 +126,6 @@ public class EstudianteService {
                     } else {
                         client.onResponseError(null);
                     }
-
                 }
             }
 
@@ -139,7 +140,6 @@ public class EstudianteService {
     public void desinscribirAlumno(Integer idCurso, final Client client){
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
         estudianteApi.desinscribirAlumno(AUTHORIZATION_PREFIX+apiToken,idCurso).enqueue(new Callback<Inscripcion>() {
-
             @Override
             public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
                 if (response.code() > 199 && response.code() < 300) {
@@ -183,4 +183,36 @@ public class EstudianteService {
             }
         });
     }
+
+    public void getFinales(Integer idCurso, final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getFinales(AUTHORIZATION_PREFIX + apiToken,idCurso).enqueue(new Callback<ArrayList<Final>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Final>> call, Response<ArrayList<Final>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Final>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
 }
