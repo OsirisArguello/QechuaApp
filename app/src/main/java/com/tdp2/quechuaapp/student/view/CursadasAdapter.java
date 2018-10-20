@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
-import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Horario;
 
@@ -20,11 +19,9 @@ import java.util.ArrayList;
 public class CursadasAdapter extends ArrayAdapter<Cursada> {
 
     private CursadasAdapterCallback adapterCallback;
-    Alumno alumno;
 
-    public CursadasAdapter(@NonNull Context context, @NonNull ArrayList<Cursada> listaCursadas, Alumno alumno) {
+    public CursadasAdapter(@NonNull Context context, @NonNull ArrayList<Cursada> listaCursadas) {
         super(context, 0,  listaCursadas);
-        this.alumno=alumno;
         try {
             this.adapterCallback = ((CursadasAdapterCallback) context);
         } catch (ClassCastException e) {

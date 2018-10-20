@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp.student;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -76,6 +77,11 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 };
                 thread.start();
             }
+
+            @Override
+            public Context getContext() {
+                return InscripcionCursoActivity.this;
+            }
         });
     }
 
@@ -147,6 +153,11 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
                 showAlert(messageToDisplay, "Inscripción Fallida");
 
+            }
+
+            @Override
+            public Context getContext() {
+                return InscripcionCursoActivity.this;
             }
         });
 

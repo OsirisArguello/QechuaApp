@@ -21,11 +21,11 @@ public interface EstudianteApi {
     Call<ArrayList<Curso>> getCursosPorMateria(@Path("materiaId")Integer materiaId);
 
     @GET("/api/alumnos/cursadasActivas")
-    Call<ArrayList<Cursada>> getCursadas(@Header("Authorization") String token);
+    Call<ArrayList<Cursada>> getCursadas(@Header("Authorization") String apiToken);
 
     @POST("/public/inscripcion-cursos/{cursoId}/{alumnoId}")
     Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);
 
     @POST("/api/inscripcion-cursos/{inscripcionCursoId}/accion/desinscribir")
-    Call<Inscripcion> desinscribirAlumno(@Path("inscripcionCursoId")Integer inscripcionCursoId);
+    Call<Inscripcion> desinscribirAlumno(@Header("Authorization") String apiToken, @Path("inscripcionCursoId")Integer inscripcionCursoId);
 }
