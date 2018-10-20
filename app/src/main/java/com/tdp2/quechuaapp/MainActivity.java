@@ -18,6 +18,7 @@ import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
+import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
         } else {
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, DetalleCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
         }
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
         } else {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
         }
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
+                startActivity(measurementIntent);
             }
         });
 
@@ -108,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         inscripcion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
+                Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
+                startActivity(inscripcionMateriasIntent);
             }
         });
 
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
+                startActivity(measurementIntent);
             }
         });
 

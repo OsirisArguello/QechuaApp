@@ -3,6 +3,7 @@ package com.tdp2.quechuaapp.networking;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
@@ -20,6 +21,7 @@ import retrofit2.Response;
 
 public class EstudianteService {
 
+    public static final String AUTHORIZATION_PREFIX = "Bearer ";
     private EstudianteApi estudianteApi;
 
     public EstudianteService() {
@@ -27,7 +29,9 @@ public class EstudianteService {
     }
 
     public void getCarreras(final Client client){
-        estudianteApi.getCarreras().enqueue(new Callback<ArrayList<Carrera>>() {
+
+        String accessToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getCarreras(AUTHORIZATION_PREFIX +accessToken).enqueue(new Callback<ArrayList<Carrera>>() {
 
             @Override
             public void onResponse(Call<ArrayList<Carrera>> call, Response<ArrayList<Carrera>> response) {
@@ -120,7 +124,9 @@ public class EstudianteService {
     }
 
     public void getMateriasPorCarrera(Integer idCarrera, final Client client) {
-        estudianteApi.getMateriasPorCarrera(idCarrera).enqueue(new Callback<ArrayList<Materia>>() {
+
+        String accessToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getMateriasPorCarrera(AUTHORIZATION_PREFIX +accessToken,idCarrera).enqueue(new Callback<ArrayList<Materia>>() {
             @Override
             public void onResponse(Call<ArrayList<Materia>> call, Response<ArrayList<Materia>> response) {
                 if (response.code() > 199 && response.code() < 300) {

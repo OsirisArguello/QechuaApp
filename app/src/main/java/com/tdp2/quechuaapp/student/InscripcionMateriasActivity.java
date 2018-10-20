@@ -126,6 +126,11 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
             public void onResponseError(String errorMessage) {
                 showMensajeError(errorMessage);
             }
+
+            @Override
+            public Context getContext() {
+                return InscripcionMateriasActivity.this;
+            }
         });
     }
 
@@ -173,6 +178,11 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
                 @Override
                 public void onResponseError(String errorMessage) {
                     showMensajeError(errorMessage);
+                }
+
+                @Override
+                public Context getContext() {
+                    return InscripcionMateriasActivity.this;
                 }
             });
         }

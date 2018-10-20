@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -16,13 +17,13 @@ import retrofit2.http.Query;
 public interface EstudianteApi {
 
     @GET("/api/alumnos/carreras")
-    Call<ArrayList<Carrera>> getCarreras();
+    Call<ArrayList<Carrera>> getCarreras(@Header("Authorization") String apiToken);
 
     @GET("/public/materias")
     Call<ArrayList<Materia>> getMaterias();
 
     @GET("/api/materias")
-    Call<ArrayList<Materia>> getMateriasPorCarrera(@Query("carrera") Integer carreraId);
+    Call<ArrayList<Materia>> getMateriasPorCarrera(@Header("Authorization") String apiToken, @Query("carrera") Integer carreraId);
 
     @GET("/public/cursos")
     Call<ArrayList<Curso>> getCursos();

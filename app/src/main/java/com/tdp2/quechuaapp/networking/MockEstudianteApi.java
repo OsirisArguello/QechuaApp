@@ -35,7 +35,7 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<ArrayList<Carrera>> getCarreras() {
+    public Call<ArrayList<Carrera>> getCarreras(String apiToken) {
         Carrera carrera = new Carrera();
         carrera.id = 1;
         carrera.nombre = "Carrera 1";
@@ -43,7 +43,7 @@ public class MockEstudianteApi implements EstudianteApi {
         ArrayList<Carrera> lista = new ArrayList<>();
         lista.add(carrera);
 
-        return delegate.returningResponse(lista).getCarreras();
+        return delegate.returningResponse(lista).getCarreras("");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<ArrayList<Materia>> getMateriasPorCarrera(Integer carreraId) {
+    public Call<ArrayList<Materia>> getMateriasPorCarrera(String apiToken, Integer carreraId) {
         return null;
     }
 
