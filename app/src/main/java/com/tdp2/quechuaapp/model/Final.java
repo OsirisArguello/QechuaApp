@@ -31,4 +31,6 @@ public class Final implements Serializable {
     @SerializedName("periodo")
     @Expose
     public Periodo periodo;
+
+    public Boolean inscripto = false;
 }

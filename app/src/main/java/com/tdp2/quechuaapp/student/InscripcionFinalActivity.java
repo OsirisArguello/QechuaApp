@@ -29,7 +29,6 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
 
     Curso curso;
     ArrayList<Final> finales;
-
     EstudianteService estudianteService;
 
     @Override
@@ -63,9 +62,56 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
             @Override
             public void onResponseSuccess(Object responseBody) {
                 finales = (ArrayList<Final>) responseBody;
-                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
-                loadingView.setVisibility(View.INVISIBLE);
-                displayFinales();
+
+                estudianteService.getMisFinales(new Client() {
+                    @Override
+                    public void onResponseSuccess(Object responseBody) {
+
+                        ArrayList<Final> misFinales = (ArrayList<Final>) responseBody;
+                        for (Final miFinal: misFinales) {
+                            if (miFinal.curso.id != curso.id) {
+                                continue;
+                            }
+                            for (Final otro: finales) {
+                                if (otro.id == miFinal.id) {
+                                    otro.inscripto = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                        loadingView.setVisibility(View.INVISIBLE);
+                        displayFinales();
+                    }
+
+                    @Override
+                    public void onResponseError(String errorMessage) {
+                        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_final);
+                        loadingView.setVisibility(View.INVISIBLE);
+                        Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                                Toast.LENGTH_LONG).show();
+
+                        Thread thread = new Thread(){
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                                    Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                                    startActivity(mainActivityIntent);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+                        thread.start();
+                    }
+
+                    @Override
+                    public Context getContext() {
+                        return InscripcionFinalActivity.this;
+                    }
+                });
             }
 
             @Override
@@ -99,13 +145,20 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        final Final aFinal = finales.get(position);
+        String mensaje = aFinal.inscripto ? "desinscribirte?":"inscribirte?";
+
         new AlertDialog.Builder(this)
                 .setTitle("Inscipcion")
-                .setMessage("Confirmas que deseas inscribirte?")
+                .setMessage("Confirmas que deseas " + mensaje)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // Agregar request para inscripcion a final
+                        if (aFinal.inscripto) {
+                            //Desinscribir
+                        } else {
+                            //Inscribir
+                        }
                     }})
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();

@@ -32,7 +32,6 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.final_view, parent, false);
         }
-        // Lookup view for data population
 
         if (position % 2 == 1) {
             convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground1));
@@ -44,10 +43,7 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         TextView aulaTextView = convertView.findViewById(R.id.aulaFinal);
 
         final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
-        iconoInscipcion.setImageResource(android.R.drawable.ic_menu_add);
-        // si ya esta inscripto, setear: android.R.drawable.ic_menu_delete
-
-
+        iconoInscipcion.setImageResource(aFinal.inscripto ? android.R.drawable.ic_menu_delete : android.R.drawable.ic_menu_add);
 
         fechaTextView.setText(aFinal.dia + " // "+ aFinal.horaFin + " - " + aFinal.horaFin);
         aulaTextView.setText(aFinal.sede + " - " + aFinal.aula);
