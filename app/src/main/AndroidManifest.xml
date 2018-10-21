@@ -41,7 +41,7 @@
         <activity
             android:name=".student.InscripcionMateriasActivity"
             android:label="@string/title_activity_inscripcion_materias"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".student.CursadasActivity"

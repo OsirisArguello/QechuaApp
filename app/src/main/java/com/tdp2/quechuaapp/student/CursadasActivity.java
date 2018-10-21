@@ -41,10 +41,7 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
     private void setupInitials() {
         cursadas=new ArrayList<>();
         estudianteService=new EstudianteService();
-        /*cursos = estudianteService.getCursadasMock();
-        ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
-        loadingView.setVisibility(View.INVISIBLE);
-        displayCursos();*/
+
         estudianteService.getCursadas(new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
