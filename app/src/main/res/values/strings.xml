@@ -21,4 +21,6 @@
     <string name="error_invalid_password">La contraseña es muy corta</string>
     <string name="error_incorrect_password">La contraseña es incorrecta</string>
     <string name="error_field_required">Campo requerido</string>
+    <string name="title_activity_inscripcion_materias">Inscripción</string>
+    <string name="hint_search">Qué materia buscas?</string>
 </resources>
