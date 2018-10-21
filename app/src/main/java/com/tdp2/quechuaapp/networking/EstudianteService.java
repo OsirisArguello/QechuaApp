@@ -348,6 +348,37 @@ public class EstudianteService {
         });
     }
 
+    public void inscribirFinal(Integer finalId,final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.inscribirFinal(AUTHORIZATION_PREFIX+apiToken, finalId).enqueue(new Callback<InscripcionFinal>() {
+            @Override
+            public void onResponse(Call<InscripcionFinal> call, Response<InscripcionFinal> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InscripcionFinal> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
     public void getAlumno(final Client client){
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
         estudianteApi.getAlumno(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<Alumno>() {
@@ -449,6 +480,11 @@ public class EstudianteService {
         listHor.add(hor);
         listHor.add(hor2);
         curso1.horarios = listHor ;
+
+        Materia m = new Materia();
+        m.codigo = "12";
+        m.nombre = "materia 1";
+        curso1.materia = m;
 
 
         Curso curso2 = new Curso();

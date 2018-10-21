@@ -60,7 +60,6 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                 estudianteService.getMisFinales(new Client() {
                     @Override
                     public void onResponseSuccess(Object responseBody) {
-
                         ArrayList<InscripcionFinal> misInscripciones = (ArrayList<InscripcionFinal>) responseBody;
                         for (InscripcionFinal inscripcionFinal: misInscripciones) {
                             if (! inscripcionFinal.estado.equals("ACTIVA")) continue;
@@ -111,22 +110,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
             public void onResponseError(String errorMessage) {
                 ProgressBar loadingView = findViewById(R.id.loading_inscripcion_final);
                 loadingView.setVisibility(View.INVISIBLE);
-                Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
-                        Toast.LENGTH_LONG).show();
 
-                Thread thread = new Thread(){
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                            Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
-                            startActivity(mainActivityIntent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                thread.start();
+                showMensajeError(errorMessage);
             }
 
             @Override
@@ -147,10 +132,36 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+
+                        ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                        loadingView.setVisibility(View.VISIBLE);
+
                         if (aFinal.inscripto) {
                             Log.i("FINALES", "Desinscripcion a final");
+                            loadingView.setVisibility(View.INVISIBLE);
+                            
                         } else {
-                            Log.i("FINALES", "Inscripcion a final");
+                            estudianteService.inscribirFinal(aFinal.id, new Client() {
+                                @Override
+                                public void onResponseSuccess(Object responseBody) {
+                                    ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                                    loadingView.setVisibility(View.INVISIBLE);
+
+                                    showAlert("Inscripcion satisfactoria","Inscripcion");
+                                }
+
+                                @Override
+                                public void onResponseError(String errorMessage) {
+                                    ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                                    loadingView.setVisibility(View.INVISIBLE);
+                                    showMensajeError(errorMessage);
+                                }
+
+                                @Override
+                                public Context getContext() {
+                                    return InscripcionFinalActivity.this;
+                                }
+                            });
                         }
                     }})
                 .setNegativeButton(android.R.string.cancel, null)
@@ -162,5 +173,35 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
         listView.setAdapter(new FinalesAdapter(this, finales));
         listView.setOnItemClickListener(this);
         listView.setEmptyView(findViewById(R.id.emptyElementFinales));
+    }
+
+    private void showMensajeError(String mensaje) {
+        Toast.makeText(InscripcionFinalActivity.this, mensaje, Toast.LENGTH_LONG).show();
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(Toast.LENGTH_LONG);
+                    Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                    startActivity(mainActivityIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
+    private void showAlert(String messageToDisplay, String title) {
+        AlertDialog alertDialog = new AlertDialog.Builder(InscripcionFinalActivity.this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(messageToDisplay);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }

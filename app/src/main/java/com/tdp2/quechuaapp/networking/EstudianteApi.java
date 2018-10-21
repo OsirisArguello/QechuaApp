@@ -53,6 +53,9 @@ public interface EstudianteApi {
     @GET("/api/inscripcion-coloquios/byAlumno")
     Call<ArrayList<InscripcionFinal>> getMisFinales(@Header("Authorization")String apiToken);
 
+    @POST("/api/inscripcion-coloquios/{coloquioId}/inscribir")
+    Call<InscripcionFinal> inscribirFinal(@Header("Authorization")String apiToken, @Path("coloquioId")Integer coloquioId);
+
     @GET("/api/alumnos/data")
     Call<Alumno> getAlumno(@Header("Authorization")String apiToken);
 }
