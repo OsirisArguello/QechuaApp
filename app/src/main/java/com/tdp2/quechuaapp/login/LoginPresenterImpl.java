@@ -28,12 +28,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email) || !isEmailValid(email)) {
-            loginView.validateEmail();
+            loginView.validateEmail(email);
             abort = true;
         }
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            loginView.validatePassword();
+        if (TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            loginView.validatePassword(password);
             abort = true;
         }
 
