@@ -6,10 +6,15 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 public interface DocenteApi {
 
     @GET("/public/cursos/{cursoID}/inscripciones")
     Call<Curso> getCurso(@Path("cursoID")Integer cursoId);
+
+    @GET("/api/profesors/cursos")
+    Call<ArrayList<Curso>> getCursos(@Header("Authorization") String apiToken);
+
 }

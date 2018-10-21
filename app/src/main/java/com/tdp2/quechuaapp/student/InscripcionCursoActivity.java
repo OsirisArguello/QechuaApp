@@ -1,10 +1,11 @@
 package com.tdp2.quechuaapp.student;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,15 +14,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
+import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
-import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
-import com.tdp2.quechuaapp.R;
-import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.CursosAdapter;
+import com.tdp2.quechuaapp.student.view.CursosAdapterCallback;
 
 import java.util.ArrayList;
 
@@ -75,6 +76,10 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                     }
                 };
                 thread.start();
+            }
+            @Override
+            public Context getContext() {
+                return InscripcionCursoActivity.this;
             }
         });
     }
@@ -147,6 +152,10 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
                 showAlert(messageToDisplay, "Inscripción Fallida");
 
+            }
+            @Override
+            public Context getContext() {
+                return InscripcionCursoActivity.this;
             }
         });
 

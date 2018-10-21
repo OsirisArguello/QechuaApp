@@ -2,11 +2,11 @@ package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
 
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
-import com.tdp2.quechuaapp.model.Profesor;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DocenteService {
+    public static final String AUTHORIZATION_PREFIX = "Bearer ";
     private DocenteApi docenteApi;
 
     static final String SERVICE_TAG = "DOCENTESERVICE";
@@ -82,6 +83,38 @@ public class DocenteService {
 
             @Override
             public void onFailure(Call<Curso> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
+    public void getCursos(final Client client) {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+
+        docenteApi.getCursos(AUTHORIZATION_PREFIX +apiToken).enqueue(new Callback<ArrayList<Curso>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Curso>> call, Response<ArrayList<Curso>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Curso>> call, Throwable t) {
                 Log.e(SERVICE_TAG, t.getMessage());
                 client.onResponseError(null);
             }

@@ -1,24 +1,20 @@
 package com.tdp2.quechuaapp.professor;
 
-import java.util.HashMap;
-import java.util.List;
-
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +30,8 @@ import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DetalleCursoActivity extends AppCompatActivity {
@@ -134,6 +132,11 @@ public class DetalleCursoActivity extends AppCompatActivity {
                 };
                 thread.start();
             }
+            @Override
+            public Context getContext() {
+                return DetalleCursoActivity.this;
+            }
+
         });
     }
 

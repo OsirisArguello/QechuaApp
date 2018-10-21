@@ -2,12 +2,8 @@ package com.tdp2.quechuaapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +12,7 @@ import android.widget.TextView;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
-import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
+import com.tdp2.quechuaapp.professor.InscripcionFinalActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent measurementIntent = new Intent(MainActivity.this, DetalleCursoActivity.class);
+                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionFinalActivity.class);
                     MainActivity.this.startActivity(measurementIntent);
                 }
             });
@@ -114,18 +110,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         LinearLayout prioridad = findViewById(R.id.prioridad_action);
-        prioridad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
-            }
-        });
+        if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")) {
+            prioridad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    MainActivity.this.startActivity(measurementIntent);
+                }
+            });
+        }  else {
+            misfinales.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionFinalActivity.class);
+                    MainActivity.this.startActivity(measurementIntent);
+                }
+            });
+        }
 
         if(!userLogged.authorities.get(0).equals("ROLE_ALUMNO")) {
             historiaacademica.setVisibility(View.INVISIBLE);
             inscripcion.setVisibility(View.INVISIBLE);
-            prioridad.setVisibility(View.INVISIBLE);
+            //prioridad.setVisibility(View.INVISIBLE);
         }
 
     }
