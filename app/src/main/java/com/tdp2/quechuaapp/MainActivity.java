@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
@@ -114,8 +115,10 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent misfinalesIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    startActivity(misfinalesIntent);
+                    //Intent misfinalesIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    //startActivity(misfinalesIntent);
+                    Toast.makeText(MainActivity.this, "En Construccion",
+                            Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -123,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
             historiaacademica.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent historiaAcademicaIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    startActivity(historiaAcademicaIntent);
+                    //Intent historiaAcademicaIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    //startActivity(historiaAcademicaIntent);
+                    Toast.makeText(MainActivity.this, "En Construccion",
+                            Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -142,9 +147,11 @@ public class MainActivity extends AppCompatActivity {
             prioridad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent prioridadIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    //Intent prioridadIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
 
-                    startActivity(prioridadIntent);
+                    //startActivity(prioridadIntent);
+                    Toast.makeText(MainActivity.this, "En Construccion",
+                            Toast.LENGTH_LONG).show();
                 }
             });
         } else {
