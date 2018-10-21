@@ -98,4 +98,9 @@ public class MockEstudianteApi implements EstudianteApi {
     public Call<Inscripcion> desinscribirAlumno(String apiToken, Integer cursoId) {
         return null;
     }
+
+    @Override
+    public Call<Alumno> getAlumno(String apiToken) {
+        return null;
+    }
 }

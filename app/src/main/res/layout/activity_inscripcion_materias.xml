@@ -33,8 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:layout_anchorGravity="left|bottom">
@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="Carrera"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/carreras_spinner"
@@ -53,7 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -61,8 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
             android:background="?attr/colorPrimaryDark"
             android:orientation="horizontal"
@@ -71,7 +72,7 @@
 
             <EditText
                 android:id="@+id/materias_search"
-                android:layout_width="274dp"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
                 android:hint="@string/hint_search"
                 android:imeOptions="actionDone"
@@ -80,16 +81,16 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textColorLink="@color/white"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="0dp"
                 android:gravity="center_vertical"
-                android:tint="@color/white"
-                android:src="@android:drawable/ic_menu_search" />
+                android:src="@android:drawable/ic_menu_search"
+                android:tint="@color/white" />
 
         </LinearLayout>
 

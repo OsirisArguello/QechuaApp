@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp.networking;
 
+import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Materia;
@@ -37,5 +38,6 @@ public interface EstudianteApi {
     @POST("/api/inscripcion-cursos/{cursoId}/accion/desinscribir")
     Call<Inscripcion> desinscribirAlumno(@Header("Authorization")String apiToken, @Path("cursoId")Integer inscripcionId);
 
-
+    @GET("/api/alumnos/data")
+    Call<Alumno> getAlumno(@Header("Authorization")String apiToken);
 }

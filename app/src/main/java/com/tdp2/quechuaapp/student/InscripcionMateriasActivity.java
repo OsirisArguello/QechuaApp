@@ -42,6 +42,7 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
 
     EditText materiaBuscada;
     ArrayList<Materia> materiasFiltradas = new ArrayList<>();
+    Alumno alumno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
         setContentView(R.layout.activity_inscripcion_materias);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        alumno = (Alumno) getIntent().getSerializableExtra("alumno");
 
         estudianteService = new EstudianteService();
 
@@ -86,8 +89,6 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent courseSignUpActivity = new Intent(getApplicationContext(), InscripcionCursoActivity.class);
-                Alumno alumno = new Alumno();
-                alumno.id = 1;
                 courseSignUpActivity.putExtra("alumno", alumno);
                 courseSignUpActivity.putExtra("materia", materias().get(position));
                 startActivity(courseSignUpActivity);
