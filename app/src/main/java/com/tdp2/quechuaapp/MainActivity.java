@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -16,15 +17,24 @@ import android.widget.TextView;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.DocenteService;
+import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
+import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private UserSessionManager userSessionManager;
     private UserLogged userLogged;
+    private EstudianteService estudianteService;
+    private DocenteService docenteService;
+    private Alumno alumno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         userLogged=userSessionManager.getUserLogged();
+
+        estudianteService=new EstudianteService();
+        docenteService=new DocenteService();
 
         setupUI();
 
@@ -58,13 +71,80 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupActions() {
 
-        LinearLayout miscursos = findViewById(R.id.miscursos_action);
+
+
+        final LinearLayout miscursos = findViewById(R.id.miscursos_action);
+        LinearLayout misfinales = findViewById(R.id.misfinales_action);
+
         if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")){
+
+
+            estudianteService.getAlumno(new Client() {
+                @Override
+                public void onResponseSuccess(Object responseBody) {
+                    alumno=(Alumno) responseBody;
+                }
+
+                @Override
+                public void onResponseError(String errorMessage) {
+                    //TODO
+                }
+
+                @Override
+                public Context getContext() {
+                    return MainActivity.this;
+                }
+            });
+
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent cursadasIntent = new Intent(MainActivity.this, CursadasActivity.class);
-                    MainActivity.this.startActivity(cursadasIntent);
+                    Intent miscursosIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+
+                    Materia materia = new Materia();
+                    materia.id=1;
+
+                    miscursosIntent.putExtra("alumno",alumno);
+                    miscursosIntent.putExtra("materia",materia);
+
+                    startActivity(miscursosIntent);
+                }
+            });
+
+            misfinales.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent misfinalesIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    startActivity(misfinalesIntent);
+                }
+            });
+
+            LinearLayout historiaacademica = findViewById(R.id.historiaacademica_action);
+            historiaacademica.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent historiaAcademicaIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    startActivity(historiaAcademicaIntent);
+                }
+            });
+
+            LinearLayout inscripcion = findViewById(R.id.inscripcion_action);
+            inscripcion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
+                    inscripcionMateriasIntent.putExtra("alumno",alumno);
+                    startActivity(inscripcionMateriasIntent);
+                }
+            });
+
+            LinearLayout prioridad = findViewById(R.id.prioridad_action);
+            prioridad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent prioridadIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+
+                    startActivity(prioridadIntent);
                 }
             });
         } else {
@@ -72,97 +152,40 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, DetalleCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
-        }
-        LinearLayout misfinales = findViewById(R.id.misfinales_action);
 
-        if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")){
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
-                }
-            });
-        } else {
-            misfinales.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    MainActivity.this.startActivity(measurementIntent);
+                    startActivity(measurementIntent);
                 }
             });
         }
 
-        LinearLayout historiaacademica = findViewById(R.id.historiaacademica_action);
-        historiaacademica.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
-            }
-        });
 
-        LinearLayout inscripcion = findViewById(R.id.inscripcion_action);
-        inscripcion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
-            }
-        });
 
-        LinearLayout prioridad = findViewById(R.id.prioridad_action);
-        prioridad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                MainActivity.this.startActivity(measurementIntent);
-            }
-        });
 
-        if(!userLogged.authorities.get(0).equals("ROLE_ALUMNO")) {
-            historiaacademica.setVisibility(View.INVISIBLE);
-            inscripcion.setVisibility(View.INVISIBLE);
-            prioridad.setVisibility(View.INVISIBLE);
-        }
+
 
     }
 
     @Override
     public void onBackPressed() {
-        /*DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*/
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        /*getMenuInflater().inflate(R.menu.main, menu);
 
-        UserLogged user = userSessionManager.getUserLogged();
-
-        menu.getItem(0).setTitle(user.toString());
-        menu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.close));*/
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*int id = item.getItemId();
-
-        if (id == R.id.logout) {
-            userSessionManager.logout();
-            finish();
-            return true;
-        }*/
 
         return super.onOptionsItemSelected(item);
     }

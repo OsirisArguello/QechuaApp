@@ -78,4 +78,16 @@ public class Curso implements Serializable {
         Integer vacantes = capacidadCurso - getInscriptosRegulares().size();
         return vacantes >= 0 ? vacantes : 0;
     }
+
+    public Inscripcion getInscripcion(Alumno alumno) {
+        if(inscripciones!=null) {
+            for (Inscripcion inscripcion : inscripciones) {
+                if(alumno.id.equals(inscripcion.alumno.id)){
+                    return inscripcion;
+                }
+            }
+        }
+
+        return null;
+    }
 }
