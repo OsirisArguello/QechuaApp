@@ -43,7 +43,9 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         TextView fechaTextView = convertView.findViewById(R.id.fechaFinal);
         TextView aulaTextView = convertView.findViewById(R.id.aulaFinal);
 
-//        final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
+        final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
+        iconoInscipcion.setImageResource(android.R.drawable.ic_menu_add);
+        // si ya esta inscripto, setear: android.R.drawable.ic_menu_delete
 
 
 

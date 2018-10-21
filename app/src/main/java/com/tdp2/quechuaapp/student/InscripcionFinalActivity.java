@@ -1,19 +1,24 @@
 package com.tdp2.quechuaapp.student;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.FinalesAdapter;
@@ -33,19 +38,34 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
 //        curso = (Curso) getIntent().getSerializableExtra("curso");
         setContentView(R.layout.activity_inscripcion_final);
 
+        Materia materia = new Materia();
+        materia.id = 123;
+        materia.nombre = "Materia";
+
+        curso = new Curso();
+        curso.id = 1;
+        curso.materia = materia;
+
+        estudianteService = new EstudianteService();
+
         setupInitials();
     }
 
     private void setupInitials() {
-        estudianteService = new EstudianteService();
-        estudianteService.getFinales(1, new Client() {
+        final TextView materiaTextView = findViewById(R.id.materiaTextView);
+        final TextView cursoTextView = findViewById(R.id.cursoTextView);
+        final TextView cuatrimestreTextView = findViewById(R.id.cuatrimestreTextView);
+
+        materiaTextView.setText("Materia: " + curso.materia.id.toString() + " - " + curso.materia.nombre);
+        cursoTextView.setText("Curso: " + curso.id);
+
+        estudianteService.getFinalesDisponibles(curso.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                finales=(ArrayList<Final>) responseBody;
+                finales = (ArrayList<Final>) responseBody;
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
                 loadingView.setVisibility(View.INVISIBLE);
                 displayFinales();
-
             }
 
             @Override
@@ -69,12 +89,26 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                 };
                 thread.start();
             }
+
+            @Override
+            public Context getContext() {
+                return InscripcionFinalActivity.this;
+            }
         });
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // Mostrar pop up de confirmacion
+        new AlertDialog.Builder(this)
+                .setTitle("Inscipcion")
+                .setMessage("Confirmas que deseas inscribirte?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Agregar request para inscripcion a final
+                    }})
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     private void displayFinales() {
