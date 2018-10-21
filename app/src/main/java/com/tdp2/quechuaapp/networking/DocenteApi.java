@@ -16,7 +16,7 @@ public interface DocenteApi {
     @GET("/public/cursos/{cursoID}/inscripciones")
     Call<Curso> getCurso(@Path("cursoID")Integer cursoId);
 
-    @POST("/api/inscripcion-cursos/{inscripcionId}/accion/aceptar")
+    @POST("/api/inscripcion-cursos/{inscripcionId}/accion/regularizar")
     Call<Inscripcion> aceptar(@Header("Authorization")String apiToken, @Path("inscripcionId")Integer inscripcionId);
 
     @POST("/api/inscripcion-cursos/{inscripcionId}/accion/rechazar")

@@ -176,66 +176,66 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
     @Override
     public void aceptar(final Integer inscripcionId) {
         showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Aceptación", "¿Esta seguro que desea aceptar a este alumno en el curso?", "Aceptar Alumno", "Cancelar",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
-                        loadingView.bringToFront();
-                        loadingView.setVisibility(View.VISIBLE);
-                        docenteService.aceptarInscripcion(inscripcionId, new Client() {
-                            @Override
-                            public void onResponseSuccess(Object responseBody) {
+        new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+            loadingView.bringToFront();
+            loadingView.setVisibility(View.VISIBLE);
+            docenteService.aceptarInscripcion(inscripcionId, new Client() {
+                @Override
+                public void onResponseSuccess(Object responseBody) {
 
-                                getCurso();
+                    getCurso();
 
-                                DialogBuilder.showAlert("El alumno ha sido aceptado en el curso como REGULAR.","Inscripción Satisfactoria",DetalleCursoActivity.this);
-                            }
+                    DialogBuilder.showAlert("El alumno ha sido aceptado en el curso como REGULAR.","Inscripción Satisfactoria",DetalleCursoActivity.this);
+                }
 
-                            @Override
-                            public void onResponseError(String errorMessage) {
-                                DialogBuilder.showAlert("Hubo un error al intentar inscribir al alumno. Por favor reintente más tarde.","Inscripción Fallida",DetalleCursoActivity.this);
-                            }
+                @Override
+                public void onResponseError(String errorMessage) {
+                    DialogBuilder.showAlert("Hubo un error al intentar inscribir al alumno. Por favor reintente más tarde.","Inscripción Fallida",DetalleCursoActivity.this);
+                }
 
-                            @Override
-                            public Context getContext() {
-                                return DetalleCursoActivity.this;
-                            }
-                        });
-                    }
-                });
+                @Override
+                public Context getContext() {
+                    return DetalleCursoActivity.this;
+                }
+            });
+            }
+        });
     }
 
     @Override
     public void rechazar(final Integer inscripcionId) {
 
         showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Rechazo", "¿Esta seguro que desea rechazar la inscripción de este alumno?", "Rechazar Inscripción","Cancelar",
-                new DialogInterface.OnClickListener() {
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+                loadingView.bringToFront();
+                loadingView.setVisibility(View.VISIBLE);
+                docenteService.rechazarInscripcion(inscripcionId, new Client() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
-                        loadingView.bringToFront();
-                        loadingView.setVisibility(View.VISIBLE);
-                        docenteService.rechazarInscripcion(inscripcionId, new Client() {
-                            @Override
-                            public void onResponseSuccess(Object responseBody) {
-                                getCurso();
-                                DialogBuilder.showAlert("La inscripción del alumno ha sido rechazada","Rechazo Satisfactorio",DetalleCursoActivity.this);
+                    public void onResponseSuccess(Object responseBody) {
+                        getCurso();
+                        DialogBuilder.showAlert("La inscripción del alumno ha sido rechazada","Rechazo Satisfactorio",DetalleCursoActivity.this);
 
-                            }
+                    }
 
-                            @Override
-                            public void onResponseError(String errorMessage) {
-                                DialogBuilder.showAlert("Hubo un error al rechazar la inscripción del alumno. Por favor reintente más tarde.","Rechazo Fallido",DetalleCursoActivity.this);
+                    @Override
+                    public void onResponseError(String errorMessage) {
+                        DialogBuilder.showAlert("Hubo un error al rechazar la inscripción del alumno. Por favor reintente más tarde.","Rechazo Fallido",DetalleCursoActivity.this);
 
-                            }
+                    }
 
-                            @Override
-                            public Context getContext() {
-                                return DetalleCursoActivity.this;
-                            }
-                        });
+                    @Override
+                    public Context getContext() {
+                        return DetalleCursoActivity.this;
                     }
                 });
+                }
+            });
 
 
 
