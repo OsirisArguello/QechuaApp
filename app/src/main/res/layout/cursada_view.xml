@@ -32,6 +32,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idMateria" />
 
+
+    <TextView
+        android:id="@+id/idProf"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/idCursada" />
+
     <TextView
         android:id="@+id/dia_horarioCursada"
         android:layout_width="110dp"
@@ -44,7 +60,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/horas_horarioCursada"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idCursada"
+        app:layout_constraintTop_toBottomOf="@+id/idProf"
         />
 
     <TextView
@@ -72,20 +88,8 @@
         android:id="@+id/finalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="280dp"
-        android:layout_marginRight="280dp"
-        android:text="Final"
-        android:textSize="18sp"
-        android:theme="@style/AppTheme.Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horas_horarioCursada" /> />
-
-    <Button
-        android:id="@+id/desinscribirseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
-        android:text="Desinscribirse"
+        android:text="Final"
         android:textSize="18sp"
         android:theme="@style/AppTheme.Button"
         app:layout_constraintEnd_toEndOf="parent"

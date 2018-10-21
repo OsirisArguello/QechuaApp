@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
@@ -51,22 +50,15 @@ public class CursadasAdapter extends ArrayAdapter<Cursada> {
 
         TextView idMateriaTextView = convertView.findViewById(R.id.idMateria);
         TextView idCursoTextView = convertView.findViewById(R.id.idCursada);
+        TextView idProfTextView = convertView.findViewById(R.id.idProf);
         TextView diaTextView = convertView.findViewById(R.id.dia_horarioCursada);
         TextView horasTextView = convertView.findViewById(R.id.horas_horarioCursada);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horarioCursada);
 
 
-        final Button desinscribirseButton = convertView.findViewById(R.id.desinscribirseButton);
-
-        desinscribirseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapterCallback.desinscribirAlumno(cursada.id, desinscribirseButton);
-            }
-        });
-
         idMateriaTextView.setText("Materia: "+cursada.curso.materia.codigo.toString()+" - " + cursada.curso.materia.nombre.toString());
         idCursoTextView.setText("Curso: "+cursada.curso.id.toString());
+        idProfTextView.setText("Docente: "+cursada.curso.profesor.apellido.toString() + ", " + cursada.curso.profesor.nombre.toString());
 
         StringBuilder diaString=new StringBuilder();
         StringBuilder horasString=new StringBuilder();
