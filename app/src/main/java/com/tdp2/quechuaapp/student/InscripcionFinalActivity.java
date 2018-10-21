@@ -36,16 +36,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        curso = (Curso) getIntent().getSerializableExtra("curso");
+        curso = (Curso) getIntent().getSerializableExtra("curso");
         setContentView(R.layout.activity_inscripcion_final);
-
-        Materia materia = new Materia();
-        materia.id = 123;
-        materia.nombre = "Materia";
-
-        curso = new Curso();
-        curso.id = 1;
-        curso.materia = materia;
 
         estudianteService = new EstudianteService();
 
@@ -57,7 +49,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
         final TextView cursoTextView = findViewById(R.id.cursoTextView);
         final TextView cuatrimestreTextView = findViewById(R.id.cuatrimestreTextView);
 
-        materiaTextView.setText("Materia: " + curso.materia.id.toString() + " - " + curso.materia.nombre);
+        materiaTextView.setText("Materia: " + curso.materia.codigo + " - " + curso.materia.nombre);
         cursoTextView.setText("Curso: " + curso.id);
 
         estudianteService.getFinalesDisponibles(curso.id, new Client() {

@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Cursada;
+import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -146,6 +148,13 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
             }
         });
 
+    }
+
+    @Override
+    public void verFinales(Cursada cursada) {
+        Intent inscripcionFinalActivity = new Intent(getApplicationContext(), InscripcionFinalActivity.class);
+        inscripcionFinalActivity.putExtra("curso", cursada.curso);
+        startActivity(inscripcionFinalActivity);
     }
 
     private void showAlert(String messageToDisplay, String title) {
