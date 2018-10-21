@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp.student;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +27,12 @@ import java.util.ArrayList;
 
 public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback {
 
-    Alumno alumno;
     ArrayList<Cursada> cursadas;
     EstudianteService estudianteService;
     CursadasAdapter cursadasAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        alumno = (Alumno) getIntent().getSerializableExtra("alumno");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cursadas);
         setupInitials();
@@ -46,7 +45,7 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
         ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_curso);
         loadingView.setVisibility(View.INVISIBLE);
         displayCursos();*/
-        estudianteService.getCursadas(alumno.id, new Client() {
+        estudianteService.getCursadas(new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursadas=(ArrayList<Cursada>) responseBody;
@@ -76,12 +75,17 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
                 };
                 thread.start();
             }
+
+            @Override
+            public Context getContext() {
+                return CursadasActivity.this;
+            }
         });
     }
 
     private void displayCursadas() {
         final ListView cursadasListView = findViewById(R.id.lista_cursadas);
-        cursadasAdapter = new CursadasAdapter(this, cursadas, alumno);
+        cursadasAdapter = new CursadasAdapter(this, cursadas);
         cursadasListView.setAdapter(cursadasAdapter);
         cursadasListView.setEmptyView(findViewById(R.id.emptyElementCursadas));
     }
@@ -137,6 +141,11 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
 
                 showAlert(messageToDisplay, "Desinscripción Fallida");
 
+            }
+
+            @Override
+            public Context getContext() {
+                return CursadasActivity.this;
             }
         });
 

@@ -2,6 +2,7 @@ package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
 
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
@@ -21,6 +22,7 @@ import retrofit2.Response;
 
 public class EstudianteService {
 
+    public static final String AUTHORIZATION_PREFIX = "Bearer ";
     private EstudianteApi estudianteApi;
 
     public EstudianteService() {
@@ -136,8 +138,9 @@ public class EstudianteService {
         });
     }
 
-    public void getCursadas(Integer idEstudiante, final Client client){
-        estudianteApi.getCursadas("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcGFlekBmaXViYS5jb20iLCJhdXRoIjoiUk9MRV9BTFVNTk8iLCJleHAiOjE1NDAwNzcxNDJ9.xjPIR8tlbwa1WwFQfPa3yA7UKv0cVPBpsXIEmYcJb7WiJJ2dHou7pOWgLrGJfzNRZhPRd96zQjUdPWXkYbGlHg").enqueue(new Callback<ArrayList<Cursada>>() {
+    public void getCursadas(final Client client){
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getCursadas(AUTHORIZATION_PREFIX +apiToken).enqueue(new Callback<ArrayList<Cursada>>() {
 
             @Override
             public void onResponse(Call<ArrayList<Cursada>> call, Response<ArrayList<Cursada>> response) {
@@ -169,7 +172,8 @@ public class EstudianteService {
     }
 
     public void desinscribirAlumno(Integer idCursada, final Client client){
-        estudianteApi.desinscribirAlumno(idCursada).enqueue(new Callback<Inscripcion>() {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.desinscribirAlumno(apiToken,idCursada).enqueue(new Callback<Inscripcion>() {
 
             @Override
             public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
