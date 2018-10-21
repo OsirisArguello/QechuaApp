@@ -7,12 +7,12 @@
 
     <TextView
         android:id="@+id/idMateriaFinal"
-        android:layout_width="166dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,14 +32,14 @@
 
     <TextView
         android:id="@+id/idCuatrimestreFinal"
-        android:layout_width="110dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idCursoFinal"
         />
@@ -53,10 +53,11 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="16dp"
-        android:text="Agregar Fecha final"
-        android:textSize="10sp"
+        android:text="+"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idCuatrimestreFinal"
+        app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/AppTheme.Button"
         />
 </android.support.constraint.ConstraintLayout>
