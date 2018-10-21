@@ -193,7 +193,7 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
 
                             @Override
                             public void onResponseError(String errorMessage) {
-                                DialogBuilder.showAlert("Hubo un error al aceptar al alumno. Por favor reintente más tarde.","Inscripción Fallida",DetalleCursoActivity.this);
+                                DialogBuilder.showAlert("Hubo un error al intentar inscribir al alumno. Por favor reintente más tarde.","Inscripción Fallida",DetalleCursoActivity.this);
                             }
 
                             @Override
@@ -208,7 +208,7 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
     @Override
     public void rechazar(final Integer inscripcionId) {
 
-        showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Rechazo", "¿Esta seguro que desea rechazar la inscripción de este alumno?", "Rechazar Alumno","Cancelar",
+        showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Rechazo", "¿Esta seguro que desea rechazar la inscripción de este alumno?", "Rechazar Inscripción","Cancelar",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -219,13 +219,13 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
                             @Override
                             public void onResponseSuccess(Object responseBody) {
                                 getCurso();
-                                DialogBuilder.showAlert("El alumno no ha sido aceptado en el curso","Rechazo Satisfactorio",DetalleCursoActivity.this);
+                                DialogBuilder.showAlert("La inscripción del alumno ha sido rechazada","Rechazo Satisfactorio",DetalleCursoActivity.this);
 
                             }
 
                             @Override
                             public void onResponseError(String errorMessage) {
-                                DialogBuilder.showAlert("Hubo un error al rechazar al alumno. Por favor reintente más tarde.","Rechazo Fallido",DetalleCursoActivity.this);
+                                DialogBuilder.showAlert("Hubo un error al rechazar la inscripción del alumno. Por favor reintente más tarde.","Rechazo Fallido",DetalleCursoActivity.this);
 
                             }
 
