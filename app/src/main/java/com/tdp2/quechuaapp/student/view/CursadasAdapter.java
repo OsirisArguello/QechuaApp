@@ -55,18 +55,21 @@ public class CursadasAdapter extends ArrayAdapter<Cursada> {
         final Button boton = convertView.findViewById(R.id.finalButton);
 
         // Ver si hay mas mensajes segun los otros estados
-        boton.setText(cursada.estado.equals("FINAL_PENDIENTE") ? "Inscribirse a final" : "Desinscribir");
-        boton.setBackgroundColor(cursada.estado.equals("FINAL_PENDIENTE") ? R.color.lightBlue : R.color.red);
+        boton.setText("Finales");
+        //boton.setBackgroundColor(cursada.estado.equals("FINAL_PENDIENTE") ? R.color.lightBlue : R.color.red);
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (cursada.estado.equals("FINAL_PENDIENTE")) {
                     adapterCallback.verFinales(cursada);
-                } else {
-                    adapterCallback.desinscribirAlumno(cursada.id, boton);
                 }
             }
         });
+
+        if(!cursada.estado.equals("FINAL_PENDIENTE")) {
+            boton.setVisibility(View.INVISIBLE);
+        }
+
 
 
         idMateriaTextView.setText("Materia: "+cursada.curso.materia.codigo.toString()+" - " + cursada.curso.materia.nombre.toString());

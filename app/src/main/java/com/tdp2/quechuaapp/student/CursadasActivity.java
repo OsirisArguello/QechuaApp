@@ -90,67 +90,6 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
     }
 
     @Override
-    public void desinscribirAlumno(final Integer idCursada, final Button desinscribirseButton) {
-
-        ProgressBar loadingView = findViewById(R.id.loading_cursadas);
-        loadingView.setVisibility(View.VISIBLE);
-        loadingView.bringToFront();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-        estudianteService.desinscribirAlumno(idCursada, new Client() {
-            @Override
-            public void onResponseSuccess(Object responseBody) {
-                ProgressBar loadingView = findViewById(R.id.loading_cursadas);
-                loadingView.setVisibility(View.INVISIBLE);
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                Inscripcion inscripcion = (Inscripcion) responseBody;
-
-                String messageToDisplay;
-
-                messageToDisplay = String.format(getResources().getString(R.string.desinscripcion_exito), inscripcion.curso.id);
-
-
-                //Actualizo el curso con la desinscripcion realizada
-                //for (Cursada cursada : cursadas) {
-                //    if(cursadas.curso.id.equals(idCurso)){
-                //        cursadas.curso.inscripciones.remove(inscripcion);
-                //    }
-                //}
-
-                showAlert(messageToDisplay, "Desinscripción Satisfactoria");
-            }
-
-            @Override
-            public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_cursadas);
-                loadingView.setVisibility(View.INVISIBLE);
-
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                String messageToDisplay;
-                if(errorMessage!=null){
-                    Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
-                    messageToDisplay=getString(idError);
-                } else {
-                    messageToDisplay=getString(R.string.desinscripcion_error_generico);
-                }
-
-                showAlert(messageToDisplay, "Desinscripción Fallida");
-
-            }
-
-            @Override
-            public Context getContext() {
-                return CursadasActivity.this;
-            }
-        });
-
-    }
-
-    @Override
     public void verFinales(Cursada cursada) {
         Intent inscripcionFinalActivity = new Intent(getApplicationContext(), InscripcionFinalActivity.class);
         inscripcionFinalActivity.putExtra("curso", cursada.curso);

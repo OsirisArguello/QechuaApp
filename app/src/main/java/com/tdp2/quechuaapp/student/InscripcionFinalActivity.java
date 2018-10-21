@@ -32,6 +32,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     Curso curso;
     ArrayList<Final> finales;
     EstudianteService estudianteService;
+    FinalesAdapter finalesAdapter;
+    ArrayList<InscripcionFinal> misInscripciones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,53 +59,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
             public void onResponseSuccess(Object responseBody) {
                 finales = (ArrayList<Final>) responseBody;
 
-                estudianteService.getMisFinales(new Client() {
-                    @Override
-                    public void onResponseSuccess(Object responseBody) {
-                        ArrayList<InscripcionFinal> misInscripciones = (ArrayList<InscripcionFinal>) responseBody;
-                        for (InscripcionFinal inscripcionFinal: misInscripciones) {
-                            if (! inscripcionFinal.estado.equals("ACTIVA")) continue;
-
-                            for (Final otro: finales) {
-                                if (otro.id == inscripcionFinal.coloquio.id) {
-                                    otro.inscripto = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
-                        loadingView.setVisibility(View.INVISIBLE);
-                        displayFinales();
-                    }
-
-                    @Override
-                    public void onResponseError(String errorMessage) {
-                        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_final);
-                        loadingView.setVisibility(View.INVISIBLE);
-                        Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
-                                Toast.LENGTH_LONG).show();
-
-                        Thread thread = new Thread(){
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                                    Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
-                                    startActivity(mainActivityIntent);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                        thread.start();
-                    }
-
-                    @Override
-                    public Context getContext() {
-                        return InscripcionFinalActivity.this;
-                    }
-                });
+                getMisInscripciones();
             }
 
             @Override
@@ -121,15 +77,64 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
         });
     }
 
+    private void getMisInscripciones() {
+        estudianteService.getMisFinales(new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                misInscripciones = (ArrayList<InscripcionFinal>) responseBody;
+                for (InscripcionFinal inscripcionFinal: misInscripciones) {
+                    if (! inscripcionFinal.estado.equals("ACTIVA")) continue;
+
+                    for (Final otro: finales) {
+                        if (otro.id == inscripcionFinal.coloquio.id) {
+                            otro.inscripto = true;
+                            break;
+                        }
+                    }
+                }
+
+                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                loadingView.setVisibility(View.INVISIBLE);
+                displayFinales();
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_final);
+                loadingView.setVisibility(View.INVISIBLE);
+                Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                        Toast.LENGTH_LONG).show();
+
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                            Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public Context getContext() {
+                return InscripcionFinalActivity.this;
+            }
+        });
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Final aFinal = finales.get(position);
         String mensaje = aFinal.inscripto ? "desinscribirte?":"inscribirte?";
 
         new AlertDialog.Builder(this)
-                .setTitle("Inscipcion")
+                .setTitle("Inscripción")
                 .setMessage("Confirmas que deseas " + mensaje)
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -137,7 +142,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                         loadingView.setVisibility(View.VISIBLE);
 
                         if (aFinal.inscripto) {
-                            Log.i("FINALES", "Desinscripcion a final");
+                            Log.i("FINALES", "Desinscripción a final");
                             loadingView.setVisibility(View.INVISIBLE);
                             
                         } else {
@@ -147,7 +152,10 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                                     ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
                                     loadingView.setVisibility(View.INVISIBLE);
 
+                                    getMisInscripciones();
+
                                     showAlert("Inscripcion satisfactoria","Inscripcion");
+                                    finalesAdapter.notifyDataSetChanged();
                                 }
 
                                 @Override
@@ -170,7 +178,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
 
     private void displayFinales() {
         final ListView listView = findViewById(R.id.lista_finales);
-        listView.setAdapter(new FinalesAdapter(this, finales));
+        finalesAdapter=new FinalesAdapter(this, finales);
+        listView.setAdapter(finalesAdapter);
         listView.setOnItemClickListener(this);
         listView.setEmptyView(findViewById(R.id.emptyElementFinales));
     }
