@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +19,6 @@ import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
-import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -104,14 +104,22 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    public void validateEmail() {
-        mEmailView.setError(getString(R.string.error_invalid_email));
+    public void validateEmail(String email) {
+        if (TextUtils.isEmpty(email)){
+            mEmailView.setError(getString(R.string.error_empty_email));
+        } else {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+        }
         mEmailView.requestFocus();
     }
 
     @Override
-    public void validatePassword() {
-        mPasswordView.setError(getString(R.string.error_invalid_password));
+    public void validatePassword(String password) {
+        if (TextUtils.isEmpty(password)){
+            mPasswordView.setError(getString(R.string.error_empty_password));
+        } else {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+        }
         mPasswordView.requestFocus();
     }
 
@@ -123,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void onServiceUnavailable() {
-        Toast.makeText(LoginActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+        Toast.makeText(LoginActivity.this, "No es posible ingresar en este momento, por favor intente más tarde.",
                 Toast.LENGTH_LONG).show();
     }
 
