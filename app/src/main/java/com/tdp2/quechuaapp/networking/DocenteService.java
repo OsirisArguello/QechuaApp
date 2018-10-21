@@ -2,6 +2,7 @@ package com.tdp2.quechuaapp.networking;
 
 import android.util.Log;
 
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
@@ -15,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DocenteService {
+    public static final String AUTHORIZATION_PREFIX = "Bearer ";
     private DocenteApi docenteApi;
 
     static final String SERVICE_TAG = "DOCENTESERVICE";
@@ -86,5 +88,71 @@ public class DocenteService {
                 client.onResponseError(null);
             }
         });
+    }
+
+    public void aceptarInscripcion(Integer inscripcionId, final Client client) {
+
+        String apiToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.aceptar(AUTHORIZATION_PREFIX+apiToken,inscripcionId).enqueue(new Callback<Inscripcion>() {
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+
+    }
+
+    public void rechazarInscripcion(Integer inscripcionId, final Client client) {
+
+        String apiToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.rechazar(AUTHORIZATION_PREFIX+apiToken,inscripcionId).enqueue(new Callback<Inscripcion>() {
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+
     }
 }

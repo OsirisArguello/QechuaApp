@@ -2,6 +2,7 @@ package com.tdp2.quechuaapp.networking;
 
 
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Inscripcion;
 
 import retrofit2.Call;
 
@@ -21,6 +22,16 @@ public class MockDocenteService implements DocenteApi {
         curso.id=cursoId;
 
         return delegate.returningResponse(curso).getCurso(cursoId);
+    }
+
+    @Override
+    public Call<Inscripcion> aceptar(String apiToken, Integer inscripcionId) {
+        return null;
+    }
+
+    @Override
+    public Call<Inscripcion> rechazar(String apiToken, Integer inscripcionId) {
+        return null;
     }
 
 

@@ -3,7 +3,7 @@ package com.tdp2.quechuaapp.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.tdp2.quechuaapp.student.view.AlumnoPrioridadComparator;
+import com.tdp2.quechuaapp.student.view.InscripcionPrioridadComparator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,28 +35,28 @@ public class Curso implements Serializable {
     @Expose
     public List<Inscripcion> inscripciones;
 
-    public List<Alumno> getInscriptosRegulares(){
-        List<Alumno> listaAlumnos = new ArrayList<>();
+    public List<Inscripcion> getInscriptosRegulares(){
+        List<Inscripcion> listaAlumnos = new ArrayList<>();
         if(inscripciones!=null) {
             for (Inscripcion inscripcion : inscripciones) {
                 if (inscripcion.estado.equals("REGULAR"))
-                    listaAlumnos.add(inscripcion.alumno);
+                    listaAlumnos.add(inscripcion);
             }
         }
 
         return listaAlumnos;
     }
 
-    public List<Alumno> getInscriptosCondicionales(){
-        List<Alumno> listaAlumnos = new ArrayList<>();
+    public List<Inscripcion> getInscriptosCondicionales(){
+        List<Inscripcion> listaAlumnos = new ArrayList<>();
         if(inscripciones!=null) {
             for (Inscripcion inscripcion : inscripciones) {
                 if (inscripcion.estado.equals("CONDICIONAL"))
-                    listaAlumnos.add(inscripcion.alumno);
+                    listaAlumnos.add(inscripcion);
             }
         }
 
-        Collections.sort(listaAlumnos,new AlumnoPrioridadComparator());
+        Collections.sort(listaAlumnos,new InscripcionPrioridadComparator());
 
         return listaAlumnos;
     }

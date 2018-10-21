@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp.student;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.CursosAdapter;
+import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
 
@@ -137,7 +139,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
                 getCursosPorMateria();
 
-                showAlert(messageToDisplay, "Inscripción Satisfactoria");
+                DialogBuilder.showAlert(messageToDisplay, "Inscripción Satisfactoria",InscripcionCursoActivity.this);
+                cursosAdapter.notifyDataSetChanged();
 
             }
 
@@ -157,8 +160,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                     messageToDisplay=getString(R.string.inscripcion_error_generico);
                 }
 
-                showAlert(messageToDisplay, "Inscripción Fallida");
-
+                DialogBuilder.showAlert(messageToDisplay, "Inscripción Fallida",InscripcionCursoActivity.this);
+                cursosAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -200,7 +203,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 getCursosPorMateria();
 
 
-                showAlert(messageToDisplay, "Desinscripción Satisfactoria");
+                DialogBuilder.showAlert(messageToDisplay, "Desinscripción Satisfactoria",InscripcionCursoActivity.this);
+                cursosAdapter.notifyDataSetChanged();
 
             }
 
@@ -220,7 +224,8 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                     messageToDisplay=getString(R.string.desinscripcion_error_generico);
                 }
 
-                showAlert(messageToDisplay, "Desinscripción Fallida");
+                DialogBuilder.showAlert(messageToDisplay, "Desinscripción Fallida",InscripcionCursoActivity.this);
+                cursosAdapter.notifyDataSetChanged();
 
             }
 
@@ -232,7 +237,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
 
     }
 
-    private void showAlert(String messageToDisplay, String title) {
+    /*private void showAlert(String messageToDisplay, String title) {
         AlertDialog alertDialog = new AlertDialog.Builder(InscripcionCursoActivity.this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(messageToDisplay);
@@ -244,5 +249,5 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 });
         alertDialog.show();
         cursosAdapter.notifyDataSetChanged();
-    }
+    }*/
 }
