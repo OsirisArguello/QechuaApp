@@ -22,7 +22,7 @@ public interface EstudianteApi {
     @GET("/public/materias")
     Call<ArrayList<Materia>> getMaterias();
 
-    @GET("/api/materias")
+    @GET("/api/materias/find")
     Call<ArrayList<Materia>> getMateriasPorCarrera(@Header("Authorization") String apiToken, @Query("carrera") Integer carreraId);
 
     @GET("/public/cursos")
