@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
@@ -51,6 +52,21 @@ public class CursadasAdapter extends ArrayAdapter<Cursada> {
         TextView diaTextView = convertView.findViewById(R.id.dia_horarioCursada);
         TextView horasTextView = convertView.findViewById(R.id.horas_horarioCursada);
         TextView aulaTextView = convertView.findViewById(R.id.aula_horarioCursada);
+        final Button boton = convertView.findViewById(R.id.finalButton);
+
+        // Ver si hay mas mensajes segun los otros estados
+        boton.setText(cursada.estado.equals("FINAL_PENDIENTE") ? "Inscribirse a final" : "Desinscribir");
+        boton.setBackgroundColor(cursada.estado.equals("FINAL_PENDIENTE") ? R.color.lightBlue : R.color.red);
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cursada.estado.equals("FINAL_PENDIENTE")) {
+                    adapterCallback.verFinales(cursada);
+                } else {
+                    adapterCallback.desinscribirAlumno(cursada.id, boton);
+                }
+            }
+        });
 
 
         idMateriaTextView.setText("Materia: "+cursada.curso.materia.codigo.toString()+" - " + cursada.curso.materia.nombre.toString());
