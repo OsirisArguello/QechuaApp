@@ -1,6 +1,7 @@
 package com.tdp2.quechuaapp.networking;
 
 import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
@@ -69,6 +70,22 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
+    public Call<ArrayList<Cursada>> getCursadas(String token) {
+        Curso curso1 = new Curso();
+        curso1.id=1;
+
+        Curso curso2 = new Curso();
+        curso2.id=2;
+
+        ArrayList<Curso> listaCursos = new ArrayList<>();
+        listaCursos.add(curso1);
+        listaCursos.add(curso2);
+
+        return delegate.returningResponse(listaCursos).getCursadas("h");
+
+    }
+
+    @Override
     public Call<ArrayList<Curso>> getCursosPorMateria(Integer materiaId) {
         Curso curso = new Curso();
         curso.id=1;
@@ -95,12 +112,18 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<Inscripcion> desinscribirAlumno(String apiToken, Integer cursoId) {
+    public Call<Alumno> getAlumno(String apiToken) {
         return null;
     }
 
     @Override
-    public Call<Alumno> getAlumno(String apiToken) {
-        return null;
+    public Call<Inscripcion> desinscribirAlumno(String apiToken,Integer cursoId) {
+        Inscripcion inscripcion = new Inscripcion();
+        inscripcion.alumno = new Alumno();
+
+        inscripcion.curso=new Curso();
+        inscripcion.curso.id=cursoId;
+
+        return delegate.returningResponse(inscripcion).desinscribirAlumno("",cursoId);
     }
 }

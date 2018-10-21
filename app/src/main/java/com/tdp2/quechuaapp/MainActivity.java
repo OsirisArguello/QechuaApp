@@ -23,6 +23,7 @@ import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
+import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
 
@@ -98,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent miscursosIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    Intent miscursosIntent = new Intent(MainActivity.this, CursadasActivity.class);
 
-                    Materia materia = new Materia();
+                    /*Materia materia = new Materia();
                     materia.id=1;
 
                     miscursosIntent.putExtra("alumno",alumno);
-                    miscursosIntent.putExtra("materia",materia);
+                    miscursosIntent.putExtra("materia",materia);*/
 
                     startActivity(miscursosIntent);
                 }
