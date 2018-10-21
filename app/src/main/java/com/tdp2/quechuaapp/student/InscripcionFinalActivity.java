@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.InscripcionFinal;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -67,13 +69,12 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                     @Override
                     public void onResponseSuccess(Object responseBody) {
 
-                        ArrayList<Final> misFinales = (ArrayList<Final>) responseBody;
-                        for (Final miFinal: misFinales) {
-                            if (miFinal.curso.id != curso.id) {
-                                continue;
-                            }
+                        ArrayList<InscripcionFinal> misInscripciones = (ArrayList<InscripcionFinal>) responseBody;
+                        for (InscripcionFinal inscripcionFinal: misInscripciones) {
+                            if (! inscripcionFinal.estado.equals("ACTIVA")) continue;
+
                             for (Final otro: finales) {
-                                if (otro.id == miFinal.id) {
+                                if (otro.id == inscripcionFinal.coloquio.id) {
                                     otro.inscripto = true;
                                     break;
                                 }
@@ -155,9 +156,9 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (aFinal.inscripto) {
-                            //Desinscribir
+                            Log.i("FINALES", "Desinscripcion a final");
                         } else {
-                            //Inscribir
+                            Log.i("FINALES", "Inscripcion a final");
                         }
                     }})
                 .setNegativeButton(android.R.string.cancel, null)

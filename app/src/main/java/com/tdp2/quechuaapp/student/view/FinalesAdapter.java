@@ -45,7 +45,7 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
         iconoInscipcion.setImageResource(aFinal.inscripto ? android.R.drawable.ic_menu_delete : android.R.drawable.ic_menu_add);
 
-        fechaTextView.setText(aFinal.dia + " // "+ aFinal.horaFin + " - " + aFinal.horaFin);
+        fechaTextView.setText(aFinal.dia + " // "+ aFinal.horaInicio + " - " + aFinal.horaFin);
         aulaTextView.setText(aFinal.sede + " - " + aFinal.aula);
 
         return convertView;
