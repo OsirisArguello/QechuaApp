@@ -7,6 +7,7 @@ import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.InscripcionFinal;
 
 import java.io.File;
 import java.io.IOException;
@@ -184,7 +185,7 @@ public class EstudianteService {
         });
     }
 
-    public void getFinales(Integer idCurso, final Client client) {
+    public void getFinalesDisponibles(Integer idCurso, final Client client) {
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
         estudianteApi.getFinales(AUTHORIZATION_PREFIX + apiToken,idCurso).enqueue(new Callback<ArrayList<Final>>() {
             @Override
@@ -215,4 +216,34 @@ public class EstudianteService {
         });
     }
 
+    public void getMisFinales(final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getMisFinales(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<ArrayList<InscripcionFinal>>() {
+            @Override
+            public void onResponse(Call<ArrayList<InscripcionFinal>> call, Response<ArrayList<InscripcionFinal>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<InscripcionFinal>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
 }

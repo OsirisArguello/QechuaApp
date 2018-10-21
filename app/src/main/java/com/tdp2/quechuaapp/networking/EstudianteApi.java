@@ -3,6 +3,7 @@ package com.tdp2.quechuaapp.networking;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.InscripcionFinal;
 
 import java.util.ArrayList;
 
@@ -31,4 +32,7 @@ public interface EstudianteApi {
 
     @GET("/api/cursos/{cursoId}/coloquios")
     Call<ArrayList<Final>> getFinales(@Header("Authorization")String apiToken, @Path("cursoId")Integer cursoId);
+
+    @GET("/api/inscripcion-coloquios/byAlumno")
+    Call<ArrayList<InscripcionFinal>> getMisFinales(@Header("Authorization")String apiToken);
 }

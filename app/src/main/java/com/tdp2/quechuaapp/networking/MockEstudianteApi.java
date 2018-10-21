@@ -2,7 +2,9 @@ package com.tdp2.quechuaapp.networking;
 
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.InscripcionFinal;
 import com.tdp2.quechuaapp.model.Materia;
 
 import java.util.ArrayList;
@@ -61,7 +63,22 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
+    public Call<Inscripcion> inscribirAlumno(Integer alumnoId, Integer cursoId) {
+        return null;
+    }
+
+    @Override
     public Call<Inscripcion> desinscribirAlumno(String apiToken, Integer cursoId) {
+        return null;
+    }
+
+    @Override
+    public Call<ArrayList<Final>> getFinales(String apiToken, Integer cursoId) {
+        return null;
+    }
+
+    @Override
+    public Call<ArrayList<InscripcionFinal>> getMisFinales(String apiToken) {
         return null;
     }
 }
