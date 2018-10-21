@@ -47,7 +47,11 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
     private void setupInitials() {
         cursos=new ArrayList<>();
         estudianteService=new EstudianteService();
-        estudianteService.getCursosPorMateria(alumno.id, materia.id, new Client() {
+        getCursosPorMateria();
+    }
+
+    private void getCursosPorMateria(){
+        estudianteService.getCursosPorMateria(materia.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
@@ -93,7 +97,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
     }
 
     @Override
-    public void inscribirAlumno(Integer idAlumno, final Integer idCurso, final Button inscribirseButton) {
+    public void inscribirAlumno(final Integer idCurso) {
 
         ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
         loadingView.setVisibility(View.VISIBLE);
@@ -102,7 +106,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
-        estudianteService.inscribirAlumno(idAlumno, idCurso, new Client() {
+        estudianteService.inscribirAlumno(idCurso, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
@@ -121,7 +125,7 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 }
 
                 //Actualizo el curso con la inscripcion realizada
-                for (Curso curso : cursos) {
+                /*for (Curso curso : cursos) {
                     if(curso.id.equals(idCurso)){
                         curso.inscripciones.add(inscripcion);
                         //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
@@ -129,7 +133,9 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                             curso.capacidadCurso=0;
                         }
                     }
-                }
+                }*/
+
+                getCursosPorMateria();
 
                 showAlert(messageToDisplay, "Inscripción Satisfactoria");
 
@@ -152,6 +158,69 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                 }
 
                 showAlert(messageToDisplay, "Inscripción Fallida");
+
+            }
+
+            @Override
+            public Context getContext() {
+                return InscripcionCursoActivity.this;
+            }
+        });
+
+    }
+
+    @Override
+    public void desinscribirAlumno(final Integer idInscripcion) {
+
+        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.bringToFront();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+
+        estudianteService.desinscribirAlumno(idInscripcion, new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                Inscripcion inscripcion = (Inscripcion) responseBody;
+
+                String messageToDisplay = String.format(getResources().getString(R.string.desinscripcion_exito), inscripcion.curso.id);
+
+                /*//Actualizo el curso con la desinscripcion realizada
+                for (Curso curso : cursos) {
+                    if(curso.id.equals(inscripcion.curso.id)){
+                        curso.inscripciones.remove(inscripcion);
+                    }
+                }*/
+                getCursosPorMateria();
+
+
+                showAlert(messageToDisplay, "Desinscripción Satisfactoria");
+
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                //TODO manejar los distintos problemas de inscripcion y cual es el mensaje que se va a mostrar al usuario
+                String messageToDisplay;
+                if(errorMessage!=null){
+                    Integer idError = getResources().getIdentifier(errorMessage,"string",getPackageName());
+                    messageToDisplay=getString(idError);
+                } else {
+                    messageToDisplay=getString(R.string.desinscripcion_error_generico);
+                }
+
+                showAlert(messageToDisplay, "Desinscripción Fallida");
 
             }
 

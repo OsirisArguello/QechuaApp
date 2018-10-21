@@ -4,5 +4,7 @@ import android.widget.Button;
 
 public interface CursosAdapterCallback {
 
-    void inscribirAlumno(Integer idAlumno, Integer idCurso, Button inscribirseButton);
+    void inscribirAlumno(Integer idCurso);
+
+    void desinscribirAlumno(Integer idInscripcion);
 }

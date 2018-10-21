@@ -82,15 +82,20 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<Inscripcion> inscribirAlumno(Integer alumnoId, Integer cursoId) {
+    public Call<Inscripcion> inscribirAlumno(String apiToken,Integer cursoId) {
 
         Inscripcion inscripcion = new Inscripcion();
         inscripcion.alumno = new Alumno();
-        inscripcion.alumno.id=alumnoId;
+        inscripcion.alumno.id=1;
 
         inscripcion.curso=new Curso();
         inscripcion.curso.id=cursoId;
 
-        return delegate.returningResponse(inscripcion).inscribirAlumno(alumnoId,cursoId);
+        return delegate.returningResponse(inscripcion).inscribirAlumno(apiToken,cursoId);
+    }
+
+    @Override
+    public Call<Inscripcion> desinscribirAlumno(String apiToken, Integer cursoId) {
+        return null;
     }
 }

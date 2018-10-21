@@ -31,6 +31,11 @@ public interface EstudianteApi {
     @GET("/public/materias/{materiaId}/cursos")
     Call<ArrayList<Curso>> getCursosPorMateria(@Path("materiaId")Integer materiaId);
 
-    @POST("/public/inscripcion-cursos/{cursoId}/{alumnoId}")
-    Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);
+    @POST("/api/inscripcion-cursos/{cursoId}")
+    Call<Inscripcion> inscribirAlumno(@Header("Authorization")String apiToken, @Path("cursoId")Integer cursoId);
+
+    @POST("/api/inscripcion-cursos/{cursoId}/accion/desinscribir")
+    Call<Inscripcion> desinscribirAlumno(@Header("Authorization")String apiToken, @Path("cursoId")Integer inscripcionId);
+
+
 }
