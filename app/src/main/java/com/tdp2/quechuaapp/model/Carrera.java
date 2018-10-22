@@ -5,14 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Periodo implements Serializable {
+public class Carrera implements Serializable {
+
     @SerializedName("id")
     @Expose
     public Integer id;
-    @SerializedName("cuatrimestre")
+
+    @SerializedName("nombre")
     @Expose
-    public String cuatrimestre;
-    @SerializedName("anio")
-    @Expose
-    public String anio;
+    public String nombre;
 }

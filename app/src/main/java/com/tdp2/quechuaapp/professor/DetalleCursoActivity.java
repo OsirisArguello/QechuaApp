@@ -1,20 +1,27 @@
 package com.tdp2.quechuaapp.professor;
 
+import java.util.HashMap;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,19 +29,21 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
-import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
+import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
-import com.tdp2.quechuaapp.professor.view.AlumnosAdapter;
+import com.tdp2.quechuaapp.professor.view.ListadoInscriptosAdapter;
+import com.tdp2.quechuaapp.professor.view.ListadoInscriptosAdapterCallback;
+import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DetalleCursoActivity extends AppCompatActivity {
+public class DetalleCursoActivity extends AppCompatActivity implements ListadoInscriptosAdapterCallback {
 
     public Curso curso;
 
@@ -132,11 +141,11 @@ public class DetalleCursoActivity extends AppCompatActivity {
                 };
                 thread.start();
             }
+
             @Override
             public Context getContext() {
                 return DetalleCursoActivity.this;
             }
-
         });
     }
 
@@ -162,21 +171,89 @@ public class DetalleCursoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void aceptar(final Integer inscripcionId) {
+        showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Aceptación", "¿Esta seguro que desea aceptar a este alumno en el curso?", "Aceptar Alumno", "Cancelar",
+        new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+            loadingView.bringToFront();
+            loadingView.setVisibility(View.VISIBLE);
+            docenteService.aceptarInscripcion(inscripcionId, new Client() {
+                @Override
+                public void onResponseSuccess(Object responseBody) {
+
+                    getCurso();
+
+                    DialogBuilder.showAlert("El alumno ha sido aceptado en el curso como REGULAR.","Inscripción Satisfactoria",DetalleCursoActivity.this);
+                }
+
+                @Override
+                public void onResponseError(String errorMessage) {
+                    DialogBuilder.showAlert("Hubo un error al intentar inscribir al alumno. Por favor reintente más tarde.","Inscripción Fallida",DetalleCursoActivity.this);
+                }
+
+                @Override
+                public Context getContext() {
+                    return DetalleCursoActivity.this;
+                }
+            });
+            }
+        });
+    }
+
+    @Override
+    public void rechazar(final Integer inscripcionId) {
+
+        showConfirmationAlert(DetalleCursoActivity.this, "Confirmación de Rechazo", "¿Esta seguro que desea rechazar la inscripción de este alumno?", "Rechazar Inscripción","Cancelar",
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                ProgressBar loadingView = findViewById(R.id.loading_detalle_curso);
+                loadingView.bringToFront();
+                loadingView.setVisibility(View.VISIBLE);
+                docenteService.rechazarInscripcion(inscripcionId, new Client() {
+                    @Override
+                    public void onResponseSuccess(Object responseBody) {
+                        getCurso();
+                        DialogBuilder.showAlert("La inscripción del alumno ha sido rechazada","Rechazo Satisfactorio",DetalleCursoActivity.this);
+
+                    }
+
+                    @Override
+                    public void onResponseError(String errorMessage) {
+                        DialogBuilder.showAlert("Hubo un error al rechazar la inscripción del alumno. Por favor reintente más tarde.","Rechazo Fallido",DetalleCursoActivity.this);
+
+                    }
+
+                    @Override
+                    public Context getContext() {
+                        return DetalleCursoActivity.this;
+                    }
+                });
+                }
+            });
+
+
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class StudentsFragment extends Fragment {
 
-        List<Alumno> alumnos = new ArrayList<>();
-        private AlumnosAdapter adapter;
+        List<Inscripcion> inscriptos = new ArrayList<>();
+        private ListadoInscriptosAdapter adapter;
         private Boolean condicional;
 
-        public void setAlumnos(List<Alumno> alumnos) {
-            this.alumnos = alumnos;
+        public void setAlumnos(List<Inscripcion> inscriptos) {
+            this.inscriptos = inscriptos;
 
             if (adapter != null) {
                 adapter.clear();
-                adapter.addAll(alumnos);
+                adapter.addAll(inscriptos);
                 adapter.notifyDataSetChanged();
             }
         }
@@ -195,9 +272,9 @@ public class DetalleCursoActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_course_view, container, false);
 
             final ListView listView = rootView.findViewById(R.id.lista_estudiantes);
-            adapter = new AlumnosAdapter(
+            adapter = new ListadoInscriptosAdapter(
                     getActivity(),
-                    alumnos
+                    inscriptos
             );
             adapter.condicionales = condicional;
             listView.setAdapter(adapter);
@@ -223,9 +300,9 @@ public class DetalleCursoActivity extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        private final Map<Integer, List<Alumno>> mDataSource = new HashMap<>();
+        private final Map<Integer, List<Inscripcion>> mDataSource = new HashMap<>();
 
-        public void setRegulares(List<Alumno> regulares) {
+        public void setRegulares(List<Inscripcion> regulares) {
 
             mDataSource.put(INDEX_REGULARES, regulares);
 
@@ -233,7 +310,7 @@ public class DetalleCursoActivity extends AppCompatActivity {
             fragment.setAlumnos(regulares);
         }
 
-        public void setCondicionales(List<Alumno> condicionales) {
+        public void setCondicionales(List<Inscripcion> condicionales) {
             mDataSource.put(INDEX_CONDICIONALES, condicionales);
 
             StudentsFragment fragment = (StudentsFragment)mFragmentList.get(INDEX_CONDICIONALES);
@@ -246,8 +323,8 @@ public class DetalleCursoActivity extends AppCompatActivity {
             addFragment(new StudentsFragment(), INDEX_REGULARES,"@string/curso.alumnos.regulares");
             addFragment(new StudentsFragment(true), INDEX_CONDICIONALES,"@string/curso.alumnos.condicionales");
 
-            mDataSource.put(INDEX_REGULARES, new ArrayList<Alumno>());
-            mDataSource.put(INDEX_CONDICIONALES, new ArrayList<Alumno>());
+            mDataSource.put(INDEX_REGULARES, new ArrayList<Inscripcion>());
+            mDataSource.put(INDEX_CONDICIONALES, new ArrayList<Inscripcion>());
         }
 
         private void addFragment(Fragment fragment, Integer index, String title) {
@@ -269,6 +346,26 @@ public class DetalleCursoActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position) + " (" + mDataSource.get(position).size() + ')';
         }
+    }
+
+    public void showConfirmationAlert(Context context, String title, String messageToDisplay, String positiveMessage, String negativeMessage, DialogInterface.OnClickListener positiveListener){
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(messageToDisplay);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, positiveMessage, positiveListener);
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negativeMessage,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void callAcceptService() {
+
     }
 
 }

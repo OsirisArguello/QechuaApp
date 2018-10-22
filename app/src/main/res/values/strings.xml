@@ -4,6 +4,8 @@
     <string name="inscripcion.exito">Ha sido inscripto correctamente al curso %1$d.</string>
     <string name="inscripcion.exito.condicional">Ha sido inscripto correctamente al curso %1$d como CONDICIONAL.</string>
     <string name="inscripcion.error.generico">Ha ocurrido un error al inscribirse. Por favor, reintente más tarde.</string>
+    <string name="desinscripcion.exito">Ha sido desinscripto correctamente del curso %1$d.</string>
+    <string name="desinscripcion.error.generico">Ha ocurrido un error al desinscribirse. Por favor, reintente más tarde.</string>
     <string name="curso.alumnos.titulo">Curso actual</string>
     <string name="curso.alumnos.regulares">Regulares</string>
     <string name="curso.alumnos.condicionales">Condicionales</string>
@@ -15,8 +17,15 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Continuar</string>
-    <string name="error_invalid_email">Correo electrónico inválido</string>
+    <string name="error_invalid_email">El correo ingresado no tiene un formato correcto</string>
+    <string name="error_empty_email">Debe completar el correo electronico del usuario</string>
     <string name="error_invalid_password">La contraseña es muy corta</string>
-    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_empty_password">Debe completar el password</string>
+    <string name="error_incorrect_password">Usuario o contraseña incorrecta. Intente nuevamente.</string>
     <string name="error_field_required">Campo requerido</string>
+
+
+    <string name="title_activity_inscripcion_final">InscripcionFinalActivity</string>
+    <string name="title_activity_inscripcion_materias">Inscripción</string>
+    <string name="hint_search">Qué materia buscas?</string>
 </resources>

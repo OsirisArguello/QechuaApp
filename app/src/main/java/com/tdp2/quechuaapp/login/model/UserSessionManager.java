@@ -83,16 +83,16 @@ public class UserSessionManager {
         editor.commit();
 
         // After logout redirect user to MainActivity
-        Intent i = new Intent(context, LoginActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
 
         // Closing all the Activities
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Add new Flag to start new Activity
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Staring Login Activity
-        context.startActivity(i);
+        context.startActivity(intent);
     }
 
 }

@@ -9,5 +9,4 @@ public interface Client<T> {
     void onResponseError(String errorMessage);
 
     Context getContext();
-
 }

@@ -19,7 +19,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/grayBlue</item>
+        <item name="android:textColor">@color/lightGray</item>
+    </style>
+
+    <style name="AppTheme.Button.Cancel" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/red</item>
         <item name="android:textColor">@color/lightGray</item>
     </style>
 </resources>

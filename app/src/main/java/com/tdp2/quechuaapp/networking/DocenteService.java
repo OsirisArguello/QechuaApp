@@ -7,6 +7,7 @@ import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.Profesor;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,72 @@ public class DocenteService {
                 client.onResponseError(null);
             }
         });
+    }
+
+    public void aceptarInscripcion(Integer inscripcionId, final Client client) {
+
+        String apiToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.aceptar(AUTHORIZATION_PREFIX+apiToken,inscripcionId).enqueue(new Callback<Inscripcion>() {
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+
+    }
+
+    public void rechazarInscripcion(Integer inscripcionId, final Client client) {
+
+        String apiToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.rechazar(AUTHORIZATION_PREFIX+apiToken,inscripcionId).enqueue(new Callback<Inscripcion>() {
+            @Override
+            public void onResponse(Call<Inscripcion> call, Response<Inscripcion> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inscripcion> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+
     }
 
     public void getCursos(final Client client) {
