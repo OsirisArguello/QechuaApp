@@ -39,6 +39,8 @@ import com.tdp2.quechuaapp.professor.view.ListadoInscriptosAdapterCallback;
 import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DetalleCursoActivity extends AppCompatActivity implements ListadoInscriptosAdapterCallback {
@@ -78,7 +80,7 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
         getCurso();
     }
 
-    private void getCurso(){
+    public void getCurso(){
         docenteService.getCurso(curso.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {

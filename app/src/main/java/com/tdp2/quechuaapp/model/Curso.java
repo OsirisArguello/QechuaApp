@@ -27,6 +27,9 @@ public class Curso implements Serializable {
     @SerializedName("profesor")
     @Expose
     public Profesor profesor;
+    @SerializedName("periodo")
+    @Expose
+    public Periodo periodo;
     @SerializedName("materia")
     @Expose
     public Materia materia;
