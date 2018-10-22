@@ -19,31 +19,30 @@ import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
-import com.tdp2.quechuaapp.professor.view.CursosDocenteAdapter;
 import com.tdp2.quechuaapp.professor.view.CursosDocenteAddFinalAdapterCallback;
+import com.tdp2.quechuaapp.professor.view.VerCursosDocenteAdapter;
+import com.tdp2.quechuaapp.professor.view.VerCursosDocenteAdapterCallback;
 
 import java.util.ArrayList;
 
-public class InscripcionFinalActivity extends AppCompatActivity implements CursosDocenteAddFinalAdapterCallback {
+public class MostrarCursosDocenteActivity extends AppCompatActivity implements VerCursosDocenteAdapterCallback {
 
     public Curso curso;
     ArrayList<Curso> cursos;
     private ViewPager viewPager;
     private DocenteService docenteService;
-    CursosDocenteAdapter cursosAdapter;
+    VerCursosDocenteAdapter cursosAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profesor_addfinal);
+        setContentView(R.layout.activity_profesor_vercursos);
         setupInitials();
     }
 
     private void setupInitials() {
-        //TODO Vincular con la US14 para obtener id de curso
-        final String idCurso = "1";
         cursos=new ArrayList<>();
-        ProgressBar loadingView = findViewById(R.id.loading_addfinal);
+        ProgressBar loadingView = findViewById(R.id.loading_vercursos);
         loadingView.bringToFront();
         loadingView.setVisibility(View.VISIBLE);
 
@@ -52,23 +51,17 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
-                Curso cursoEnCuestion = cursos.get(0);
-                for (Curso cursito : cursos) {
-                    if (cursito.id.toString() == idCurso){
-                        cursoEnCuestion=cursito;
-                    }
-                }
-                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_addfinal);
+                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_vercursos);
                 loadingView.setVisibility(View.INVISIBLE);
-                displayCurso(cursoEnCuestion);
+                displayCursos();
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_addfinal);
+                ProgressBar loadingView = findViewById(R.id.loading_vercursos);
                 loadingView.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                Toast.makeText(MostrarCursosDocenteActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
 
                 Thread thread = new Thread() {
@@ -76,7 +69,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                     public void run() {
                         try {
                             Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                            Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                            Intent mainActivityIntent = new Intent(MostrarCursosDocenteActivity.this, MainActivity.class);
                             startActivity(mainActivityIntent);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -87,33 +80,32 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
             }
             @Override
             public Context getContext() {
-                return InscripcionFinalActivity.this;
+                return MostrarCursosDocenteActivity.this;
             }
         });
     }
 
-    private void displayCurso(Curso curso) {
-        final ListView cursosListView = findViewById(R.id.lista_cursos_final);
-        cursosAdapter = new CursosDocenteAdapter(this, cursos, curso);
+    private void displayCursos() {
+        final ListView cursosListView = findViewById(R.id.lista_cursos_final_docente);
+        cursosAdapter = new VerCursosDocenteAdapter(this, cursos);
         cursosListView.setAdapter(cursosAdapter);
-        cursosListView.setEmptyView(findViewById(R.id.emptyElement_final));
+        cursosListView.setEmptyView(findViewById(R.id.emptyElement_final_cursos_docente));
     }
 
     @Override
-    public void agregarFecha(final Integer idCurso, final Button inscribirseButton) {
+    public void verFechasFinal(final Integer idCurso, final Button verFechasFinalButtom) {
+        Intent measurementIntent = new Intent(MostrarCursosDocenteActivity.this, InscripcionFinalActivity.class);
+        MostrarCursosDocenteActivity.this.startActivity(measurementIntent);
+    }
 
-        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
-        loadingView.setVisibility(View.VISIBLE);
-        loadingView.bringToFront();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
-
+    @Override
+    public void verInscriptosCursos(final Integer idCurso, final Button verFechasFinalButtom) {
+        Intent measurementIntent = new Intent(MostrarCursosDocenteActivity.this, DetalleCursoActivity.class);
+        MostrarCursosDocenteActivity.this.startActivity(measurementIntent);
     }
 
     private void showAlert(String messageToDisplay, String title) {
-        AlertDialog alertDialog = new AlertDialog.Builder(InscripcionFinalActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(MostrarCursosDocenteActivity.this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(messageToDisplay);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -126,4 +118,3 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
         cursosAdapter.notifyDataSetChanged();
     }
 }
-

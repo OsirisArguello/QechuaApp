@@ -14,6 +14,7 @@ public interface DocenteApi {
     @GET("/public/cursos/{cursoID}/inscripciones")
     Call<Curso> getCurso(@Path("cursoID")Integer cursoId);
 
+
     @GET("/api/profesors/cursos")
     Call<ArrayList<Curso>> getCursos(@Header("Authorization") String apiToken);
 

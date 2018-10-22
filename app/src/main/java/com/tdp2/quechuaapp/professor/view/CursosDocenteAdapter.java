@@ -17,12 +17,16 @@ import java.util.ArrayList;
 
 public class CursosDocenteAdapter extends ArrayAdapter<Curso> {
 
-    private CursosDocenteAdapterCallback adapterCallback;
+    private CursosDocenteAddFinalAdapterCallback adapterCallback;
+    private Curso curso;
+    private boolean mostrado;
 
-    public CursosDocenteAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos) {
-        super(context, 0,  listaCursos);
+    public CursosDocenteAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Curso cursoEnCuestion) {
+        super(context, 0, listaCursos);
+        this.mostrado = false;
+        this.curso = cursoEnCuestion;
         try {
-            this.adapterCallback = ((CursosDocenteAdapterCallback) context);
+            this.adapterCallback = ((CursosDocenteAddFinalAdapterCallback) context);
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement CursosAdapterCallback.");
         }
@@ -31,39 +35,43 @@ public class CursosDocenteAdapter extends ArrayAdapter<Curso> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final Curso curso = getItem(position);
+        if (!this.mostrado) {
+            final Curso curso = this.curso;
 
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.curso_finales_view, parent, false);
-        }
-        // Lookup view for data population
-
-        if (position % 2 == 1) {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground1));
-        } else {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground2));
-        }
-
-        TextView idMateriaFinalTextView = convertView.findViewById(R.id.idMateriaFinal);
-        TextView idCursoFinalTextView = convertView.findViewById(R.id.idCursoFinal);
-        TextView idCuatrimestreFinalTextView = convertView.findViewById(R.id.idCuatrimestreFinal);
-
-        final Button buttomAddFinal = convertView.findViewById(R.id.idButtomAddFinal);
-
-        buttomAddFinal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapterCallback.agregarFecha(curso.id, buttomAddFinal);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.add_curso_finales_view, parent, false);
             }
-        });
+            // Lookup view for data population
+
+            if (position % 2 == 1) {
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground1));
+            } else {
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground2));
+            }
+
+            TextView idMateriaFinalTextView = convertView.findViewById(R.id.idMateriaFinal);
+            TextView idCursoFinalTextView = convertView.findViewById(R.id.idCursoFinal);
+            TextView idCuatrimestreFinalTextView = convertView.findViewById(R.id.idCuatrimestreFinal);
+
+            final Button buttomAddFinal = convertView.findViewById(R.id.idButtomAddFinal);
+
+            buttomAddFinal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    adapterCallback.agregarFecha(curso.id, buttomAddFinal);
+                }
+            });
 
 
-        idMateriaFinalTextView.setText("Materia: "+curso.materia.codigo.toString() + " - "+ curso.materia.nombre.toString());
-        idCursoFinalTextView.setText("Curso: "+curso.id);
-        idCuatrimestreFinalTextView.setText(curso.periodo.cuatrimestre + "°"+ " Cuatrimestre "+curso.periodo.anio);
-
+            idMateriaFinalTextView.setText("Materia: " + curso.materia.codigo.toString() + " - " + curso.materia.nombre.toString());
+            idCursoFinalTextView.setText("Curso: " + curso.id);
+            idCuatrimestreFinalTextView.setText(curso.periodo.cuatrimestre + "°" + " Cuatrimestre " + curso.periodo.anio);
+            this.mostrado = true;
+            return convertView;
+        }
         return convertView;
     }
+
 
 }
