@@ -95,6 +95,7 @@ public class MostrarCursosDocenteActivity extends AppCompatActivity implements V
     @Override
     public void verFechasFinal(final Integer idCurso, final Button verFechasFinalButtom) {
         Intent measurementIntent = new Intent(MostrarCursosDocenteActivity.this, InscripcionFinalActivity.class);
+        measurementIntent.putExtra("key", idCurso);
         MostrarCursosDocenteActivity.this.startActivity(measurementIntent);
     }
 

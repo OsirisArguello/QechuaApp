@@ -36,12 +36,14 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profesor_addfinal);
-        setupInitials();
+        Intent intent = getIntent();
+        Integer cursoId = (Integer) intent.getSerializableExtra("key");
+        setupInitials(cursoId);
     }
 
-    private void setupInitials() {
+    private void setupInitials(Integer cursoId) {
         //TODO Vincular con la US14 para obtener id de curso
-        final String idCurso = "1";
+        final String idCurso = cursoId.toString();
         cursos=new ArrayList<>();
         ProgressBar loadingView = findViewById(R.id.loading_addfinal);
         loadingView.bringToFront();
@@ -52,7 +54,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
-                Curso cursoEnCuestion = cursos.get(0);
+                Curso cursoEnCuestion = new Curso();
                 for (Curso cursito : cursos) {
                     if (cursito.id.toString() == idCurso){
                         cursoEnCuestion=cursito;
