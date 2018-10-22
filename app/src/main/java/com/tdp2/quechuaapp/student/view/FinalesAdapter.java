@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Final;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class FinalesAdapter extends ArrayAdapter<Final> {
@@ -45,8 +46,9 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
         iconoInscipcion.setImageResource(aFinal.inscripto ? android.R.drawable.ic_delete : android.R.drawable.ic_input_add);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        fechaTextView.setText(aFinal.dia + " // "+ aFinal.horaInicio + " - " + aFinal.horaFin);
+        fechaTextView.setText(sdf.format(aFinal.fecha) + " // "+ aFinal.horaInicio + " - " + aFinal.horaFin);
         aulaTextView.setText(aFinal.sede + " - " + aFinal.aula);
 
         return convertView;

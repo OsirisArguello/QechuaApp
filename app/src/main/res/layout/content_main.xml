@@ -35,7 +35,12 @@
                     android:id="@+id/user_logged"
                     android:layout_width="wrap_content"
                     android:layout_height="68dp"
-                    android:layout_centerInParent="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginTop="2dp"
                     android:text="Juan Perez"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -49,6 +54,17 @@
                     android:layout_alignStart="@+id/user_logged"
                     android:text="juan.perez@gmail.com"
                     android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    app:srcCompat="@drawable/logout" />
 
             </RelativeLayout>
 

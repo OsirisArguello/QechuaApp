@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tdp2.quechuaapp.login.LoginActivity;
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
@@ -176,9 +178,25 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(measurementIntent);
                 }
             });
+            LinearLayout historiaacademica = findViewById(R.id.historiaacademica_action);
+            historiaacademica.setVisibility(View.INVISIBLE);
+            LinearLayout inscripcion = findViewById(R.id.inscripcion_action);
+            inscripcion.setVisibility(View.INVISIBLE);
+            LinearLayout prioridad = findViewById(R.id.prioridad_action);
+            prioridad.setVisibility(View.INVISIBLE);
+
+
         }
 
-
+        ImageView logout = findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userSessionManager.logout();
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
 
 
 

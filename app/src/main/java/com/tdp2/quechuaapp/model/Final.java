@@ -4,15 +4,16 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Final implements Serializable {
 
     @SerializedName("id")
     @Expose
     public Integer id;
-    @SerializedName("dia")
+    @SerializedName("fecha")
     @Expose
-    public String dia;
+    public Date fecha;
     @SerializedName("horaInicio")
     @Expose
     public String horaInicio;
