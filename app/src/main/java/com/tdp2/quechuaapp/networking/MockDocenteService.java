@@ -2,6 +2,7 @@ package com.tdp2.quechuaapp.networking;
 
 
 import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.Inscripcion;
 
 import java.util.ArrayList;
@@ -39,6 +40,16 @@ public class MockDocenteService implements DocenteApi {
 
     @Override
     public Call<Inscripcion> rechazar(String apiToken, Integer inscripcionId) {
+        return null;
+    }
+
+    @Override
+    public Call<ArrayList<Final>> getColoquios(String apiToken, Integer cursoId) {
+        return null;
+    }
+
+    @Override
+    public Call<Final> crearColoquio(String apiToken, Final coloquio) {
         return null;
     }
 

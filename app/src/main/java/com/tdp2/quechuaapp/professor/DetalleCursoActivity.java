@@ -77,6 +77,10 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
         loadingView.setVisibility(View.VISIBLE);
 
         docenteService = new DocenteService();
+        getCurso();
+    }
+
+    public void getCurso(){
         docenteService.getCurso(curso.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
