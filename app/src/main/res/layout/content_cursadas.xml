@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:paddingLeft="16dp"
-        android:text="No estás inscripto en ninguna cursada"
+        android:text="Usted no está inscripto a un curso"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         android:textStyle="bold"

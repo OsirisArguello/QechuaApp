@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:paddingLeft="16dp"
-        android:text="No hay finales disponibles"
+        android:text="Este curso todavia no tiene fechas de final asignadas"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         android:textStyle="bold"

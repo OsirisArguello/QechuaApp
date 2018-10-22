@@ -25,6 +25,7 @@ import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.FinalesAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class InscripcionFinalActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -35,11 +36,14 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     FinalesAdapter finalesAdapter;
     ArrayList<InscripcionFinal> misInscripciones;
 
+    SimpleDateFormat sdf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         curso = (Curso) getIntent().getSerializableExtra("curso");
         setContentView(R.layout.activity_inscripcion_final);
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         estudianteService = new EstudianteService();
 
@@ -130,11 +134,13 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Final aFinal = finales.get(position);
-        String mensaje = aFinal.inscripto ? "desinscribirte?":"inscribirte?";
+        String mensaje = aFinal.inscripto ? "desinscribirse":"anotarse";
+
+
 
         new AlertDialog.Builder(this)
                 .setTitle("Inscripción")
-                .setMessage("Confirmas que deseas " + mensaje)
+                .setMessage("¿Desea " + mensaje + " a la fecha "+sdf.format(aFinal.fecha)+"?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -154,7 +160,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
 
                                     getMisInscripciones();
 
-                                    showAlert("Inscripcion satisfactoria","Inscripcion");
+                                    showAlert("Ha sido inscripto correctamente a la fecha de final del "+sdf.format(aFinal.fecha),"Inscripción");
                                     finalesAdapter.notifyDataSetChanged();
                                 }
 
