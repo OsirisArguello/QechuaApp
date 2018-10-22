@@ -14,6 +14,9 @@ public class Horario implements Serializable{
     @SerializedName("dia")
     @Expose
     public String dia;
+    @SerializedName("sede")
+    @Expose
+    public String sede;
     @SerializedName("aula")
     @Expose
     public String aula;

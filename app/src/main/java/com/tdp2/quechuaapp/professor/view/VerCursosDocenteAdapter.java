@@ -61,7 +61,7 @@ public class VerCursosDocenteAdapter extends ArrayAdapter<Curso> {
         for (Horario horario : curso.horarios) {
             diaString.append(horario.dia);
             horasString.append(horario.horaInicio+"-"+horario.horaFin);
-            aulaString.append(horario.aula);
+            aulaString.append(horario.sede+"-"+horario.aula);
             if(cantHorarios<curso.horarios.size()){
                 diaString.append("\n");
                 horasString.append("\n");

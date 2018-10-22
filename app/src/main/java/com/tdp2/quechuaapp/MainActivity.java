@@ -171,8 +171,10 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    startActivity(measurementIntent);
+                    //Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
+                    //startActivity(measurementIntent);
+                    Toast.makeText(MainActivity.this, "En Construccion",
+                            Toast.LENGTH_LONG).show();
                 }
             });
             LinearLayout historiaacademica = findViewById(R.id.historiaacademica_action);
