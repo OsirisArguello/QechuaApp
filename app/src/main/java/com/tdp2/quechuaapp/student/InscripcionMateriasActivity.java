@@ -26,6 +26,8 @@ import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.view.MateriasAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class InscripcionMateriasActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -172,7 +174,14 @@ public class InscripcionMateriasActivity extends AppCompatActivity implements Ad
             estudianteService.getMateriasPorCarrera(carreraSeleccionada.id, new Client() {
                 @Override
                 public void onResponseSuccess(Object responseBody) {
-                    materiasPorCarrera.put(carreraSeleccionada, (ArrayList<Materia>) responseBody);
+                    ArrayList<Materia> materias = (ArrayList<Materia>) responseBody;
+                    Collections.sort(materias, new Comparator<Materia>() {
+                        @Override
+                        public int compare(Materia materia1, Materia materia2) {
+                            return materia1.codigo.compareTo(materia2.codigo);
+                        }
+                    });
+                    materiasPorCarrera.put(carreraSeleccionada, materias);
                     displayMaterias();
                 }
 
