@@ -1,10 +1,8 @@
 package com.tdp2.quechuaapp.professor;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,22 +16,24 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
-import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
+import com.tdp2.quechuaapp.professor.view.ColoquiosAdapter;
 import com.tdp2.quechuaapp.professor.view.CursosDocenteAddFinalAdapterCallback;
-import com.tdp2.quechuaapp.professor.view.FinalesAdapter;
+import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
 
-public class InscripcionFinalActivity extends AppCompatActivity implements CursosDocenteAddFinalAdapterCallback {
+public class InscripcionColoquioActivity extends AppCompatActivity implements CursosDocenteAddFinalAdapterCallback {
 
     public Curso curso;
     private DocenteService docenteService;
-    ArrayList<Final> finales;
-    private FinalesAdapter finalesAdapter;
+    ArrayList<Coloquio> coloquios;
+    private ColoquiosAdapter coloquiosAdapter;
+
+    public static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
     }
 
     private void setupInitials() {
-      finales=new ArrayList<>();
+        coloquios=new ArrayList<>();
 
         docenteService = new DocenteService();
         getCurso();
@@ -54,9 +54,13 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
         agregarColoquio.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nuevoFinalIntent = new Intent(InscripcionFinalActivity.this, NuevoFinalActivity.class);
+                if(coloquios.size()>=5){
+                    DialogBuilder.showAlert("No se pueden asignar más de 5 fechas de final a un curso por cuatrimestre.","Nuevo Final",InscripcionColoquioActivity.this);
+                    return;
+                }
+                Intent nuevoFinalIntent = new Intent(InscripcionColoquioActivity.this, NuevoColoquioActivity.class);
                 nuevoFinalIntent.putExtra("curso",curso);
-                startActivity(nuevoFinalIntent);
+                startActivityForResult(nuevoFinalIntent,REQUEST_CODE);
             }
         });
 
@@ -71,7 +75,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
             public void onResponseSuccess(Object responseBody) {
                 ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
                 loadingView.setVisibility(View.INVISIBLE);
-                finales = (ArrayList<Final>) responseBody;
+                coloquios = (ArrayList<Coloquio>) responseBody;
                 displayFinales();
 
             }
@@ -81,7 +85,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                 ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
                 loadingView.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                Toast.makeText(InscripcionColoquioActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
 
                 Thread thread = new Thread(){
@@ -89,7 +93,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                     public void run() {
                         try {
                             Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                            Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                            Intent mainActivityIntent = new Intent(InscripcionColoquioActivity.this, MainActivity.class);
                             startActivity(mainActivityIntent);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -101,7 +105,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
 
             @Override
             public Context getContext() {
-                return InscripcionFinalActivity.this;
+                return InscripcionColoquioActivity.this;
             }
         });
     }
@@ -121,8 +125,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                 materia.setText("Materia: "+curso.materia.codigo+"-"+curso.materia.nombre);
                 TextView cursoText=findViewById(R.id.profesor_cursos_finales_curso);
                 cursoText.setText("Curso: "+curso.id);
-                //TextView cuatrimestre=findViewById(R.id.profesor_cursos_finales_cuatrimestre);
-                //cuatrimestre.setText("Curso: "+curso.periodo.cuatrimestre);
+                TextView cuatrimestre=findViewById(R.id.profesor_cursos_finales_cuatrimestre);
+                cuatrimestre.setText("Cuatrimestre: "+curso.periodo.cuatrimestre+" "+curso.periodo.anio);
             }
 
             @Override
@@ -130,7 +134,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                 ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
                 loadingView.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(InscripcionFinalActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                Toast.makeText(InscripcionColoquioActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
                         Toast.LENGTH_LONG).show();
 
                 Thread thread = new Thread(){
@@ -138,7 +142,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
                     public void run() {
                         try {
                             Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
-                            Intent mainActivityIntent = new Intent(InscripcionFinalActivity.this, MainActivity.class);
+                            Intent mainActivityIntent = new Intent(InscripcionColoquioActivity.this, MainActivity.class);
                             startActivity(mainActivityIntent);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -150,7 +154,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
 
             @Override
             public Context getContext() {
-                return InscripcionFinalActivity.this;
+                return InscripcionColoquioActivity.this;
             }
         });
 
@@ -158,8 +162,8 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
 
     private void displayFinales() {
         final ListView finalesListView = findViewById(R.id.lista_profesor_finales);
-        finalesAdapter = new FinalesAdapter(this, finales, curso);
-        finalesListView.setAdapter(finalesAdapter);
+        coloquiosAdapter = new ColoquiosAdapter(this, coloquios, curso);
+        finalesListView.setAdapter(coloquiosAdapter);
         finalesListView.setEmptyView(findViewById(R.id.emptyList_profesor_finales));
     }
 
@@ -176,18 +180,13 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Curso
 
     }
 
-    private void showAlert(String messageToDisplay, String title) {
-        AlertDialog alertDialog = new AlertDialog.Builder(InscripcionFinalActivity.this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(messageToDisplay);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-        //cursosAdapter.notifyDataSetChanged();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getColoquios();
+        coloquiosAdapter.notifyDataSetChanged();
+        displayFinales();
+
     }
 }
 

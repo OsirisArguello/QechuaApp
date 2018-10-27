@@ -77,11 +77,11 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
         loadingView.setVisibility(View.VISIBLE);
 
         docenteService = new DocenteService();
-        getCurso();
+        getInscripcionesACurso();
     }
 
-    public void getCurso(){
-        docenteService.getCurso(curso.id, new Client() {
+    public void getInscripcionesACurso(){
+        docenteService.getInscripcionesACurso(curso.id, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 Curso curso = (Curso)responseBody;
@@ -188,7 +188,7 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
                 @Override
                 public void onResponseSuccess(Object responseBody) {
 
-                    getCurso();
+                    getInscripcionesACurso();
 
                     DialogBuilder.showAlert("El alumno ha sido aceptado en el curso como REGULAR.","Inscripción Satisfactoria",DetalleCursoActivity.this);
                 }
@@ -220,7 +220,7 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
                 docenteService.rechazarInscripcion(inscripcionId, new Client() {
                     @Override
                     public void onResponseSuccess(Object responseBody) {
-                        getCurso();
+                        getInscripcionesACurso();
                         DialogBuilder.showAlert("La inscripción del alumno ha sido rechazada","Rechazo Satisfactorio",DetalleCursoActivity.this);
 
                     }

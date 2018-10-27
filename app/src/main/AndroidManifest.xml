@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.tdp2.quechuaapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/app_name"
@@ -47,12 +49,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".student.InscripcionFinalActivity"
+            android:name=".student.InscripcionColoquioActivity"
             android:label="@string/title_activity_inscripcion_final"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".professor.InscripcionFinalActivity"
+            android:name=".professor.InscripcionColoquioActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -63,7 +65,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".professor.NuevoFinalActivity"
+            android:name=".professor.NuevoColoquioActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>

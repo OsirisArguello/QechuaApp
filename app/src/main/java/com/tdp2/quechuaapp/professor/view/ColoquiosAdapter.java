@@ -10,18 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class FinalesAdapter extends ArrayAdapter<Final> {
+public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
 
     Curso curso;
     Context context;
 
-    public FinalesAdapter(@NonNull Context context, @NonNull ArrayList<Final> finales, Curso curso) {
+    public ColoquiosAdapter(@NonNull Context context, @NonNull ArrayList<Coloquio> finales, Curso curso) {
         super(context, 0,  finales);
 
         this.curso=curso;
@@ -36,7 +36,7 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final Final coloquio=getItem(position);
+        final Coloquio coloquio=getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {

@@ -1,8 +1,10 @@
 package com.tdp2.quechuaapp.networking;
 
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,10 @@ import retrofit2.http.Path;
 public interface DocenteApi {
 
     @GET("/public/cursos/{cursoID}/inscripciones")
-    Call<Curso> getCurso(@Path("cursoID")Integer cursoId);
+    Call<Curso> getInscripcionesACurso(@Path("cursoID")Integer cursoId);
+
+    @GET("/api/cursos/{cursoID}/")
+    Call<Curso> getCurso(@Header("Authorization") String apiToken, @Path("cursoID")Integer cursoId);
 
 
     @GET("/api/profesors/cursos")
@@ -30,8 +35,8 @@ public interface DocenteApi {
     Call<Inscripcion> rechazar(@Header("Authorization")String apiToken, @Path("inscripcionId")Integer inscripcionId);
 
     @GET("/api/cursos/{cursoId}/coloquios")
-    Call<ArrayList<Final>> getColoquios(@Header("Authorization") String apiToken,@Path("cursoId") Integer cursoId);
+    Call<ArrayList<Coloquio>> getColoquios(@Header("Authorization") String apiToken,@Path("cursoId") Integer cursoId);
 
     @POST("/api/coloquios")
-    Call<Final> crearColoquio(@Header("Authorization") String apiToken,@Body Final coloquio);
+    Call<Coloquio> crearColoquio(@Header("Authorization") String apiToken, @Body ColoquioRequest coloquio);
 }

@@ -3,11 +3,11 @@ package com.tdp2.quechuaapp.networking;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Inscripcion;
-import com.tdp2.quechuaapp.model.InscripcionFinal;
+import com.tdp2.quechuaapp.model.InscripcionColoquio;
 
 import java.util.ArrayList;
 
@@ -48,13 +48,13 @@ public interface EstudianteApi {
     Call<Inscripcion> inscribirAlumno(@Path("alumnoId")Integer alumnoId, @Path("cursoId")Integer cursoId);
 
     @GET("/api/cursos/{cursoId}/coloquios")
-    Call<ArrayList<Final>> getFinales(@Header("Authorization")String apiToken, @Path("cursoId")Integer cursoId);
+    Call<ArrayList<Coloquio>> getFinales(@Header("Authorization")String apiToken, @Path("cursoId")Integer cursoId);
 
     @GET("/api/inscripcion-coloquios/byAlumno")
-    Call<ArrayList<InscripcionFinal>> getMisFinales(@Header("Authorization")String apiToken);
+    Call<ArrayList<InscripcionColoquio>> getMisFinales(@Header("Authorization")String apiToken);
 
     @POST("/api/inscripcion-coloquios/{coloquioId}/inscribir")
-    Call<InscripcionFinal> inscribirFinal(@Header("Authorization")String apiToken, @Path("coloquioId")Integer coloquioId);
+    Call<InscripcionColoquio> inscribirFinal(@Header("Authorization")String apiToken, @Path("coloquioId")Integer coloquioId);
 
     @GET("/api/alumnos/data")
     Call<Alumno> getAlumno(@Header("Authorization")String apiToken);
