@@ -28,6 +28,8 @@ import com.tdp2.quechuaapp.student.view.FinalesAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class InscripcionFinalActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -138,9 +140,17 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Final aFinal = finales.get(position);
+
+        Date hoy = Calendar.getInstance().getTime();
+        long diferencia = aFinal.fecha.getTime() - hoy.getTime();
+        diferencia = diferencia / (60 * 60 * 24 * 1000); // Diferencia en dias
+
+        if (diferencia < 2 && !aFinal.inscripto) {
+            showAlert("Ya ha pasado el plazo para inscribirse a este final", "Alerta");
+            return;
+        }
+
         String mensaje = aFinal.inscripto ? "desinscribirse":"anotarse";
-
-
 
         new AlertDialog.Builder(this)
                 .setTitle("Inscripción")
