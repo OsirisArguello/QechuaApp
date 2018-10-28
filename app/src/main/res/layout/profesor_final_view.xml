@@ -73,4 +73,5 @@
         app:layout_constraintEnd_toStartOf="@+id/verDetalleFinalProfesor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profesor_aula_final" />
+
 </android.support.constraint.ConstraintLayout>

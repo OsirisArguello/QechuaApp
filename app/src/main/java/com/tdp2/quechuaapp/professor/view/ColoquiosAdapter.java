@@ -15,6 +15,8 @@ import com.tdp2.quechuaapp.model.Curso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
 
@@ -43,12 +45,23 @@ public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.profesor_final_view, parent, false);
         }
 
-        // Lookup view for data population
+        //Codigo de colores
+        Calendar fechaYHoraInicioColoquio = Calendar.getInstance();
+        fechaYHoraInicioColoquio.setTime(coloquio.fecha);
+        fechaYHoraInicioColoquio.set(Calendar.HOUR_OF_DAY,Integer.parseInt(coloquio.horaInicio.split(":")[0]));
+        fechaYHoraInicioColoquio.set(Calendar.MINUTE,Integer.parseInt(coloquio.horaInicio.split(":")[1]));
 
-        if (position % 2 == 1) {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground1));
+        Calendar fechaYHoraActual = Calendar.getInstance();
+
+        if(fechaYHoraActual.after(fechaYHoraInicioColoquio)){
+            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.coloquiosPasados));
         } else {
-            convertView.setBackgroundColor(getContext().getResources().getColor(R.color.cursosBackground2));
+            fechaYHoraActual.add(Calendar.DAY_OF_MONTH,1);
+            if(fechaYHoraActual.before(fechaYHoraInicioColoquio)){
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.coloquiosFuturos));
+            } else {
+                convertView.setBackgroundColor(getContext().getResources().getColor(R.color.coloquiosCercanos));
+            }
         }
 
         TextView fechaFinal=convertView.findViewById(R.id.profesor_fecha_final);
