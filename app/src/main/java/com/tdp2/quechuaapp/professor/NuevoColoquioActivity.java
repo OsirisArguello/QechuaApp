@@ -46,6 +46,9 @@ public class NuevoColoquioActivity extends AppCompatActivity {
     EditText horaFinalColoquioText;
     EditText fechaColoquioText;
     private DocenteService docenteService;
+
+    DatePicker datePicker;
+
     private OnSelectDateListener listener = new OnSelectDateListener() {
         @Override
         public void onSelect(List<Calendar> calendars) {
@@ -64,6 +67,8 @@ public class NuevoColoquioActivity extends AppCompatActivity {
 
         curso = (Curso) getIntent().getSerializableExtra("curso");
 
+        datePicker=buildDatePicker();
+
         setUpInitials();
         attachEvents();
     }
@@ -75,7 +80,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
                     if(fechaColoquioText.getError()==null){
-                        buildDatePicker();
+                        datePicker.show();
                         fechaColoquioText.clearFocus();
                     }
 
@@ -87,7 +92,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fechaColoquioText.setError(null);
-                buildDatePicker();
+                datePicker.show();
                 fechaColoquioText.clearFocus();
             }
         });
@@ -146,7 +151,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                buildDatePicker();
+                datePicker.show();
                 fechaColoquioText.setError(null);
             }
         });
@@ -222,7 +227,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         return true;
     }
 
-    private void buildDatePicker() {
+    private DatePicker buildDatePicker() {
         DatePickerBuilder builder = new DatePickerBuilder(NuevoColoquioActivity.this, listener)
                 .pickerType(CalendarView.ONE_DAY_PICKER);
 
@@ -240,15 +245,14 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         diasNoPermitidos.addAll(domingos);
 
 
-        DatePicker datePicker = builder
+        datePicker = builder
                 .date(Calendar.getInstance())
                 .minimumDate(min)
                 .maximumDate(max)
                 .disabledDays(diasNoPermitidos)
                 .disabledDaysLabelsColor(R.color.lightGray)
                 .build();
-
-        datePicker.show();
+        return datePicker;
     }
 
     private void nuevoColoquio() {
