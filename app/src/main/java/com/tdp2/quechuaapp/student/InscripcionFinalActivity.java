@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Final;
 import com.tdp2.quechuaapp.model.InscripcionFinal;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 
 public class InscripcionFinalActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    Curso curso;
+    Cursada cursada;
     ArrayList<Final> finales;
     EstudianteService estudianteService;
     FinalesAdapter finalesAdapter;
@@ -41,7 +42,7 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        curso = (Curso) getIntent().getSerializableExtra("curso");
+        cursada = (Cursada) getIntent().getSerializableExtra("cursada");
         setContentView(R.layout.activity_inscripcion_final);
         sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -51,12 +52,15 @@ public class InscripcionFinalActivity extends AppCompatActivity implements Adapt
     }
 
     private void setupInitials() {
+        Curso curso = cursada.curso;
+
         final TextView materiaTextView = findViewById(R.id.materiaTextView);
         final TextView cursoTextView = findViewById(R.id.cursoTextView);
         final TextView cuatrimestreTextView = findViewById(R.id.cuatrimestreTextView);
 
         materiaTextView.setText("Materia: " + curso.materia.codigo + " - " + curso.materia.nombre);
         cursoTextView.setText("Curso: " + curso.id);
+        cuatrimestreTextView.setText(cursada.periodo.cuatrimestre.toLowerCase() + " cuatrimestre, " + cursada.periodo.anio);
 
         estudianteService.getFinalesDisponibles(curso.id, new Client() {
             @Override
