@@ -21,12 +21,11 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.professor.view.ColoquiosAdapter;
-import com.tdp2.quechuaapp.professor.view.CursosDocenteAddFinalAdapterCallback;
 import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
 
-public class InscripcionColoquioActivity extends AppCompatActivity implements CursosDocenteAddFinalAdapterCallback {
+public class InscripcionColoquioActivity extends AppCompatActivity {
 
     public Curso curso;
     private DocenteService docenteService;
@@ -165,19 +164,6 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Cu
         coloquiosAdapter = new ColoquiosAdapter(this, coloquios, curso);
         finalesListView.setAdapter(coloquiosAdapter);
         finalesListView.setEmptyView(findViewById(R.id.emptyList_profesor_finales));
-    }
-
-    @Override
-    public void agregarFecha(final Integer idCurso, final Button inscribirseButton) {
-
-        ProgressBar loadingView = findViewById(R.id.loading_inscripcion_curso);
-        loadingView.setVisibility(View.VISIBLE);
-        loadingView.bringToFront();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
-
     }
 
     @Override
