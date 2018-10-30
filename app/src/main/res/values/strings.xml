@@ -29,12 +29,16 @@
     <string name="title_activity_inscripcion_materias">Inscripción</string>
     <string name="hint_search">Qué materia buscas?</string>
 
+    <!-- Coloquios (Profesor) -->
     <string name="seleccionar_fecha"></string>
     <string name="boton_seleccionar_fecha_coloquio">Seleccionar Fecha</string>
     <string name="boton_seleccionar_hora_inicio_final">Seleccionar Hora Inicio</string>
     <string name="boton_seleccionar_hora_finalizacion_coloquio">Seleccionar Hora Finalización</string>
 
     <string name="asignarFechaPregunta">¿Desea asignar la fecha de final %1$s en el horario de %2$s a %3$s?</string>
+    <string name="confirmacionEliminarColoquio">¿Está seguro que desea eliminar la fecha de coloquio? Cantidad de Inscriptos: %1$d</string>
+    <string name="eliminacionColoquioOk">El coloquio ha sido eliminado.</string>
+
 
     <!-- Material Calendar View -->
     <string name="material_calendar_monday">L</string>

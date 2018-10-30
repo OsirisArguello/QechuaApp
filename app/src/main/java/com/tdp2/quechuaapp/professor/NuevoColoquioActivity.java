@@ -23,8 +23,6 @@ import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Coloquio;
-import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
