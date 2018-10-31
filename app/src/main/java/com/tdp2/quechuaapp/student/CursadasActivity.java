@@ -26,6 +26,8 @@ import com.tdp2.quechuaapp.student.view.CursadasAdapter;
 import com.tdp2.quechuaapp.student.view.CursadasAdapterCallback;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CursadasActivity extends AppCompatActivity implements CursadasAdapterCallback {
 
@@ -48,6 +50,12 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursadas=(ArrayList<Cursada>) responseBody;
+                Collections.sort(cursadas, new Comparator<Cursada>() {
+                    @Override
+                    public int compare(Cursada o1, Cursada o2) {
+                        return o1.curso.id.compareTo(o2.curso.id);
+                    }
+                });
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_cursadas);
                 loadingView.setVisibility(View.INVISIBLE);
                 displayCursadas();
@@ -92,7 +100,7 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
     @Override
     public void verFinales(Cursada cursada) {
         Intent inscripcionFinalActivity = new Intent(getApplicationContext(), InscripcionColoquioActivity.class);
-        inscripcionFinalActivity.putExtra("curso", cursada.curso);
+        inscripcionFinalActivity.putExtra("cursada", cursada);
         startActivity(inscripcionFinalActivity);
     }
 

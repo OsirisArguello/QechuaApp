@@ -34,6 +34,9 @@ public class Cursada implements Serializable {
     @SerializedName("materia")
     @Expose
     public Materia materia;
+    @SerializedName("periodo")
+    @Expose
+    public Periodo periodo;
 
 
 }

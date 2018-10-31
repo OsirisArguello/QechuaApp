@@ -67,12 +67,12 @@ public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
         TextView fechaFinal=convertView.findViewById(R.id.profesor_fecha_final);
         TextView horarioFinal=convertView.findViewById(R.id.profesor_hora_final);
         TextView aulaFinal=convertView.findViewById(R.id.profesor_aula_final);
+        TextView inscriptosFinal = convertView.findViewById(R.id.profesor_inscriptos_final);
 
         SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
         fechaFinal.setText(sdf.format(coloquio.fecha));
         horarioFinal.setText(coloquio.horaInicio+"-"+coloquio.horaFin);
         aulaFinal.setText(coloquio.sede+"-"+coloquio.aula);
-
 
         return convertView;
     }
