@@ -32,6 +32,9 @@ public class Coloquio implements Serializable {
     @SerializedName("periodo")
     @Expose
     public Periodo periodo;
+    @SerializedName("inscripcionesCantidad")
+    @Expose
+    public Integer inscripcionesCantidad;
 
     public Boolean inscripto = false;
 }

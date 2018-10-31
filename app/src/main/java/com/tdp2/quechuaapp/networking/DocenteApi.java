@@ -23,10 +23,8 @@ public interface DocenteApi {
     @GET("/api/cursos/{cursoID}/")
     Call<Curso> getCurso(@Header("Authorization") String apiToken, @Path("cursoID")Integer cursoId);
 
-
     @GET("/api/profesors/cursos")
     Call<ArrayList<Curso>> getCursos(@Header("Authorization") String apiToken);
-
 
     @POST("/api/inscripcion-cursos/{inscripcionId}/accion/regularizar")
     Call<Inscripcion> aceptar(@Header("Authorization")String apiToken, @Path("inscripcionId")Integer inscripcionId);
