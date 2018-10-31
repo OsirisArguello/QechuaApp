@@ -60,6 +60,15 @@
                     android:layout_marginEnd="13dp"
                     app:srcCompat="@drawable/logout" />
 
+                <ImageView
+                    android:id="@+id/cambiar_perfil"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="56dp"
+                    app:srcCompat="@drawable/cambiar_perfil" />
+
             </RelativeLayout>
 
             <LinearLayout
