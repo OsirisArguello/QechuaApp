@@ -207,7 +207,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         }
 
         if(TextUtils.isEmpty(horaInicioColoquioText.getText())){
-            horaInicioColoquioText.setError("Seleccione una hora de inicio el coloquio");
+            horaInicioColoquioText.setError("Seleccione una hora de inicio para el coloquio");
             horaInicioColoquioText.requestFocus();
             return false;
         }
