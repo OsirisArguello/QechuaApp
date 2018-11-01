@@ -12,13 +12,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tdp2.quechuaapp.login.LoginActivity;
+import com.tdp2.quechuaapp.login.SeleccionarPerfilActivity;
 import com.tdp2.quechuaapp.login.model.UserLogged;
+import com.tdp2.quechuaapp.login.model.UserLogged.PerfilActual;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
@@ -69,8 +72,19 @@ public class MainActivity extends AppCompatActivity {
 
         TextView emailText = findViewById(R.id.user_logged_email);
         emailText.setText(userLogged.email);
+        ImageView cambiarPerfil=findViewById(R.id.cambiar_perfil);
 
-
+        if(userLogged.authorities.size()<2){
+            cambiarPerfil.setVisibility(View.INVISIBLE);
+        } else {
+            cambiarPerfil.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, SeleccionarPerfilActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -81,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout miscursos = findViewById(R.id.miscursos_action);
         LinearLayout misfinales = findViewById(R.id.misfinales_action);
 
-        if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")){
-
+        if(userLogged.perfilActual.equals(PerfilActual.ALUMNO)){
+            //ES ALUMNO
 
             estudianteService.getAlumno(new Client() {
                 @Override
@@ -105,13 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent miscursosIntent = new Intent(MainActivity.this, CursadasActivity.class);
-
-                    /*Materia materia = new Materia();
-                    materia.id=1;
-
-                    miscursosIntent.putExtra("alumno",alumno);
-                    miscursosIntent.putExtra("materia",materia);*/
-
                     startActivity(miscursosIntent);
                 }
             });
@@ -119,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent misfinalesIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    //startActivity(misfinalesIntent);
                     Toast.makeText(MainActivity.this, "En Construccion",
                             Toast.LENGTH_LONG).show();
                 }
@@ -130,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
             historiaacademica.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent historiaAcademicaIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    //startActivity(historiaAcademicaIntent);
                     Toast.makeText(MainActivity.this, "En Construccion",
                             Toast.LENGTH_LONG).show();
                 }
@@ -151,14 +154,13 @@ public class MainActivity extends AppCompatActivity {
             prioridad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent prioridadIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-
-                    //startActivity(prioridadIntent);
                     Toast.makeText(MainActivity.this, "En Construccion",
                             Toast.LENGTH_LONG).show();
                 }
             });
         } else {
+
+            //ES DOCENTE
             miscursos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -171,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent measurementIntent = new Intent(MainActivity.this, InscripcionCursoActivity.class);
-                    //startActivity(measurementIntent);
                     Toast.makeText(MainActivity.this, "En Construccion",
                             Toast.LENGTH_LONG).show();
                 }
