@@ -54,12 +54,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".student.InscripcionFinalActivity"
+            android:name=".student.InscripcionColoquioActivity"
             android:label="@string/title_activity_inscripcion_final"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".professor.InscripcionFinalActivity"
+            android:name=".professor.InscripcionColoquioActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -70,7 +70,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".professor.NuevoFinalActivity"
+            android:name=".professor.NuevoColoquioActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>

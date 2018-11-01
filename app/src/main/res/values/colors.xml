@@ -13,4 +13,8 @@
     <color name="cursosBackground1">#DAE8FC</color>
     <color name="cursosBackground2">#E1D5E7</color>
 
+    <color name="coloquiosFuturos">#c8e6c9</color>
+    <color name="coloquiosCercanos">#90caf9</color>
+    <color name="coloquiosPasados">#e0e0e0</color>
+
 </resources>

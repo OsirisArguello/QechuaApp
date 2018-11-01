@@ -2,8 +2,9 @@ package com.tdp2.quechuaapp.networking;
 
 
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,16 @@ public class MockDocenteService implements DocenteApi {
     }
 
     @Override
-    public Call<Curso> getCurso(Integer cursoId) {
+    public Call<Curso> getInscripcionesACurso(Integer cursoId) {
         Curso curso = new Curso();
         curso.id=cursoId;
 
-        return delegate.returningResponse(curso).getCurso(cursoId);
+        return delegate.returningResponse(curso).getInscripcionesACurso(cursoId);
+    }
+
+    @Override
+    public Call<Curso> getCurso(String apiToken, Integer cursoId) {
+        return null;
     }
 
     @Override
@@ -44,12 +50,12 @@ public class MockDocenteService implements DocenteApi {
     }
 
     @Override
-    public Call<ArrayList<Final>> getColoquios(String apiToken, Integer cursoId) {
+    public Call<ArrayList<Coloquio>> getColoquios(String apiToken, Integer cursoId) {
         return null;
     }
 
     @Override
-    public Call<Final> crearColoquio(String apiToken, Final coloquio) {
+    public Call<Coloquio> crearColoquio(String apiToken, ColoquioRequest coloquio) {
         return null;
     }
 

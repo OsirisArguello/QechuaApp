@@ -7,9 +7,9 @@ import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
-import com.tdp2.quechuaapp.model.InscripcionFinal;
+import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.model.Materia;
@@ -288,9 +288,9 @@ public class EstudianteService {
 
     public void getFinalesDisponibles(Integer idCurso, final Client client) {
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
-        estudianteApi.getFinales(AUTHORIZATION_PREFIX + apiToken,idCurso).enqueue(new Callback<ArrayList<Final>>() {
+        estudianteApi.getFinales(AUTHORIZATION_PREFIX + apiToken,idCurso).enqueue(new Callback<ArrayList<Coloquio>>() {
             @Override
-            public void onResponse(Call<ArrayList<Final>> call, Response<ArrayList<Final>> response) {
+            public void onResponse(Call<ArrayList<Coloquio>> call, Response<ArrayList<Coloquio>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i("ESTUDIANTESERVICE", response.body().toString());
@@ -310,7 +310,7 @@ public class EstudianteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Final>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<Coloquio>> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
                 client.onResponseError(null);
             }
@@ -319,9 +319,9 @@ public class EstudianteService {
 
     public void getMisFinales(final Client client) {
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
-        estudianteApi.getMisFinales(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<ArrayList<InscripcionFinal>>() {
+        estudianteApi.getMisFinales(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<ArrayList<InscripcionColoquio>>() {
             @Override
-            public void onResponse(Call<ArrayList<InscripcionFinal>> call, Response<ArrayList<InscripcionFinal>> response) {
+            public void onResponse(Call<ArrayList<InscripcionColoquio>> call, Response<ArrayList<InscripcionColoquio>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i("ESTUDIANTESERVICE", response.body().toString());
@@ -341,7 +341,7 @@ public class EstudianteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<InscripcionFinal>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<InscripcionColoquio>> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
                 client.onResponseError(null);
             }
@@ -350,9 +350,9 @@ public class EstudianteService {
 
     public void inscribirFinal(Integer finalId,final Client client) {
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
-        estudianteApi.inscribirFinal(AUTHORIZATION_PREFIX+apiToken, finalId).enqueue(new Callback<InscripcionFinal>() {
+        estudianteApi.inscribirFinal(AUTHORIZATION_PREFIX+apiToken, finalId).enqueue(new Callback<InscripcionColoquio>() {
             @Override
-            public void onResponse(Call<InscripcionFinal> call, Response<InscripcionFinal> response) {
+            public void onResponse(Call<InscripcionColoquio> call, Response<InscripcionColoquio> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i("ESTUDIANTESERVICE", response.body().toString());
@@ -372,7 +372,7 @@ public class EstudianteService {
             }
 
             @Override
-            public void onFailure(Call<InscripcionFinal> call, Throwable t) {
+            public void onFailure(Call<InscripcionColoquio> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", t.getMessage());
                 client.onResponseError(null);
             }

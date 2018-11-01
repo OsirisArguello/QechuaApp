@@ -1,14 +1,10 @@
 package com.tdp2.quechuaapp.professor;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -19,7 +15,6 @@ import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
-import com.tdp2.quechuaapp.professor.view.CursosDocenteAddFinalAdapterCallback;
 import com.tdp2.quechuaapp.professor.view.VerCursosDocenteAdapter;
 import com.tdp2.quechuaapp.professor.view.VerCursosDocenteAdapterCallback;
 
@@ -29,7 +24,6 @@ public class MostrarCursosDocenteActivity extends AppCompatActivity implements V
 
     public Curso curso;
     ArrayList<Curso> cursos;
-    private ViewPager viewPager;
     private DocenteService docenteService;
     VerCursosDocenteAdapter cursosAdapter;
 
@@ -51,7 +45,7 @@ public class MostrarCursosDocenteActivity extends AppCompatActivity implements V
             @Override
             public void onResponseSuccess(Object responseBody) {
                 cursos=(ArrayList<Curso>) responseBody;
-                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_vercursos);
+                ProgressBar loadingView = findViewById(R.id.loading_vercursos);
                 loadingView.setVisibility(View.INVISIBLE);
                 displayCursos();
             }
@@ -94,7 +88,7 @@ public class MostrarCursosDocenteActivity extends AppCompatActivity implements V
 
     @Override
     public void verFechasFinal(final Integer idCurso, final Button verFechasFinalButtom) {
-        Intent inscripcionFinalIntent = new Intent(MostrarCursosDocenteActivity.this, InscripcionFinalActivity.class);
+        Intent inscripcionFinalIntent = new Intent(MostrarCursosDocenteActivity.this, InscripcionColoquioActivity.class);
         Curso curso=new Curso();
         curso.id=idCurso;
         inscripcionFinalIntent.putExtra("curso",curso);
@@ -110,17 +104,5 @@ public class MostrarCursosDocenteActivity extends AppCompatActivity implements V
         startActivity(detalleCursoIntent);
     }
 
-    private void showAlert(String messageToDisplay, String title) {
-        AlertDialog alertDialog = new AlertDialog.Builder(MostrarCursosDocenteActivity.this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(messageToDisplay);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-        cursosAdapter.notifyDataSetChanged();
-    }
+
 }

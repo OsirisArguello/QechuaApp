@@ -25,7 +25,7 @@
     <string name="error_field_required">Campo requerido</string>
 
 
-    <string name="title_activity_inscripcion_final">InscripcionFinalActivity</string>
+    <string name="title_activity_inscripcion_final">InscripcionColoquioActivity</string>
     <string name="title_activity_inscripcion_materias">Inscripción</string>
     <string name="hint_search">Qué materia buscas?</string>
 
@@ -33,4 +33,34 @@
     <string name="boton_seleccionar_fecha_coloquio">Seleccionar Fecha</string>
     <string name="boton_seleccionar_hora_inicio_final">Seleccionar Hora Inicio</string>
     <string name="boton_seleccionar_hora_finalizacion_coloquio">Seleccionar Hora Finalización</string>
+
+    <string name="asignarFechaPregunta">¿Desea asignar la fecha de final %1$s en el horario de %2$s a %3$s?</string>
+
+    <!-- Material Calendar View -->
+    <string name="material_calendar_monday">L</string>
+    <string name="material_calendar_tuesday">M</string>
+    <string name="material_calendar_wednesday">M</string>
+    <string name="material_calendar_thursday">J</string>
+    <string name="material_calendar_friday">V</string>
+    <string name="material_calendar_saturday">S</string>
+    <string name="material_calendar_sunday">D</string>
+
+    <array name="material_calendar_months_array">
+        <item>Enero</item>
+        <item>Febrero</item>
+        <item>Marzo</item>
+        <item>Abril</item>
+        <item>Mayo</item>
+        <item>Junio</item>
+        <item>Julio</item>
+        <item>Agosto</item>
+        <item>Septiembre</item>
+        <item>Octubre</item>
+        <item>Noviembre</item>
+        <item>Diciembre</item>
+    </array>
+
+    <string name="material_calendar_today_button">Hoy</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancelar</string>
 </resources>
