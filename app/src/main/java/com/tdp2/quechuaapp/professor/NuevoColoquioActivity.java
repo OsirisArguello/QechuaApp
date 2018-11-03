@@ -296,6 +296,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         coloquio.horaFin=horaFinalColoquioText.getText().toString();
         coloquio.curso=curso;
         coloquio.periodo=curso.periodo;
+        coloquio.estado = "ACTIVO";
 
         //TODO: VER COMO ESTABLECEMOS EL AULA Y SEDE DEL COLOQUIO
         coloquio.aula="414";

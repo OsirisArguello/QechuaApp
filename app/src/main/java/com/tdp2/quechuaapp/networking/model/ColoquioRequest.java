@@ -33,4 +33,7 @@ public class ColoquioRequest {
     @SerializedName("periodo")
     @Expose
     public Periodo periodo;
+    @SerializedName("estado")
+    @Expose
+    public String estado;
 }
