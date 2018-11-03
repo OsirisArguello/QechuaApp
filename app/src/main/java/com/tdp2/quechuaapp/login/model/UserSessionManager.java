@@ -3,9 +3,17 @@ package com.tdp2.quechuaapp.login.model;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.tdp2.quechuaapp.login.LoginActivity;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class UserSessionManager {
 
@@ -28,9 +36,10 @@ public class UserSessionManager {
     public static final String IS_USER_LOGIN = "isUserLoggedIn";
 
     public static final String USER_LOGGED = "userLogged";
-    //public static final String KEY_LAST_NAME = "lastName";
+
     public static final String KEY_TOKEN = "accessToken";
 
+    public static final String KEY_ACTIVITIES = "activitiesPeriod";
 
     public UserSessionManager(Context context) {
         this.context = context;
@@ -38,17 +47,25 @@ public class UserSessionManager {
         editor = pref.edit();
     }
 
+    public void saveActividadValida(ArrayList<PeriodoActividad> actividades) {
+        Set<String> set = new HashSet<>();
+        for (PeriodoActividad actividad: actividades) {
+            set.add(actividad.name());
+        }
+
+        editor.putStringSet(KEY_ACTIVITIES, set);
+
+        // commit changes
+        editor.commit();
+    }
 
     public void saveUserLogged(UserLogged userLogged, String accessToken){
         editor.putBoolean(IS_USER_LOGIN, true);
         // Storing name in preferences
-        //editor.putString(KEY_FIRST_NAME, userLogged.firstName);
-        //editor.putString(KEY_LAST_NAME, userLogged.lastName);
         Gson gson = new Gson();
         String userAsJson = gson.toJson(userLogged);
         editor.putString(USER_LOGGED, userAsJson);
         editor.putString(KEY_TOKEN, accessToken);
-
         // commit changes
         editor.commit();
     }
@@ -58,6 +75,14 @@ public class UserSessionManager {
         return accessToken;
     }
 
+    public ArrayList<PeriodoActividad> getActividadValida() {
+        Set<String> set = pref.getStringSet(KEY_ACTIVITIES, null);
+        ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
+        for (String name: set) {
+            returnSet.add(PeriodoActividad.valueOf(name));
+        }
+        return returnSet;
+    }
     /*public String getFullName() {
         String name = pref.getString(KEY_FIRST_NAME, null);
         String lastName = pref.getString(KEY_LAST_NAME, null);
