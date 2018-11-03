@@ -40,4 +40,7 @@ public interface DocenteApi {
 
     @POST("/api/coloquios/{coloquioId}/eliminar")
     Call<Void> eliminarColoquio(@Header("Authorization") String apiToken, @Path("coloquioId") Integer coloquioId);
+
+    @GET("/api/periodo-administrativos/acciones")
+    Call<ArrayList<String>> getAccionesPeriodo(@Header("Authorization")String apiToken);
 }
