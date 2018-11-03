@@ -287,31 +287,22 @@ public class DocenteService {
     public void eliminarColoquio(ColoquioRequest coloquio, final Client client){
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
 
-        docenteApi.eliminarColoquio(AUTHORIZATION_PREFIX +apiToken, coloquio).enqueue(new Callback<Coloquio>() {
+        docenteApi.eliminarColoquio(AUTHORIZATION_PREFIX +apiToken, coloquio.id).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Coloquio> call, Response<Coloquio> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() > 199 && response.code() < 300) {
-                    if (response.body() != null) {
-                        Log.i(SERVICE_TAG, response.body().toString());
-                        client.onResponseSuccess(response.body());
-                    } else {
-                        Log.i(SERVICE_TAG, "NO RESPONSE");
-                        client.onResponseError(null);
-                    }
+                    Log.i(SERVICE_TAG, "Coloquio eliminado");
+                    client.onResponseSuccess(response.body());
                 } else {
-                    if(response.body() != null) {
-                        Log.e(SERVICE_TAG, response.body().toString());
-                    }else {
-                        Log.e(SERVICE_TAG, "NO RESPONSE");
-                    }
+                    Log.e(SERVICE_TAG, "NO RESPONSE");
                     client.onResponseError(null);
                 }
             }
 
             @Override
-            public void onFailure(Call<Coloquio> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e(SERVICE_TAG, t.getMessage());
-                client.onResponseError(null);
+                client.onResponseError(t.getMessage());
             }
         });
     }

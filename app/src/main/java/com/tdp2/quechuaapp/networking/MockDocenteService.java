@@ -60,9 +60,8 @@ public class MockDocenteService implements DocenteApi {
     }
 
     @Override
-    public Call<Coloquio> eliminarColoquio(String apiToken, ColoquioRequest coloquio) {
+    public Call<Void> eliminarColoquio(String apiToken, Integer coloquioId) {
         return null;
     }
-
 
 }

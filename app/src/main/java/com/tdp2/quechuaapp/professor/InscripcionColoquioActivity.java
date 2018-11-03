@@ -183,7 +183,7 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Co
     public void eliminarColoquio(final Integer idColoquio, Integer cantInscriptos) {
 
         String messageToDisplay=String.format(getResources().getString(R.string.confirmacionEliminarColoquio),cantInscriptos);
-        showConfirmationAlert(InscripcionColoquioActivity.this, "Confirmación de Eliminación de Coloquio", messageToDisplay, "Eliminar Coloquio","Cancelar",
+        showConfirmationAlert(InscripcionColoquioActivity.this, "Eliminación de Coloquio", messageToDisplay, "Eliminar Coloquio","Cancelar",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -219,8 +219,7 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Co
                 ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
                 loadingView.setVisibility(View.INVISIBLE);
 
-                Toast.makeText(InscripcionColoquioActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(InscripcionColoquioActivity.this, errorMessage, Toast.LENGTH_LONG).show();
 
                 Thread thread = new Thread(){
                     @Override

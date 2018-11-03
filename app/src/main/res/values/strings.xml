@@ -36,7 +36,7 @@
     <string name="boton_seleccionar_hora_finalizacion_coloquio">Seleccionar Hora Finalización</string>
 
     <string name="asignarFechaPregunta">¿Desea asignar la fecha de final %1$s en el horario de %2$s a %3$s?</string>
-    <string name="confirmacionEliminarColoquio">¿Está seguro que desea eliminar la fecha de coloquio? Cantidad de Inscriptos: %1$d</string>
+    <string name="confirmacionEliminarColoquio">¿Está seguro que desea eliminar la fecha de coloquio?\nCantidad de Inscriptos: %1$d</string>
     <string name="eliminacionColoquioOk">El coloquio ha sido eliminado.</string>
 
 
