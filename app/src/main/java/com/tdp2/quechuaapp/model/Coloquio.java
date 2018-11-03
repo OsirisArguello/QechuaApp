@@ -34,7 +34,7 @@ public class Coloquio implements Serializable {
     public Periodo periodo;
     @SerializedName("inscripcionesCantidad")
     @Expose
-    public Integer inscripcionesCantidad;
+    public Integer cantInscriptos;
 
     public Boolean inscripto = false;
 }

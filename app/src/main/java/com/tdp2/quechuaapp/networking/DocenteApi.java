@@ -37,4 +37,7 @@ public interface DocenteApi {
 
     @POST("/api/coloquios")
     Call<Coloquio> crearColoquio(@Header("Authorization") String apiToken, @Body ColoquioRequest coloquio);
+
+    @POST("/api/coloquios/{coloquioId}/eliminar")
+    Call<Void> eliminarColoquio(@Header("Authorization") String apiToken, @Path("coloquioId") Integer coloquioId);
 }
