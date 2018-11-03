@@ -75,7 +75,7 @@ public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
         fechaFinal.setText(sdf.format(coloquio.fecha));
         horarioFinal.setText(coloquio.horaInicio+"-"+coloquio.horaFin);
         aulaFinal.setText(coloquio.sede+"-"+coloquio.aula);
-        inscriptosFinal.setText("Inscriptos: " + coloquio.cantInscriptos);
+        inscriptosFinal.setText("Cantidad de Inscriptos: " + coloquio.cantInscriptos.toString());
 
         final Button eliminarColoquioButton = convertView.findViewById(R.id.eliminarFinalProfesor);
         eliminarColoquioButton.setOnClickListener(new View.OnClickListener() {

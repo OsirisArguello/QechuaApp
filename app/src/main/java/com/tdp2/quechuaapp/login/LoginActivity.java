@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.login.model.UserLogged;
+import com.tdp2.quechuaapp.login.model.UserLogged.PerfilActual;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
@@ -137,15 +138,26 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void onSuccess(UserLogged userLogged, String accessToken) {
-        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent;
+        if(userLogged.authorities.size()>1){
+            intent = new Intent(LoginActivity.this, SeleccionarPerfilActivity.class);
+        } else {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+            if(userLogged.authorities.get(0).equals("ROLE_ALUMNO")){
+                userLogged.perfilActual=PerfilActual.ALUMNO;
+            } else {
+                userLogged.perfilActual=PerfilActual.PROFESOR;
+            }
+
+        }
 
         UserSessionManager userSession = new UserSessionManager(this.getApplicationContext());
         userSession.saveUserLogged(userLogged, accessToken);
 
         String welcome = String.format("Bienvenido %s %s!", userLogged.firstName, userLogged.lastName);
 
-        mainActivityIntent.putExtra("WELCOME", welcome);
-        startActivity(mainActivityIntent);
+        intent.putExtra("WELCOME", welcome);
+        startActivity(intent);
         finish();
     }
 

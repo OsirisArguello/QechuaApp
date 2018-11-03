@@ -9,6 +9,7 @@ import com.tdp2.quechuaapp.login.LoginActivity;
 
 public class UserSessionManager {
 
+    public static final String SELECTED_ROLE = "selectedRole";
     // Shared Preferences reference
     SharedPreferences pref;
 
