@@ -64,4 +64,8 @@ public class MockDocenteService implements DocenteApi {
         return null;
     }
 
+    @Override
+    public Call<ArrayList<String>> getAccionesPeriodo(String apiToken) {
+        return null;
+    }
 }

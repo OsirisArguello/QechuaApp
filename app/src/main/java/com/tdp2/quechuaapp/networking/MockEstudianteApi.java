@@ -147,4 +147,9 @@ public class MockEstudianteApi implements EstudianteApi {
     public Call<InscripcionColoquio> inscribirFinal(String apiToken, Integer coloquioId) {
         return null;
     }
+
+    @Override
+    public Call<ArrayList<String>> getAccionesPeriodo(String apiToken) {
+        return null;
+    }
 }
