@@ -95,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout miscursos = findViewById(R.id.miscursos_action);
         LinearLayout misfinales = findViewById(R.id.misfinales_action);
 
+        // Si el usuario loggeado teneia un perfil invalido
+        if (userLogged.perfilActual == null) {
+            userSessionManager.logout();
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            return;
+        }
+
         if(userLogged.perfilActual.equals(PerfilActual.ALUMNO)){
             //ES ALUMNO
 
@@ -196,9 +204,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(loginIntent);
             }
         });
-
-
-
 
     }
 
