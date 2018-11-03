@@ -26,6 +26,7 @@ import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -34,6 +35,8 @@ import com.tdp2.quechuaapp.professor.MostrarCursosDocenteActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
         estudianteService=new EstudianteService();
         docenteService=new DocenteService();
+
+        updateAccionesPeriodo();
 
         setupUI();
 
@@ -225,6 +230,32 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateAccionesPeriodo() {
+        Client client = new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ArrayList<PeriodoActividad> actividades = (ArrayList<PeriodoActividad>)responseBody;
+                userSessionManager.saveActividadValida(actividades);
+            }
 
+            @Override
+            public void onResponseError(String errorMessage) {
+                Toast.makeText(MainActivity.this,
+                        "No se pudieron obtener las acciones disponibles para el periodo.\n Algunas acciones podrian no estar disponibles",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public Context getContext() {
+                return MainActivity.this;
+            }
+        };
+
+        if (userLogged.perfilActual.equals(PerfilActual.ALUMNO)) {
+            estudianteService.getAccionesPeriodo(client);
+        } else {
+            docenteService.getAccionesPeriodo(client);
+        }
+    }
 
 }
