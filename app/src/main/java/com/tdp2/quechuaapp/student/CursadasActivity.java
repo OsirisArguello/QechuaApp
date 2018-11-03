@@ -99,8 +99,8 @@ public class CursadasActivity extends AppCompatActivity implements CursadasAdapt
 
     @Override
     public void verFinales(Cursada cursada) {
-        Intent inscripcionFinalActivity = new Intent(getApplicationContext(), InscripcionFinalActivity.class);
-        inscripcionFinalActivity.putExtra("curso", cursada.curso);
+        Intent inscripcionFinalActivity = new Intent(getApplicationContext(), InscripcionColoquioActivity.class);
+        inscripcionFinalActivity.putExtra("cursada", cursada);
         startActivity(inscripcionFinalActivity);
     }
 

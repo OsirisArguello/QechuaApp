@@ -1,33 +1,31 @@
 package com.tdp2.quechuaapp.student.view;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class FinalesAdapter extends ArrayAdapter<Final> {
+public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
 
-    public FinalesAdapter(@NonNull Context context, @NonNull ArrayList<Final> finales) {
+    public ColoquiosAdapter(@NonNull Context context, @NonNull ArrayList<Coloquio> finales) {
         super(context, 0,  finales);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final Final aFinal = getItem(position);
+        final Coloquio aColoquio = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -44,12 +42,12 @@ public class FinalesAdapter extends ArrayAdapter<Final> {
         TextView aulaTextView = convertView.findViewById(R.id.aulaFinal);
 
         final ImageView iconoInscipcion = convertView.findViewById(R.id.inscripcionFinal);
-        iconoInscipcion.setImageResource(aFinal.inscripto ? android.R.drawable.ic_delete : android.R.drawable.ic_input_add);
+        iconoInscipcion.setImageResource(aColoquio.inscripto ? android.R.drawable.ic_delete : android.R.drawable.ic_input_add);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        fechaTextView.setText(sdf.format(aFinal.fecha) + " // "+ aFinal.horaInicio + " - " + aFinal.horaFin);
-        aulaTextView.setText(aFinal.sede + " - " + aFinal.aula);
+        fechaTextView.setText(sdf.format(aColoquio.fecha) + " // "+ aColoquio.horaInicio + " - " + aColoquio.horaFin);
+        aulaTextView.setText(aColoquio.sede + " - " + aColoquio.aula);
 
         return convertView;
     }

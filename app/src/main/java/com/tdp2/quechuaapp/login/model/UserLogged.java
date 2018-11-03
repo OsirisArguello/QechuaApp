@@ -47,4 +47,10 @@ public class UserLogged {
     @Expose
     public List<String> authorities = null;
 
+    public PerfilActual perfilActual;
+
+    public enum PerfilActual {
+        ALUMNO, PROFESOR
+    }
+
 }

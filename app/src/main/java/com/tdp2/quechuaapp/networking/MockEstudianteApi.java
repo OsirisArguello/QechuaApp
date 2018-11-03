@@ -4,9 +4,9 @@ import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Carrera;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
-import com.tdp2.quechuaapp.model.InscripcionFinal;
+import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Materia;
 
 import java.util.ArrayList;
@@ -134,17 +134,17 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<ArrayList<Final>> getFinales(String apiToken, Integer cursoId) {
+    public Call<ArrayList<Coloquio>> getFinales(String apiToken, Integer cursoId) {
         return null;
     }
 
     @Override
-    public Call<ArrayList<InscripcionFinal>> getMisFinales(String apiToken) {
+    public Call<ArrayList<InscripcionColoquio>> getMisFinales(String apiToken) {
         return null;
     }
 
     @Override
-    public Call<InscripcionFinal> inscribirFinal(String apiToken, Integer coloquioId) {
+    public Call<InscripcionColoquio> inscribirFinal(String apiToken, Integer coloquioId) {
         return null;
     }
 }

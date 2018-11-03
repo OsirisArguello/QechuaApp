@@ -5,10 +5,10 @@ import android.util.Log;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Final;
+import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
-import com.tdp2.quechuaapp.model.Profesor;
+import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
 
@@ -61,8 +61,39 @@ public class DocenteService {
         return curso;
     }
 
+    public void getInscripcionesACurso(Integer cursoId, final Client client) {
+        docenteApi.getInscripcionesACurso(cursoId).enqueue(new Callback<Curso>() {
+            @Override
+            public void onResponse(Call<Curso> call, Response<Curso> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if (response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    } else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Curso> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
     public void getCurso(Integer cursoId, final Client client) {
-        docenteApi.getCurso(cursoId).enqueue(new Callback<Curso>() {
+        String apiToken = new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.getCurso(AUTHORIZATION_PREFIX+apiToken,cursoId).enqueue(new Callback<Curso>() {
             @Override
             public void onResponse(Call<Curso> call, Response<Curso> response) {
                 if (response.code() > 199 && response.code() < 300) {
@@ -192,9 +223,9 @@ public class DocenteService {
     public void getColoquios(Integer cursoId, final Client client){
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
 
-        docenteApi.getColoquios(AUTHORIZATION_PREFIX +apiToken, cursoId).enqueue(new Callback<ArrayList<Final>>() {
+        docenteApi.getColoquios(AUTHORIZATION_PREFIX +apiToken, cursoId).enqueue(new Callback<ArrayList<Coloquio>>() {
             @Override
-            public void onResponse(Call<ArrayList<Final>> call, Response<ArrayList<Final>> response) {
+            public void onResponse(Call<ArrayList<Coloquio>> call, Response<ArrayList<Coloquio>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if (response.body() != null) {
                         Log.i(SERVICE_TAG, response.body().toString());
@@ -214,19 +245,19 @@ public class DocenteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Final>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<Coloquio>> call, Throwable t) {
                 Log.e(SERVICE_TAG, t.getMessage());
                 client.onResponseError(null);
             }
         });
     }
 
-    public void crearColoquios(Final coloquio, final Client client){
+    public void crearColoquios(ColoquioRequest coloquio, final Client client){
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
 
-        docenteApi.crearColoquio(AUTHORIZATION_PREFIX +apiToken, coloquio).enqueue(new Callback<Final>() {
+        docenteApi.crearColoquio(AUTHORIZATION_PREFIX +apiToken, coloquio).enqueue(new Callback<Coloquio>() {
             @Override
-            public void onResponse(Call<Final> call, Response<Final> response) {
+            public void onResponse(Call<Coloquio> call, Response<Coloquio> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if (response.body() != null) {
                         Log.i(SERVICE_TAG, response.body().toString());
@@ -246,7 +277,7 @@ public class DocenteService {
             }
 
             @Override
-            public void onFailure(Call<Final> call, Throwable t) {
+            public void onFailure(Call<Coloquio> call, Throwable t) {
                 Log.e(SERVICE_TAG, t.getMessage());
                 client.onResponseError(null);
             }

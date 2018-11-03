@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Final implements Serializable {
+public class Coloquio implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -32,6 +32,9 @@ public class Final implements Serializable {
     @SerializedName("periodo")
     @Expose
     public Periodo periodo;
+    @SerializedName("inscripcionesCantidad")
+    @Expose
+    public Integer inscripcionesCantidad;
 
     public Boolean inscripto = false;
 }
