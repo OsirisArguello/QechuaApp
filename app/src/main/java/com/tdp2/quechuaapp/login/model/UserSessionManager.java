@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.tdp2.quechuaapp.login.LoginActivity;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,10 +48,11 @@ public class UserSessionManager {
         editor = pref.edit();
     }
 
-    public void saveActividadValida(ArrayList<PeriodoActividad> actividades) {
+    public void saveActividadValida(ArrayList<PeriodoAdministrativo> actividades) {
         Set<String> set = new HashSet<>();
-        for (PeriodoActividad actividad: actividades) {
-            set.add(actividad.name());
+        Gson gson = new Gson();
+        for (PeriodoAdministrativo periodo: actividades) {
+            set.add(gson.toJson(periodo));
         }
 
         editor.putStringSet(KEY_ACTIVITIES, set);
@@ -76,18 +78,25 @@ public class UserSessionManager {
     }
 
     public ArrayList<PeriodoActividad> getActividadValida() {
+        Gson gson = new Gson();
         Set<String> set = pref.getStringSet(KEY_ACTIVITIES, null);
         ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
-        for (String name: set) {
-            returnSet.add(PeriodoActividad.valueOf(name));
+        for (String strPeriodo: set) {
+            PeriodoAdministrativo periodo = gson.fromJson(strPeriodo, PeriodoAdministrativo.class);
+            returnSet.add(periodo.actividad);
         }
         return returnSet;
     }
-    /*public String getFullName() {
-        String name = pref.getString(KEY_FIRST_NAME, null);
-        String lastName = pref.getString(KEY_LAST_NAME, null);
-        return name + " " + lastName;
-    }*/
+
+    public ArrayList<PeriodoAdministrativo> getPeriodoAdminValido() {
+        Gson gson = new Gson();
+        Set<String> set = pref.getStringSet(KEY_ACTIVITIES, null);
+        ArrayList<PeriodoAdministrativo> returnSet = new ArrayList<>();
+        for (String strPeriodo: set) {
+            returnSet.add(gson.fromJson(strPeriodo, PeriodoAdministrativo.class));
+        }
+        return returnSet;
+    }
 
     public UserLogged getUserLogged() {
         Gson gson = new Gson();

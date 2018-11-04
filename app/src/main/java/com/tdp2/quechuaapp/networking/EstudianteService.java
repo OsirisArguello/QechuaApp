@@ -13,6 +13,7 @@ import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Periodo;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.model.Materia;
 
@@ -462,14 +463,14 @@ public class EstudianteService {
 
     public void getAccionesPeriodo(final Client client) {
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
-        estudianteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<String>>() {
+        estudianteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<PeriodoAdministrativo>>() {
             @Override
-            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+            public void onResponse(Call<ArrayList<PeriodoAdministrativo>> call, Response<ArrayList<PeriodoAdministrativo>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i("ESTUDIANTESERVICE", response.body().toString());
                         ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
-                        for (String name: response.body()) {
+/*                        for (String name: response.body()) {
                             PeriodoActividad actividad;
                             try {
                                 actividad = PeriodoActividad.valueOf(name);
@@ -478,8 +479,8 @@ public class EstudianteService {
                             }
                             returnSet.add(actividad);
                         }
-
-                        client.onResponseSuccess(returnSet);
+*/
+                        client.onResponseSuccess(response.body());
                     }else {
                         Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
                         client.onResponseError("No response");
@@ -495,7 +496,7 @@ public class EstudianteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<PeriodoAdministrativo>> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", "Error al obtener periodos administrativos");
                 client.onResponseError(null);
             }

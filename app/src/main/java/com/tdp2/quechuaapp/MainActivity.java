@@ -27,6 +27,7 @@ import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         Client client = new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                ArrayList<PeriodoActividad> actividades = (ArrayList<PeriodoActividad>)responseBody;
+                ArrayList<PeriodoAdministrativo> actividades = (ArrayList<PeriodoAdministrativo>)responseBody;
                 userSessionManager.saveActividadValida(actividades);
             }
 

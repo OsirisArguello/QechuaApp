@@ -9,6 +9,7 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -310,14 +311,14 @@ public class DocenteService {
 
     public void getAccionesPeriodo(final Client client) {
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
-        docenteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<String>>() {
+        docenteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<PeriodoAdministrativo>>() {
             @Override
-            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+            public void onResponse(Call<ArrayList<PeriodoAdministrativo>> call, Response<ArrayList<PeriodoAdministrativo>> response) {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i(SERVICE_TAG, response.body().toString());
                         ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
-                        for (String name: response.body()) {
+/*                        for (String name: response.body()) {
                             PeriodoActividad actividad;
                             try {
                                 actividad = PeriodoActividad.valueOf(name);
@@ -326,8 +327,8 @@ public class DocenteService {
                             }
                             returnSet.add(actividad);
                         }
-
-                        client.onResponseSuccess(returnSet);
+*/
+                        client.onResponseSuccess(response.body());
                     }else {
                         Log.i(SERVICE_TAG, "NO RESPONSE");
                         client.onResponseError("No response");
@@ -343,7 +344,7 @@ public class DocenteService {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<PeriodoAdministrativo>> call, Throwable t) {
                 Log.e(SERVICE_TAG, "Error al obtener periodos administrativos");
                 client.onResponseError(null);
             }        });

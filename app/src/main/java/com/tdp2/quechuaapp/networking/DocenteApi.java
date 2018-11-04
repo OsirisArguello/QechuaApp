@@ -4,6 +4,7 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -41,6 +42,6 @@ public interface DocenteApi {
     @POST("/api/coloquios/{coloquioId}/eliminar")
     Call<Void> eliminarColoquio(@Header("Authorization") String apiToken, @Path("coloquioId") Integer coloquioId);
 
-    @GET("/api/periodo-administrativos/acciones")
-    Call<ArrayList<String>> getAccionesPeriodo(@Header("Authorization")String apiToken);
+    @GET("/api/periodo-administrativos/periodos")
+    Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(@Header("Authorization")String apiToken);
 }

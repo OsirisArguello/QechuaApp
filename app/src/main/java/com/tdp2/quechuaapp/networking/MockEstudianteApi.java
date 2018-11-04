@@ -8,6 +8,7 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 
 import java.util.ArrayList;
 
@@ -149,7 +150,7 @@ public class MockEstudianteApi implements EstudianteApi {
     }
 
     @Override
-    public Call<ArrayList<String>> getAccionesPeriodo(String apiToken) {
+    public Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(String apiToken) {
         return null;
     }
 }

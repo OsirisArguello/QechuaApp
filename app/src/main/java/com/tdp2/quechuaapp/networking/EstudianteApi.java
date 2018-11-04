@@ -8,6 +8,7 @@ import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 
 import java.util.ArrayList;
 
@@ -59,6 +60,6 @@ public interface EstudianteApi {
     @GET("/api/alumnos/data")
     Call<Alumno> getAlumno(@Header("Authorization")String apiToken);
 
-    @GET("/api/periodo-administrativos/acciones")
-    Call<ArrayList<String>> getAccionesPeriodo(@Header("Authorization")String apiToken);
+    @GET("/api/periodo-administrativos/periodos")
+    Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(@Header("Authorization")String apiToken);
 }

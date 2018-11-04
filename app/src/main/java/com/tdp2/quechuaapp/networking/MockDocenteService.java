@@ -4,6 +4,7 @@ package com.tdp2.quechuaapp.networking;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class MockDocenteService implements DocenteApi {
     }
 
     @Override
-    public Call<ArrayList<String>> getAccionesPeriodo(String apiToken) {
+    public Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(String apiToken) {
         return null;
     }
 }
