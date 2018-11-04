@@ -317,17 +317,6 @@ public class DocenteService {
                 if (response.code() > 199 && response.code() < 300) {
                     if(response.body() != null) {
                         Log.i(SERVICE_TAG, response.body().toString());
-                        ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
-/*                        for (String name: response.body()) {
-                            PeriodoActividad actividad;
-                            try {
-                                actividad = PeriodoActividad.valueOf(name);
-                            } catch (Exception e) {
-                                actividad = PeriodoActividad.OTRO;
-                            }
-                            returnSet.add(actividad);
-                        }
-*/
                         client.onResponseSuccess(response.body());
                     }else {
                         Log.i(SERVICE_TAG, "NO RESPONSE");
