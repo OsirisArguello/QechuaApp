@@ -3,12 +3,8 @@ package com.tdp2.quechuaapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,15 +20,12 @@ import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserLogged.PerfilActual;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
-import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
-import com.tdp2.quechuaapp.professor.DetalleCursoActivity;
 import com.tdp2.quechuaapp.professor.MostrarCursosDocenteActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
-import com.tdp2.quechuaapp.student.InscripcionCursoActivity;
+import com.tdp2.quechuaapp.student.MisFinalesActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
 
 
@@ -126,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MainActivity.this, "En Construccion",
-                            Toast.LENGTH_LONG).show();
+                    Intent misfinalesIntent = new Intent(MainActivity.this, MisFinalesActivity.class);
+                    startActivity(misfinalesIntent);
                 }
             });
 
