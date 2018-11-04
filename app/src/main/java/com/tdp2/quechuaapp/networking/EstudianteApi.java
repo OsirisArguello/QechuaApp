@@ -65,4 +65,7 @@ public interface EstudianteApi {
 
     @GET("/api/periodo-administrativos/periodos")
     Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(@Header("Authorization")String apiToken);
+
+    @GET("/api/inscripcion-cursos/byAlumno")
+    Call<ArrayList<Inscripcion>> getInscripcionesActivas(@Header("Authorization")String apiToken);
 }
