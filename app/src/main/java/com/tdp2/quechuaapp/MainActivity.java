@@ -157,9 +157,15 @@ public class MainActivity extends AppCompatActivity {
             inscripcion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
-                    inscripcionMateriasIntent.putExtra("alumno",alumno);
-                    startActivity(inscripcionMateriasIntent);
+                    ArrayList<PeriodoActividad>actividades = userSessionManager.getActividadValida();
+                    if (actividades.contains(PeriodoActividad.INSCRIPCION_CURSADA)) {
+                        Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
+                        inscripcionMateriasIntent.putExtra("alumno",alumno);
+                        startActivity(inscripcionMateriasIntent);
+                    } else {
+                        Toast.makeText(MainActivity.this, "La inscripcion no esta habilitada aun",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
