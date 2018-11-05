@@ -12,7 +12,9 @@ import android.widget.Toast;
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.LinkedHashMap;
@@ -32,10 +34,11 @@ public class MisFinalesActivity extends Activity {
 
     List<String> groupList;
     List<String> childList;
-    Map<String, List<String>> laptopCollection;
+    Map<String, List<String>> finalesCollection;
     ExpandableListView expListView;
     EstudianteService estudianteService;
     ArrayList<InscripcionColoquio> misFinales;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +48,7 @@ public class MisFinalesActivity extends Activity {
         estudianteService = new EstudianteService();
         createGroupList();
 
-        createCollection();
 
-        expListView = (ExpandableListView) findViewById(R.id.laptop_list);
-        final MisFinalestAdapter expListAdapter = new MisFinalestAdapter(
-                this, groupList, laptopCollection);
-        expListView.setAdapter(expListAdapter);
-
-        //setGroupIndicatorToRight();
-
-        expListView.setOnChildClickListener(new OnChildClickListener() {
-
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                final String selected = (String) expListAdapter.getChild(
-                        groupPosition, childPosition);
-                Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
-                        .show();
-
-                return true;
-            }
-        });
     }
 
     private void createGroupList() {
@@ -73,10 +56,12 @@ public class MisFinalesActivity extends Activity {
             @Override
             public void onResponseSuccess(Object responseBody) {
                 misFinales = (ArrayList<InscripcionColoquio>) responseBody;
-                Log.i("FINALES", "ENTRA ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_mis_finales);
                 loadingView.setVisibility(View.INVISIBLE);
-                displayMaterias();
+                if (misFinales != null) {
+                    displayMaterias();
+                    crearVista();
+                }
             }
 
             @Override
@@ -109,57 +94,68 @@ public class MisFinalesActivity extends Activity {
         });
     }
 
+    public void crearVista() {
+        expListView = (ExpandableListView) findViewById(R.id.coloquio_list);
+        final MisFinalestAdapter expListAdapter = new MisFinalestAdapter(
+                this, groupList, finalesCollection);
+        expListView.setAdapter(expListAdapter);
+
+        //setGroupIndicatorToRight();
+
+        expListView.setOnChildClickListener(new OnChildClickListener() {
+
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                final String selected = (String) expListAdapter.getChild(
+                        groupPosition, childPosition);
+                //Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG)
+                   //     .show();
+
+                return true;
+            }
+        });
+    }
+
     public void displayMaterias(){
 
-        Log.i("FINALES", "HOLAAAAAAAAAAA");
-
         groupList = new ArrayList<String>();
-        /*for (InscripcionColoquio inscripcionFinal: misFinales) {
-            groupList.add(inscripcionFinal.coloquio.curso.materia.nombre);
-        }*/
-        groupList.add("HP"+'\n'+"Pola");
-        groupList.add("Dell");
-        groupList.add("Lenovo");
-        groupList.add("Sony");
-        groupList.add("HCL");
-        groupList.add("Samsung");
-    }
-
-    private void createCollection() {
-        // preparing laptops collection(child)
-        String[] hpModels = { "HP Pavilion G6-2014TX"+'\n'+"Otra cosa", "ProBook HP 4540",
-                "HP Envy 4-1025TX" };
-        String[] hclModels = { "HCL S2101", "HCL L2102", "HCL V2002" };
-        String[] lenovoModels = { "IdeaPad Z Series", "Essential G Series",
-                "ThinkPad X Series", "Ideapad Z Series" };
-        String[] sonyModels = { "VAIO E Series", "VAIO Z Series",
-                "VAIO S Series", "VAIO YB Series" };
-        String[] dellModels = { "Inspiron", "Vostro", "XPS" };
-        String[] samsungModels = { "NP Series", "Series 5", "SF Series" };
-
-        laptopCollection = new LinkedHashMap<String, List<String>>();
-
-        for (String laptop : groupList) {
-            if (laptop.equals("HP"+'\n'+"Pola")) {
-                loadChild(hpModels);
-            } else if (laptop.equals("Dell"))
-                loadChild(dellModels);
-            else if (laptop.equals("Sony"))
-                loadChild(sonyModels);
-            else if (laptop.equals("HCL"))
-                loadChild(hclModels);
-            else if (laptop.equals("Samsung"))
-                loadChild(samsungModels);
-            else
-                loadChild(lenovoModels);
-
-            laptopCollection.put(laptop, childList);
+        Map<Integer, ArrayList<InscripcionColoquio>> map = new HashMap<Integer, ArrayList<InscripcionColoquio>>();
+        Map<Integer, ArrayList<String>> materias = new HashMap<Integer, ArrayList<String>>();
+        for (InscripcionColoquio inscripcionFinal: misFinales) {
+            ArrayList<InscripcionColoquio> unArray = map.get(inscripcionFinal.coloquio.curso.materia.id);
+            if (unArray != null) {
+                unArray.add(inscripcionFinal);
+            } else {
+                ArrayList<InscripcionColoquio> nuevoArray = new ArrayList<InscripcionColoquio>();
+                nuevoArray.add(inscripcionFinal);
+                map.put(inscripcionFinal.coloquio.curso.materia.id, nuevoArray);
+                ArrayList<String> infoMateria = new ArrayList<String>();
+                infoMateria.add(inscripcionFinal.coloquio.curso.materia.codigo);
+                infoMateria.add(inscripcionFinal.coloquio.curso.materia.nombre);
+                infoMateria.add(inscripcionFinal.coloquio.curso.id.toString());
+                materias.put(inscripcionFinal.coloquio.curso.materia.id, infoMateria);
+            }
         }
+        finalesCollection = new LinkedHashMap<String, List<String>>();
+        for (Integer materiaId: map.keySet()) {
+            String materiaCompleta = "Materia: " + materias.get(materiaId).get(0) + " - " + materias.get(materiaId).get(1) + '\n' + "Curso: " + materias.get(materiaId).get(2);
+            groupList.add(materiaCompleta);
+            String[] finales = new String[map.get(materiaId).size()];
+            Integer i = 0;
+            for (InscripcionColoquio inscripcionColoquio : map.get(materiaId)) {
+                finales[i] = inscripcionColoquio.coloquio.id.toString()+"-"+sdf.format(inscripcionColoquio.coloquio.fecha)+" "+inscripcionColoquio.coloquio.horaInicio+'\n'+"Aula: "+inscripcionColoquio.coloquio.aula;
+                i++;
+            }
+            loadChild(finales);
+            finalesCollection.put(materiaCompleta, childList);
+        }
+        //createCollection();
     }
 
-    private void loadChild(String[] laptopModels) {
+
+    private void loadChild(String[] finales) {
         childList = new ArrayList<String>();
-        for (String model : laptopModels)
+        for (String model : finales)
             childList.add(model);
     }
 
