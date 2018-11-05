@@ -21,4 +21,16 @@
 
     </ExpandableListView>
 
+    <TextView
+        android:id="@+id/emptyElementMisColoquios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingLeft="16dp"
+        android:text="No estas inscripto a ningun final"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </RelativeLayout>
