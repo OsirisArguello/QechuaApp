@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Inscripcion;
@@ -154,5 +155,13 @@ public class MisIncripcionesActivity extends AppCompatActivity implements Cursos
     @Override
     public void inscribirAlumno(Integer idCurso) {
         Toast.makeText(MisIncripcionesActivity.this, "Accion no disponible", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivityIntent = new Intent(MisIncripcionesActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+
     }
 }

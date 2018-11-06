@@ -126,22 +126,14 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
                     messageToDisplay = String.format(getResources().getString(R.string.inscripcion_exito_condicional), inscripcion.curso.id);
                 }
 
-                //Actualizo el curso con la inscripcion realizada
-                /*for (Curso curso : cursos) {
-                    if(curso.id.equals(idCurso)){
-                        curso.inscripciones.add(inscripcion);
-                        //Caso especial en el que se anota habiendo vacantes pero se acabaron las vacantes antes de que presione el boton de inscripcion
-                        if (curso.getVacantes()>0 && inscripcion.estado.equals("CONDICIONAL")){
-                            curso.capacidadCurso=0;
-                        }
+                DialogBuilder.showAlert(messageToDisplay, "Inscripción Satisfactoria", InscripcionCursoActivity.this, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(InscripcionCursoActivity.this, MisIncripcionesActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
                     }
-                }*/
-
-                getCursosPorMateria();
-
-                DialogBuilder.showAlert(messageToDisplay, "Inscripción Satisfactoria",InscripcionCursoActivity.this);
-                cursosAdapter.notifyDataSetChanged();
-
+                });
             }
 
             @Override
@@ -236,18 +228,4 @@ public class InscripcionCursoActivity extends AppCompatActivity implements Curso
         });
 
     }
-
-    /*private void showAlert(String messageToDisplay, String title) {
-        AlertDialog alertDialog = new AlertDialog.Builder(InscripcionCursoActivity.this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(messageToDisplay);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
-        cursosAdapter.notifyDataSetChanged();
-    }*/
 }
