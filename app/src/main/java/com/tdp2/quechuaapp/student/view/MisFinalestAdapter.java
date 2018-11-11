@@ -7,16 +7,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.model.Coloquio;
+import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.EstudianteService;
+import com.tdp2.quechuaapp.student.InscripcionColoquioActivity;
 
 public class MisFinalestAdapter extends BaseExpandableListAdapter {
 
@@ -44,7 +53,7 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final String unFinal = (String) getChild(groupPosition, childPosition);
         LayoutInflater inflater = context.getLayoutInflater();
-        String coloquioId = unFinal.split("-")[0];
+        final String coloquioId = unFinal.split("-")[0];
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.child_item_mis_finales, null);
@@ -62,6 +71,29 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
                 builder.setPositiveButton("Aceptar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                EstudianteService estudianteService = new EstudianteService();
+                                estudianteService.desinscribirFinal(coloquioId, new Client() {
+                                    @Override
+                                    public void onResponseSuccess(Object responseBody) {
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                        builder.setMessage("¿Ha sido desinscribido exitosamente");
+                                        builder.setCancelable(false);
+                                        AlertDialog alertDialog = builder.create();
+                                        alertDialog.show();
+                                    }
+
+                                    @Override
+                                    public void onResponseError(String errorMessage) {
+                                    }
+
+
+                                    @Override
+                                    public Context getContext() {
+                                        return InscripcionColoquioActivity.class;
+                                    }
+                                });
+
                                 List<String> child =
                                         finalesCollections.get(finales.get(groupPosition));
                                 child.remove(childPosition);
@@ -121,4 +153,5 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 }

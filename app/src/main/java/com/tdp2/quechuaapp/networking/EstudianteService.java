@@ -379,6 +379,37 @@ public class EstudianteService {
         });
     }
 
+    public void desinscribirFinal(Integer finalId,final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.desinscribirFinal(AUTHORIZATION_PREFIX+apiToken, finalId).enqueue(new Callback<InscripcionColoquio>() {
+            @Override
+            public void onResponse(Call<InscripcionColoquio> call, Response<InscripcionColoquio> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InscripcionColoquio> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
     public void getAlumno(final Client client){
         String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
         estudianteApi.getAlumno(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<Alumno>() {
