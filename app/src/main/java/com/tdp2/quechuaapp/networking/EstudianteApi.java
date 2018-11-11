@@ -56,6 +56,9 @@ public interface EstudianteApi {
     @POST("/api/inscripcion-coloquios/{coloquioId}/inscribir")
     Call<InscripcionColoquio> inscribirFinal(@Header("Authorization")String apiToken, @Path("coloquioId")Integer coloquioId);
 
+    @POST("/api/inscripcion-coloquios/{inscripcionColoquioId}/accion/desinscribir")
+    Call<InscripcionColoquio> desinscribirFinal(@Header("Authorization")String apiToken, @Path("inscripcionColoquioId")Integer inscripcionColoquioId);
+
     @GET("/api/alumnos/data")
     Call<Alumno> getAlumno(@Header("Authorization")String apiToken);
 }
