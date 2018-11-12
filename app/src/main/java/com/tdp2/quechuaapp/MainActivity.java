@@ -33,6 +33,7 @@ import com.tdp2.quechuaapp.professor.MostrarCursosDocenteActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
+import com.tdp2.quechuaapp.student.MisIncripcionesActivity;
 
 import java.util.ArrayList;
 
@@ -156,10 +157,12 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ArrayList<PeriodoActividad>actividades = userSessionManager.getActividadValida();
-                    if (actividades.contains(PeriodoActividad.INSCRIPCION_CURSADA)) {
-                        Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
+                    if (actividades.contains(PeriodoActividad.INSCRIPCION_CURSADA)
+                            || actividades.contains(PeriodoActividad.DESINSCRIPCION_CURSADA)) {
+                        Intent inscripcionMateriasIntent = new Intent(MainActivity.this, MisIncripcionesActivity.class);
                         inscripcionMateriasIntent.putExtra("alumno",alumno);
                         startActivity(inscripcionMateriasIntent);
+
                     } else {
                         Toast.makeText(MainActivity.this, "La inscripcion no esta habilitada aun",
                                 Toast.LENGTH_LONG).show();

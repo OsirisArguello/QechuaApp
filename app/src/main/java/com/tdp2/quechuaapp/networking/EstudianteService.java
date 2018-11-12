@@ -523,46 +523,34 @@ public class EstudianteService {
         });
     }
 
-    public ArrayList<Curso> getCursadasMock() {
-        Curso curso1 = new Curso();
-        Profesor prof = new Profesor();
-        Horario hor = new Horario();
-        Horario hor2 = new Horario();
-        hor.aula = "1";
-        hor.dia = "Viernes";
-        hor.horaFin = "17:00";
-        hor.horaFin = "19:00";
-        hor2.aula = "1";
-        hor2.dia = "Viernes";
-        hor2.horaInicio = "17:00";
-        hor2.horaFin = "19:00";
-        prof.apellido = "Perez";
-        prof.nombre = "Jorge";
-        curso1.id=1;
-        curso1.capacidadCurso=3;
-        curso1.profesor = prof;
-        List<Horario> listHor = new ArrayList<>();
-        listHor.add(hor);
-        listHor.add(hor2);
-        curso1.horarios = listHor ;
+    public void getInscripcionesCursos(final Client client) {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getInscripcionesActivas(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<Inscripcion>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Inscripcion>> call, Response<ArrayList<Inscripcion>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError("No response");
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
 
-        Materia m = new Materia();
-        m.codigo = "12";
-        m.nombre = "materia 1";
-        curso1.materia = m;
-
-
-        Curso curso2 = new Curso();
-        curso2.id=2;
-        curso2.capacidadCurso=3;
-        curso2.profesor = prof;
-        curso2.horarios = listHor;
-
-
-        ArrayList<Curso> listaCursos = new ArrayList<>();
-        listaCursos.add(curso1);
-        listaCursos.add(curso2);
-
-        return listaCursos;
+            @Override
+            public void onFailure(Call<ArrayList<Inscripcion>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", "Error al obtener Inscripciones activas");
+                client.onResponseError(t.getMessage());
+            }
+        });
     }
 }
