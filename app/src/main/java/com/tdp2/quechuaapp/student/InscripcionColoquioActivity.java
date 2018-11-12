@@ -92,7 +92,14 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Ad
             public void onResponseSuccess(Object responseBody) {
                 misInscripciones = (ArrayList<InscripcionColoquio>) responseBody;
                 for (InscripcionColoquio inscripcionFinal: misInscripciones) {
-                    if (! inscripcionFinal.estado.equals("ACTIVA")) continue;
+                    if (inscripcionFinal.estado.equals("ELIMINADA")){
+                        for (Coloquio otro: finales) {
+                            if (otro.id == inscripcionFinal.coloquio.id) {
+                                otro.inscripto = false;
+                                break;
+                            }
+                        }
+                    }
 
                     for (Coloquio otro: finales) {
                         if (otro.id == inscripcionFinal.coloquio.id) {
@@ -162,7 +169,42 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Ad
 
                         if (aFinal.inscripto) {
                             Log.i("FINALES", "Desinscripción a final");
-                            loadingView.setVisibility(View.INVISIBLE);
+
+
+
+
+
+
+                            estudianteService.desinscribirFinal(aFinal.id, new Client() {
+                                @Override
+                                public void onResponseSuccess(Object responseBody) {
+                                    ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                                    loadingView.setVisibility(View.INVISIBLE);
+
+                                    for (Coloquio otro : finales) {
+                                        if (otro.id == aFinal.id) {
+                                            otro.inscripto = false;
+                                            break;
+                                        }
+                                    }
+                                    getMisInscripciones();
+
+                                    showAlert("Ha sido desinscripto correctamente a la fecha de final del "+sdf.format(aFinal.fecha),"Desinscripción");
+                                    coloquiosAdapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onResponseError(String errorMessage) {
+                                    ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_inscripcion_final);
+                                    loadingView.setVisibility(View.INVISIBLE);
+                                    showMensajeError(errorMessage);
+                                }
+
+                                @Override
+                                public Context getContext() {
+                                    return InscripcionColoquioActivity.this;
+                                }
+                            });
                             
                         } else {
                             estudianteService.inscribirFinal(aFinal.id, new Client() {
