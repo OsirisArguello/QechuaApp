@@ -62,10 +62,6 @@ public class MisFinalesActivity extends Activity {
                     displayMaterias();
                     crearVista();
                 }
-                if(misFinales.size() == 0){
-                    Toast.makeText(MisFinalesActivity.this, "No estas inscripto a ningun final",
-                            Toast.LENGTH_LONG).show();
-                }
             }
 
             @Override
@@ -103,7 +99,7 @@ public class MisFinalesActivity extends Activity {
         final MisFinalestAdapter expListAdapter = new MisFinalestAdapter(
                 this, groupList, finalesCollection);
         expListView.setAdapter(expListAdapter);
-
+        expListView.setEmptyView(findViewById(R.id.emptyElementMisColoquios));
         //setGroupIndicatorToRight();
 
         expListView.setOnChildClickListener(new OnChildClickListener() {
