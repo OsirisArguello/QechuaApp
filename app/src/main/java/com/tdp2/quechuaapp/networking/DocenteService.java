@@ -8,6 +8,8 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -284,5 +286,56 @@ public class DocenteService {
         });
     }
 
+    public void eliminarColoquio(ColoquioRequest coloquio, final Client client){
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
 
+        docenteApi.eliminarColoquio(AUTHORIZATION_PREFIX +apiToken, coloquio.id).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    Log.i(SERVICE_TAG, "Coloquio eliminado");
+                    client.onResponseSuccess(response.body());
+                } else {
+                    Log.e(SERVICE_TAG, "NO RESPONSE");
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e(SERVICE_TAG, t.getMessage());
+                client.onResponseError(t.getMessage());
+            }
+        });
+    }
+
+    public void getAccionesPeriodo(final Client client) {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<PeriodoAdministrativo>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PeriodoAdministrativo>> call, Response<ArrayList<PeriodoAdministrativo>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i(SERVICE_TAG, response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i(SERVICE_TAG, "NO RESPONSE");
+                        client.onResponseError("No response");
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e(SERVICE_TAG, response.body().toString());
+                    }else {
+                        Log.e(SERVICE_TAG, "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PeriodoAdministrativo>> call, Throwable t) {
+                Log.e(SERVICE_TAG, "Error al obtener periodos administrativos");
+                client.onResponseError(null);
+            }        });
+    }
 }

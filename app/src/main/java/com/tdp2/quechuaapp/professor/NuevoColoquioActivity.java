@@ -22,9 +22,10 @@ import com.applandeo.materialcalendarview.DatePicker;
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder;
 import com.applandeo.materialcalendarview.listeners.OnSelectDateListener;
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Curso;
-import com.tdp2.quechuaapp.model.Coloquio;
-import com.tdp2.quechuaapp.model.InscripcionColoquio;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
@@ -231,11 +232,19 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         DatePickerBuilder builder = new DatePickerBuilder(NuevoColoquioActivity.this, listener)
                 .pickerType(CalendarView.ONE_DAY_PICKER);
 
-        //TODO: Setear periodo de finales
+
+        UserSessionManager userSessionManager = new UserSessionManager(NuevoColoquioActivity.this);
+        ArrayList<PeriodoAdministrativo> periodos = userSessionManager.getPeriodoAdminValido();
+
         Calendar min = Calendar.getInstance();
         Calendar max = Calendar.getInstance();
-        min.set(2018,9,07);
-        max.set(2018,11,23);
+        for (PeriodoAdministrativo periodo: periodos) {
+            if (periodo.actividad == PeriodoActividad.INSCRIPCION_CURSADA) {
+                min.setTime(periodo.fechaInicio);
+                max.setTime(periodo.fechaFin);
+                break;
+            }
+        }
 
         //TODO: Setear dias no permitidos
         List<Calendar> diasNoPermitidos = new ArrayList<>();
@@ -298,6 +307,7 @@ public class NuevoColoquioActivity extends AppCompatActivity {
         coloquio.horaFin=horaFinalColoquioText.getText().toString();
         coloquio.curso=curso;
         coloquio.periodo=curso.periodo;
+        coloquio.estado = "ACTIVO";
 
         //TODO: VER COMO ESTABLECEMOS EL AULA Y SEDE DEL COLOQUIO
         coloquio.aula="414";

@@ -11,19 +11,27 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Horario;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
 
 import java.util.ArrayList;
 
 public class CursadasAdapter extends ArrayAdapter<Cursada> {
 
+    private Boolean inscripcionColoquioActiva;
     private CursadasAdapterCallback adapterCallback;
 
     public CursadasAdapter(@NonNull Context context, @NonNull ArrayList<Cursada> listaCursadas) {
         super(context, 0,  listaCursadas);
         try {
             this.adapterCallback = ((CursadasAdapterCallback) context);
+
+            UserSessionManager userSessionManager = new UserSessionManager(context);
+            ArrayList<PeriodoActividad> actividades = userSessionManager.getActividadValida();
+            inscripcionColoquioActiva = actividades.contains(PeriodoActividad.INSCRIPCION_COLOQUIO);
+
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement CursadasAdapterCallback.");
         }
@@ -56,7 +64,6 @@ public class CursadasAdapter extends ArrayAdapter<Cursada> {
 
         // Ver si hay mas mensajes segun los otros estados
         boton.setText("Finales");
-        //boton.setBackgroundColor(cursada.estado.equals("FINAL_PENDIENTE") ? R.color.lightBlue : R.color.red);
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,9 +73,7 @@ public class CursadasAdapter extends ArrayAdapter<Cursada> {
             }
         });
 
-        if(!cursada.estado.equals("FINAL_PENDIENTE")) {
-            boton.setVisibility(View.INVISIBLE);
-        }
+        boton.setVisibility(inscripcionColoquioActiva && cursada.estado.equals("FINAL_PENDIENTE") ? View.VISIBLE : View.INVISIBLE);
 
 
 

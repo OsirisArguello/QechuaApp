@@ -16,11 +16,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
 
 import java.util.ArrayList;
 
@@ -28,14 +30,18 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
 
     private CursosAdapterCallback adapterCallback;
     private Alumno alumno;
-    private Context context;
+    private Boolean desinscripcionActiva;
+
 
     public CursosAdapter(@NonNull Context context, @NonNull ArrayList<Curso> listaCursos, Alumno alumno) {
         super(context, 0,  listaCursos);
         this.alumno=alumno;
-        this.context=context;
         try {
             this.adapterCallback = ((CursosAdapterCallback) context);
+
+            UserSessionManager userSessionManager = new UserSessionManager(context);
+            ArrayList<PeriodoActividad> actividades = userSessionManager.getActividadValida();
+            desinscripcionActiva = actividades.contains(PeriodoActividad.DESINSCRIPCION_CURSADA);
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement CursosAdapterCallback.");
         }
@@ -71,6 +77,7 @@ public class CursosAdapter extends ArrayAdapter<Curso> {
         final Inscripcion inscripcion=curso.getInscripcion(alumno);
         if(inscripcion!=null) {
             //Esta inscripto
+            inscribirseButton.setVisibility(desinscripcionActiva ? View.VISIBLE : View.INVISIBLE);
             inscribirseButton.setText("Desinscribirse");
             inscribirseButton.setOnClickListener(new View.OnClickListener() {
                 @Override

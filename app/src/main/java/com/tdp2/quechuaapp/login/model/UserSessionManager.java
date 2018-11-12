@@ -3,9 +3,18 @@ package com.tdp2.quechuaapp.login.model;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.tdp2.quechuaapp.login.LoginActivity;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class UserSessionManager {
 
@@ -28,9 +37,10 @@ public class UserSessionManager {
     public static final String IS_USER_LOGIN = "isUserLoggedIn";
 
     public static final String USER_LOGGED = "userLogged";
-    //public static final String KEY_LAST_NAME = "lastName";
+
     public static final String KEY_TOKEN = "accessToken";
 
+    public static final String KEY_ACTIVITIES = "activitiesPeriod";
 
     public UserSessionManager(Context context) {
         this.context = context;
@@ -38,17 +48,26 @@ public class UserSessionManager {
         editor = pref.edit();
     }
 
+    public void saveActividadValida(ArrayList<PeriodoAdministrativo> actividades) {
+        Set<String> set = new HashSet<>();
+        Gson gson = new Gson();
+        for (PeriodoAdministrativo periodo: actividades) {
+            set.add(gson.toJson(periodo));
+        }
+
+        editor.putStringSet(KEY_ACTIVITIES, set);
+
+        // commit changes
+        editor.commit();
+    }
 
     public void saveUserLogged(UserLogged userLogged, String accessToken){
         editor.putBoolean(IS_USER_LOGIN, true);
         // Storing name in preferences
-        //editor.putString(KEY_FIRST_NAME, userLogged.firstName);
-        //editor.putString(KEY_LAST_NAME, userLogged.lastName);
         Gson gson = new Gson();
         String userAsJson = gson.toJson(userLogged);
         editor.putString(USER_LOGGED, userAsJson);
         editor.putString(KEY_TOKEN, accessToken);
-
         // commit changes
         editor.commit();
     }
@@ -58,11 +77,26 @@ public class UserSessionManager {
         return accessToken;
     }
 
-    /*public String getFullName() {
-        String name = pref.getString(KEY_FIRST_NAME, null);
-        String lastName = pref.getString(KEY_LAST_NAME, null);
-        return name + " " + lastName;
-    }*/
+    public ArrayList<PeriodoActividad> getActividadValida() {
+        Gson gson = new Gson();
+        Set<String> set = pref.getStringSet(KEY_ACTIVITIES, null);
+        ArrayList<PeriodoActividad> returnSet = new ArrayList<>();
+        for (String strPeriodo: set) {
+            PeriodoAdministrativo periodo = gson.fromJson(strPeriodo, PeriodoAdministrativo.class);
+            returnSet.add(periodo.actividad);
+        }
+        return returnSet;
+    }
+
+    public ArrayList<PeriodoAdministrativo> getPeriodoAdminValido() {
+        Gson gson = new Gson();
+        Set<String> set = pref.getStringSet(KEY_ACTIVITIES, null);
+        ArrayList<PeriodoAdministrativo> returnSet = new ArrayList<>();
+        for (String strPeriodo: set) {
+            returnSet.add(gson.fromJson(strPeriodo, PeriodoAdministrativo.class));
+        }
+        return returnSet;
+    }
 
     public UserLogged getUserLogged() {
         Gson gson = new Gson();

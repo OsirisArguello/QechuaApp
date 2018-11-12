@@ -1,8 +1,10 @@
 package com.tdp2.quechuaapp.professor;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +22,14 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
+import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 import com.tdp2.quechuaapp.professor.view.ColoquiosAdapter;
+import com.tdp2.quechuaapp.professor.view.ColoquiosAdapterCallBack;
 import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 import java.util.ArrayList;
 
-public class InscripcionColoquioActivity extends AppCompatActivity {
+public class InscripcionColoquioActivity extends AppCompatActivity implements ColoquiosAdapterCallBack {
 
     public Curso curso;
     private DocenteService docenteService;
@@ -173,6 +177,86 @@ public class InscripcionColoquioActivity extends AppCompatActivity {
         coloquiosAdapter.notifyDataSetChanged();
         displayFinales();
 
+    }
+
+    @Override
+    public void eliminarColoquio(final Integer idColoquio, Integer cantInscriptos) {
+
+        String messageToDisplay=String.format(getResources().getString(R.string.confirmacionEliminarColoquio),cantInscriptos);
+        showConfirmationAlert(InscripcionColoquioActivity.this, "Eliminación de Coloquio", messageToDisplay, "Eliminar Coloquio","Cancelar",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        eliminarColoquioConfirmado(idColoquio);
+                    }
+                });
+
+
+    }
+
+    private void eliminarColoquioConfirmado(Integer idColoquio){
+        ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+        loadingView.bringToFront();
+        loadingView.setVisibility(View.VISIBLE);
+        ColoquioRequest coloquio = new ColoquioRequest();
+        coloquio.id=idColoquio;
+        docenteService.eliminarColoquio(coloquio, new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                String messageToDisplay=String.format(getResources().getString(R.string.eliminacionColoquioOk));
+
+                DialogBuilder.showAlert(messageToDisplay,"Eliminación Satisfactoria",InscripcionColoquioActivity.this);
+                getColoquios();
+                coloquiosAdapter.notifyDataSetChanged();
+                displayFinales();
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                Toast.makeText(InscripcionColoquioActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                            Intent mainActivityIntent = new Intent(InscripcionColoquioActivity.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public Context getContext() {
+                return InscripcionColoquioActivity.this;
+            }
+        });
+    }
+
+    public void showConfirmationAlert(Context context, String title, String messageToDisplay, String positiveMessage, String negativeMessage, DialogInterface.OnClickListener positiveListener){
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(messageToDisplay);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, positiveMessage, positiveListener);
+
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negativeMessage,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 }
 

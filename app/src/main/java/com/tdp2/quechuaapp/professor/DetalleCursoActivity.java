@@ -151,9 +151,11 @@ public class DetalleCursoActivity extends AppCompatActivity implements ListadoIn
                                     CSVWriter writer = new CSVWriter(new FileWriter(csv+"/ListadoAlumnos.csv"));
 
                                     List<String[]> data = new ArrayList<>();
+                                    data.add(new String[] {"Padron",
+                                            "Apellido","Nombre","Estado Inscripcion"});
                                     for (Inscripcion inscripcion:curso.inscripciones){
                                         data.add(new String[] {inscripcion.alumno.padron,
-                                                inscripcion.alumno.apellido,inscripcion.alumno.nombre});
+                                                inscripcion.alumno.apellido,inscripcion.alumno.nombre,inscripcion.estado});
                                     }
                                     writer.writeAll(data);
                                     writer.close();

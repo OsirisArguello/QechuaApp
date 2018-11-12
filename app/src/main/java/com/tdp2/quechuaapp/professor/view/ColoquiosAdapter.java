@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.tdp2.quechuaapp.R;
@@ -22,17 +23,18 @@ public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
 
     Curso curso;
     Context context;
+    ColoquiosAdapterCallBack adapterCallback;
 
     public ColoquiosAdapter(@NonNull Context context, @NonNull ArrayList<Coloquio> finales, Curso curso) {
         super(context, 0,  finales);
 
         this.curso=curso;
         this.context=context;
-        //try {
-        //    this.adapterCallback = ((CursosAdapterCallback) context);
-        //} catch (ClassCastException e) {
-        //    throw new ClassCastException("Activity must implement CursosAdapterCallback.");
-        //}
+        try {
+            this.adapterCallback = ((ColoquiosAdapterCallBack) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement CursosAdapterCallback.");
+        }
     }
 
     @NonNull
@@ -73,7 +75,15 @@ public class ColoquiosAdapter extends ArrayAdapter<Coloquio> {
         fechaFinal.setText(sdf.format(coloquio.fecha));
         horarioFinal.setText(coloquio.horaInicio+"-"+coloquio.horaFin);
         aulaFinal.setText(coloquio.sede+"-"+coloquio.aula);
-        inscriptosFinal.setText("Cantidad de Inscriptos: "+coloquio.inscripcionesCantidad.toString());
+        inscriptosFinal.setText("Cantidad de Inscriptos: " + coloquio.cantInscriptos.toString());
+
+        final Button eliminarColoquioButton = convertView.findViewById(R.id.eliminarFinalProfesor);
+        eliminarColoquioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapterCallback.eliminarColoquio(coloquio.id, coloquio.cantInscriptos);
+            }
+        });
 
         return convertView;
     }

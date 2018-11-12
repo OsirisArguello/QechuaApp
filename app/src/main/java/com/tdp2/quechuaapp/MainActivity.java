@@ -20,6 +20,12 @@ import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserLogged.PerfilActual;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
 import com.tdp2.quechuaapp.model.Alumno;
+
+import com.tdp2.quechuaapp.model.Curso;
+import com.tdp2.quechuaapp.model.Materia;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -27,6 +33,8 @@ import com.tdp2.quechuaapp.professor.MostrarCursosDocenteActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         estudianteService=new EstudianteService();
         docenteService=new DocenteService();
+
+        updateAccionesPeriodo();
 
         setupUI();
 
@@ -87,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
 
         final LinearLayout miscursos = findViewById(R.id.miscursos_action);
         LinearLayout misfinales = findViewById(R.id.misfinales_action);
+
+        // Si el usuario loggeado teneia un perfil invalido
+        if (userLogged.perfilActual == null) {
+            userSessionManager.logout();
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            return;
+        }
 
         if(userLogged.perfilActual.equals(PerfilActual.ALUMNO)){
             //ES ALUMNO
@@ -137,9 +155,15 @@ public class MainActivity extends AppCompatActivity {
             inscripcion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
-                    inscripcionMateriasIntent.putExtra("alumno",alumno);
-                    startActivity(inscripcionMateriasIntent);
+                    ArrayList<PeriodoActividad>actividades = userSessionManager.getActividadValida();
+                    if (actividades.contains(PeriodoActividad.INSCRIPCION_CURSADA)) {
+                        Intent inscripcionMateriasIntent = new Intent(MainActivity.this, InscripcionMateriasActivity.class);
+                        inscripcionMateriasIntent.putExtra("alumno",alumno);
+                        startActivity(inscripcionMateriasIntent);
+                    } else {
+                        Toast.makeText(MainActivity.this, "La inscripcion no esta habilitada aun",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -190,9 +214,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
     }
 
     @Override
@@ -213,6 +234,32 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateAccionesPeriodo() {
+        Client client = new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ArrayList<PeriodoAdministrativo> actividades = (ArrayList<PeriodoAdministrativo>)responseBody;
+                userSessionManager.saveActividadValida(actividades);
+            }
 
+            @Override
+            public void onResponseError(String errorMessage) {
+                Toast.makeText(MainActivity.this,
+                        "No se pudieron obtener las acciones disponibles para el periodo.\n Algunas acciones podrian no estar disponibles",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public Context getContext() {
+                return MainActivity.this;
+            }
+        };
+
+        if (userLogged.perfilActual.equals(PerfilActual.ALUMNO)) {
+            estudianteService.getAccionesPeriodo(client);
+        } else {
+            docenteService.getAccionesPeriodo(client);
+        }
+    }
 
 }

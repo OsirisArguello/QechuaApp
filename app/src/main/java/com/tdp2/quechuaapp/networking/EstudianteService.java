@@ -11,6 +11,9 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Horario;
+import com.tdp2.quechuaapp.model.Periodo;
+import com.tdp2.quechuaapp.model.PeriodoActividad;
+import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.model.Materia;
 
@@ -484,6 +487,37 @@ public class EstudianteService {
             public void onFailure(Call<ArrayList<Cursada>> call, Throwable t) {
                 //Log.e("ESTUDIANTESERVICE", t.getMessage());
                 Log.e("ESTUDIANTESERVICE", "No fue posible encontrar cusadas");
+                client.onResponseError(null);
+            }
+        });
+    }
+
+    public void getAccionesPeriodo(final Client client) {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getAccionesPeriodo(AUTHORIZATION_PREFIX + apiToken).enqueue(new Callback<ArrayList<PeriodoAdministrativo>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PeriodoAdministrativo>> call, Response<ArrayList<PeriodoAdministrativo>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError("No response");
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PeriodoAdministrativo>> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", "Error al obtener periodos administrativos");
                 client.onResponseError(null);
             }
         });
