@@ -91,13 +91,8 @@ public class InscripcionColoquioActivity extends AppCompatActivity implements Ad
             @Override
             public void onResponseSuccess(Object responseBody) {
                 misInscripciones = (ArrayList<InscripcionColoquio>) responseBody;
-                Log.i("FINALES", "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                 for (InscripcionColoquio inscripcionFinal: misInscripciones) {
-                    Log.i("FINALES", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                    Log.i("ESTUDIANTESERVICE", "ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-
                     if (inscripcionFinal.estado.equals("ELIMINADA")){
-                        Log.i("ESTUDIANTESERVICE", "ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                         for (Coloquio otro: finales) {
                             if (otro.id == inscripcionFinal.coloquio.id) {
                                 otro.inscripto = false;

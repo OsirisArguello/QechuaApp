@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -26,6 +27,7 @@ import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.student.InscripcionColoquioActivity;
+import com.tdp2.quechuaapp.student.MisFinalesActivity;
 
 public class MisFinalestAdapter extends BaseExpandableListAdapter {
 
@@ -58,6 +60,7 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.child_item_mis_finales, null);
         }
+        final Integer coloquioIdInt = Integer.parseInt(coloquioId);
 
         TextView item = (TextView) convertView.findViewById(R.id.coloquio);
 
@@ -66,19 +69,19 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
 
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("¿Desea desinscribirse a esta fecha?");
+                builder.setMessage("¿Desea desinscribirse a esta fecha de final?");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Aceptar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 EstudianteService estudianteService = new EstudianteService();
-                                estudianteService.desinscribirFinal(coloquioId, new Client() {
+                                estudianteService.desinscribirFinal(coloquioIdInt, new Client() {
                                     @Override
                                     public void onResponseSuccess(Object responseBody) {
-
                                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                        builder.setMessage("¿Ha sido desinscribido exitosamente");
+                                        builder.setMessage("Ha sido desinscripto al final exitosamente.");
                                         builder.setCancelable(false);
+                                        builder.setPositiveButton("Ok", null);
                                         AlertDialog alertDialog = builder.create();
                                         alertDialog.show();
                                     }
@@ -90,7 +93,7 @@ public class MisFinalestAdapter extends BaseExpandableListAdapter {
 
                                     @Override
                                     public Context getContext() {
-                                        return InscripcionColoquioActivity.class;
+                                        return context;
                                     }
                                 });
 
