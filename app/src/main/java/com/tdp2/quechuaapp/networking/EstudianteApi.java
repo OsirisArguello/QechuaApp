@@ -9,6 +9,7 @@ import com.tdp2.quechuaapp.model.Cursada;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Prioridad;
 
 import java.util.ArrayList;
 
@@ -68,4 +69,7 @@ public interface EstudianteApi {
 
     @GET("/api/inscripcion-cursos/byAlumno")
     Call<ArrayList<Inscripcion>> getInscripcionesActivas(@Header("Authorization")String apiToken);
+
+    @GET("/api/alumnos/prioridad")
+    Call<ArrayList<Prioridad>> getPrioridad(@Header("Authorization") String apiToken);
 }

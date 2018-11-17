@@ -34,6 +34,7 @@ import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
 import com.tdp2.quechuaapp.student.InscripcionMateriasActivity;
 import com.tdp2.quechuaapp.student.MisIncripcionesActivity;
+import com.tdp2.quechuaapp.student.PrioridadActivity;
 
 import java.util.ArrayList;
 
@@ -174,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
             prioridad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MainActivity.this, "En Construccion",
-                            Toast.LENGTH_LONG).show();
+                    Intent prioridadIntent = new Intent(MainActivity.this, PrioridadActivity.class);
+                    startActivity(prioridadIntent);
                 }
             });
         } else {

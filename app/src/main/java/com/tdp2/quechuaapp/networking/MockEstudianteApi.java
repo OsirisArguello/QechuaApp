@@ -9,6 +9,7 @@ import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Prioridad;
 
 import java.util.ArrayList;
 
@@ -159,6 +160,11 @@ public class MockEstudianteApi implements EstudianteApi {
 
     @Override
     public Call<ArrayList<Inscripcion>> getInscripcionesActivas(String apiToken) {
+        return null;
+    }
+
+    @Override
+    public Call<ArrayList<Prioridad>> getPrioridad(String apiToken) {
         return null;
     }
 }

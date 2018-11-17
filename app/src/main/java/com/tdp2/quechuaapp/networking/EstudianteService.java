@@ -14,6 +14,7 @@ import com.tdp2.quechuaapp.model.Horario;
 import com.tdp2.quechuaapp.model.Periodo;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Prioridad;
 import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.model.Materia;
 
@@ -550,6 +551,39 @@ public class EstudianteService {
             public void onFailure(Call<ArrayList<Inscripcion>> call, Throwable t) {
                 Log.e("ESTUDIANTESERVICE", "Error al obtener Inscripciones activas");
                 client.onResponseError(t.getMessage());
+            }
+        });
+    }
+
+    public void getPrioridad(final Client client){
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.getPrioridad(AUTHORIZATION_PREFIX +apiToken).enqueue(new Callback<ArrayList<Prioridad>>() {
+
+            @Override
+            public void onResponse(Call<ArrayList<Prioridad>> call, Response<ArrayList<Prioridad>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Prioridad>> call, Throwable t) {
+                //Log.e("ESTUDIANTESERVICE", t.getMessage());
+                Log.e("ESTUDIANTESERVICE", "No fue posible encontrar prioridad");
+                client.onResponseError(null);
             }
         });
     }
