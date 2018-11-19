@@ -36,6 +36,9 @@ public interface DocenteApi {
     @GET("/api/cursos/{cursoId}/coloquios")
     Call<ArrayList<Coloquio>> getColoquios(@Header("Authorization") String apiToken,@Path("cursoId") Integer cursoId);
 
+    @GET("/api/finales")
+    Call<ArrayList<Coloquio>> getMisFinales(@Header("Authorization") String apiToken);
+
     @POST("/api/coloquios")
     Call<Coloquio> crearColoquio(@Header("Authorization") String apiToken, @Body ColoquioRequest coloquio);
 

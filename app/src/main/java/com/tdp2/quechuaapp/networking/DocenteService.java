@@ -338,4 +338,35 @@ public class DocenteService {
                 client.onResponseError(null);
             }        });
     }
+
+    public void getMisFinales(final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.getMisFinales(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<ArrayList<Coloquio>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Coloquio>> call, Response<ArrayList<Coloquio>> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("DOCENTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("DOCENTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("DOCENTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("DOCENTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Coloquio>> call, Throwable t) {
+                Log.e("DOCENTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
 }
