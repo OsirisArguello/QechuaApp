@@ -10,6 +10,7 @@ import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.PeriodoActividad;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -364,6 +365,37 @@ public class DocenteService {
 
             @Override
             public void onFailure(Call<ArrayList<Coloquio>> call, Throwable t) {
+                Log.e("DOCENTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
+
+    public void getProfData(final Client client) {
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        docenteApi.getProfData(AUTHORIZATION_PREFIX+apiToken).enqueue(new Callback<Profesor>() {
+            @Override
+            public void onResponse(Call<Profesor> call, Response<Profesor> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("DOCENTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("DOCENTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("DOCENTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("DOCENTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profesor> call, Throwable t) {
                 Log.e("DOCENTESERVICE", t.getMessage());
                 client.onResponseError(null);
             }

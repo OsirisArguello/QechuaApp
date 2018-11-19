@@ -25,7 +25,9 @@ import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
+import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 import com.tdp2.quechuaapp.student.InscripcionColoquioActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
 
@@ -69,17 +71,19 @@ public class FinalesAdapter extends BaseExpandableListAdapter {
 
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("¿Desea desinscribirse a esta fecha de final?");
+                builder.setMessage("¿Desea eliminar esta fecha de final?");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Aceptar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                EstudianteService estudianteService = new EstudianteService();
-                                estudianteService.desinscribirFinal(coloquioIdInt, new Client() {
+                                DocenteService docenteService = new DocenteService();
+                                ColoquioRequest coloquioRequest = new ColoquioRequest();
+                                coloquioRequest.id=coloquioIdInt;
+                                docenteService.eliminarColoquio(coloquioRequest, new Client() {
                                     @Override
                                     public void onResponseSuccess(Object responseBody) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                        builder.setMessage("Ha sido desinscripto al final exitosamente.");
+                                        builder.setMessage("La fecha ha sido eliminada exitosamente.");
                                         builder.setCancelable(false);
                                         builder.setPositiveButton("Ok", null);
                                         AlertDialog alertDialog = builder.create();

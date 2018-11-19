@@ -5,6 +5,7 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public interface DocenteApi {
     @GET("/api/cursos/{cursoId}/coloquios")
     Call<ArrayList<Coloquio>> getColoquios(@Header("Authorization") String apiToken,@Path("cursoId") Integer cursoId);
 
-    @GET("/api/finales")
+    @GET("/api/cursos/coloquios")
     Call<ArrayList<Coloquio>> getMisFinales(@Header("Authorization") String apiToken);
 
     @POST("/api/coloquios")
@@ -47,4 +48,7 @@ public interface DocenteApi {
 
     @GET("/api/periodo-administrativos/periodos")
     Call<ArrayList<PeriodoAdministrativo>> getAccionesPeriodo(@Header("Authorization")String apiToken);
+
+    @GET("/api/profesors/data")
+    Call<Profesor> getProfData(@Header("Authorization")String apiToken);
 }

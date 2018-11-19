@@ -1,5 +1,6 @@
 package com.tdp2.quechuaapp.professor;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
+import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
@@ -41,6 +43,7 @@ public class FinalesActivity extends Activity {
     ExpandableListView expListView;
     DocenteService docenteService;
     ArrayList<Coloquio> misFinales;
+    Profesor elProf;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
@@ -62,8 +65,7 @@ public class FinalesActivity extends Activity {
                 ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_mis_finales_doc);
                 loadingView.setVisibility(View.INVISIBLE);
                 if (misFinales != null) {
-                    displayMaterias();
-                    crearVista();
+                    getProfId();
                 }
             }
 
@@ -122,33 +124,39 @@ public class FinalesActivity extends Activity {
     public void displayMaterias(){
 
         groupList = new ArrayList<String>();
-        Map<Integer, ArrayList<InscripcionColoquio>> map = new HashMap<Integer, ArrayList<InscripcionColoquio>>();
+        Map<Integer, ArrayList<Coloquio>> map = new HashMap<Integer, ArrayList<Coloquio>>();
         Map<Integer, ArrayList<String>> materias = new HashMap<Integer, ArrayList<String>>();
-        /*
-        for (InscripcionColoquio inscripcionFinal: misFinales) {
-            ArrayList<InscripcionColoquio> unArray = map.get(inscripcionFinal.coloquio.curso.materia.id);
-            if (unArray != null) {
-                unArray.add(inscripcionFinal);
-            } else {
-                ArrayList<InscripcionColoquio> nuevoArray = new ArrayList<InscripcionColoquio>();
-                nuevoArray.add(inscripcionFinal);
-                map.put(inscripcionFinal.coloquio.curso.materia.id, nuevoArray);
-                ArrayList<String> infoMateria = new ArrayList<String>();
-                infoMateria.add(inscripcionFinal.coloquio.curso.materia.codigo);
-                infoMateria.add(inscripcionFinal.coloquio.curso.materia.nombre);
-                infoMateria.add(inscripcionFinal.coloquio.curso.id.toString());
-                materias.put(inscripcionFinal.coloquio.curso.materia.id, infoMateria);
+        Log.i("FINALES", "display");
+
+        for (Coloquio mifinal: misFinales) {
+            Integer profId = elProf.id;
+            Log.i("FINALES", "bbbbbbb");
+
+            if (mifinal.curso.profesor.id == profId) {
+                Log.i("FINALES", "ccccccc");
+                ArrayList<Coloquio> unArray = map.get(mifinal.curso.materia.id);
+                if (unArray != null) {
+                    unArray.add(mifinal);
+                } else {
+                    ArrayList<Coloquio> nuevoArray = new ArrayList<Coloquio>();
+                    nuevoArray.add(mifinal);
+                    map.put(mifinal.curso.materia.id, nuevoArray);
+                    ArrayList<String> infoMateria = new ArrayList<String>();
+                    infoMateria.add(mifinal.curso.materia.codigo);
+                    infoMateria.add(mifinal.curso.materia.nombre);
+                    infoMateria.add(mifinal.curso.id.toString());
+                    materias.put(mifinal.curso.materia.id, infoMateria);
+                }
             }
         }
-        */
         finalesCollection = new LinkedHashMap<String, List<String>>();
         for (Integer materiaId: map.keySet()) {
             String materiaCompleta = "Materia: " + materias.get(materiaId).get(0) + " - " + materias.get(materiaId).get(1) + '\n' + "Curso: " + materias.get(materiaId).get(2);
             groupList.add(materiaCompleta);
             String[] finales = new String[map.get(materiaId).size()];
             Integer i = 0;
-            for (InscripcionColoquio inscripcionColoquio : map.get(materiaId)) {
-                finales[i] = inscripcionColoquio.coloquio.id.toString()+"-"+sdf.format(inscripcionColoquio.coloquio.fecha)+" "+inscripcionColoquio.coloquio.horaInicio+'\n'+"Aula: "+inscripcionColoquio.coloquio.aula;
+            for (Coloquio micoloquio : map.get(materiaId)) {
+                finales[i] = micoloquio.id.toString()+"-"+sdf.format(micoloquio.fecha)+" "+micoloquio.horaInicio+'\n'+"Aula: "+micoloquio.aula;
                 i++;
             }
             loadChild(finales);
@@ -180,6 +188,55 @@ public class FinalesActivity extends Activity {
         final float scale = getResources().getDisplayMetrics().density;
         // Convert the dps to pixels, based on density scale
         return (int) (pixels * scale + 0.5f);
+    }
+
+    public void getProfId() {
+        Log.i("FINALES", "profid");
+
+        docenteService.getProfData(new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                Log.i("FINALES", "asasasas");
+
+                elProf = (Profesor) responseBody;
+                ProgressBar loadingView = (ProgressBar) findViewById(R.id.loading_mis_finales_doc);
+                loadingView.setVisibility(View.INVISIBLE);
+                if (elProf != null) {
+                    displayMaterias();
+                    crearVista();
+                }
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                Log.i("FINALES", "acasdsdsdsddssdsdddsaaa");
+
+                Log.i("FINALES", "RESPONSER ERROR");
+                ProgressBar loadingView = findViewById(R.id.loading_mis_finales_doc);
+                loadingView.setVisibility(View.INVISIBLE);
+                Toast.makeText(FinalesActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                        Toast.LENGTH_LONG).show();
+
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                            Intent mainActivityIntent = new Intent(FinalesActivity.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public Context getContext() {
+                return FinalesActivity.this;
+            }
+        });
     }
 
 }

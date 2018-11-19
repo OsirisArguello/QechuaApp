@@ -17,5 +17,8 @@ public class Profesor implements Serializable{
     @SerializedName("apellido")
     @Expose
     public String apellido;
+    @SerializedName("userId")
+    @Expose
+    public Integer userId;
 
 }
