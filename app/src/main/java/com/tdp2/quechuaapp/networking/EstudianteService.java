@@ -558,7 +558,6 @@ public class EstudianteService {
     public void getPrioridad(final Client client){
         String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
         estudianteApi.getPrioridad(AUTHORIZATION_PREFIX +apiToken).enqueue(new Callback<ArrayList<Prioridad>>() {
-
             @Override
             public void onResponse(Call<ArrayList<Prioridad>> call, Response<ArrayList<Prioridad>> response) {
                 if (response.code() > 199 && response.code() < 300) {

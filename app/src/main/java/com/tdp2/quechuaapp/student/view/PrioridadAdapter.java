@@ -47,7 +47,7 @@ public class PrioridadAdapter extends ArrayAdapter<Prioridad> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         numero_prioridad.setText("N° Prioridad: " + prioridad.numero.toString());
-        fecha_hora.setText("Fecha/Hora: "+ sdf.format(prioridad.fecha) + " " + prioridad.hora);
+        fecha_hora.setText("Fecha/Hora: "+ prioridad.fecha + " " + prioridad.hora);
 
         return convertView;
     }
