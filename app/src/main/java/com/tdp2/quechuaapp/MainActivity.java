@@ -265,4 +265,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void verMisDatos(View v){
+        Intent misDatosIntent = new Intent(MainActivity.this, MisDatosActivity.class);
+
+        startActivity(misDatosIntent);
+    }
+
 }
