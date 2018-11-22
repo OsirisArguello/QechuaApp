@@ -69,4 +69,5 @@
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancelar</string>
     <string name="title_activity_mis_incripciones">MisIncripcionesActivity</string>
+    <string name="title_activity_notification_view">Notificación</string>
 </resources>
