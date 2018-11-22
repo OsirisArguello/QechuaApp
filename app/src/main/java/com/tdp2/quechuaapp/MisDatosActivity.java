@@ -12,14 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.LoginService;
+import com.tdp2.quechuaapp.professor.InscripcionColoquioActivity;
+import com.tdp2.quechuaapp.professor.NuevoColoquioActivity;
+import com.tdp2.quechuaapp.utils.view.DialogBuilder;
 
 public class MisDatosActivity extends AppCompatActivity {
 
     private UserSessionManager userSessionManager;
     private UserLogged userLogged;
+    private LoginService loginService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,7 +35,7 @@ public class MisDatosActivity extends AppCompatActivity {
         userSessionManager = new UserSessionManager(this);
         userLogged=userSessionManager.getUserLogged();
 
-
+        loginService=new LoginService();
         setupUI();
         attachEvents();
     }
@@ -71,7 +78,56 @@ public class MisDatosActivity extends AppCompatActivity {
         loadingView.bringToFront();
         loadingView.setVisibility(View.VISIBLE);
 
+        EditText nombreUsuarioEdit=findViewById(R.id.nombreUsuarioEdit);
+        EditText apellidoUsuarioEdit=findViewById(R.id.apellidoUsuarioEdit);
+
+        this.userLogged.firstName=nombreUsuarioEdit.getText().toString();
+        this.userLogged.lastName=apellidoUsuarioEdit.getText().toString();
+
         //Invocar servicio
+        loginService.updateUserLogged(this.userLogged, new Client() {
+            @Override
+            public void onResponseSuccess(Object responseBody) {
+                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                DialogBuilder.showAlert("Sus datos han sido actualizado correctamente", "Fecha de Final Asignada", MisDatosActivity.this, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponseError(String errorMessage) {
+                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                loadingView.setVisibility(View.INVISIBLE);
+
+                Toast.makeText(MisDatosActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
+                        Toast.LENGTH_LONG).show();
+
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                    try {
+                        Thread.sleep(Toast.LENGTH_LONG); // As I am using LENGTH_LONG in Toast
+                        Intent mainActivityIntent = new Intent(MisDatosActivity.this, MainActivity.class);
+                        startActivity(mainActivityIntent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    }
+                };
+                thread.start();
+            }
+
+            @Override
+            public Context getContext() {
+                return MisDatosActivity.this;
+            }
+        });
+
     }
 
     public void showConfirmationAlert(Context context, String title, String messageToDisplay, String positiveMessage, String negativeMessage, DialogInterface.OnClickListener positiveListener){
