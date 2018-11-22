@@ -57,7 +57,8 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentTitle(remoteMessage.getNotification().getTitle())
                         .setContentText(remoteMessage.getNotification().getBody())
                         .setSmallIcon(R.drawable.logofiuba)
-                        .setContentIntent(notifyPendingIntent);
+                        .setContentIntent(notifyPendingIntent)
+                        .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
