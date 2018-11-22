@@ -7,18 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Prioridad implements Serializable {
-    @SerializedName("numero")
-    @Expose
-    public Integer numero;
     @SerializedName("id")
     @Expose
     public Integer id;
-    @SerializedName("fecha")
-    @Expose
-    public String fecha;
-    @SerializedName("hora")
-    @Expose
-    public String hora;
     @SerializedName("periodo")
     @Expose
     public Periodo periodo;
