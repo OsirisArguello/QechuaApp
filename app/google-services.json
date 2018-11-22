@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "497826304944",
+    "firebase_url": "https://quechuaapp-ac3ed.firebaseio.com",
+    "project_id": "quechuaapp-ac3ed",
+    "storage_bucket": "quechuaapp-ac3ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497826304944:android:eae1d8d02493dec8",
+        "android_client_info": {
+          "package_name": "com.tdp2.quechuaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497826304944-qccsat3t6asljie7ptapa2ufc5aifr20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrQecesVz7mTNMmIkm72t3S2XMq6UXORg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
