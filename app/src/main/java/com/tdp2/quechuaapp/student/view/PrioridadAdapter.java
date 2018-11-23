@@ -48,10 +48,10 @@ public class PrioridadAdapter extends ArrayAdapter<Prioridad> {
 
         numero_prioridad.setText("N° Prioridad: " + prioridad.id.toString());
         String fecha = prioridad.fecha_habilitacion;
-        String año = fecha.substring(0,3);
-        String mes = fecha.substring(5,6);
-        String dia = fecha.substring(8,9);
-        String hora = fecha.substring(11,15);
+        String año = fecha.substring(0,4);
+        String mes = fecha.substring(5,7);
+        String dia = fecha.substring(8,10);
+        String hora = fecha.substring(11,16);
         fecha_hora.setText("Fecha/Hora: "+ dia + "/" + mes + "/" + año + " " + hora);
 
         return convertView;
