@@ -37,35 +37,4 @@ public class LoginService {
     public Call<UserLogged> getUserLogged(String accessToken) {
         return loginApi.getUserLogged(accessToken);
     }
-
-    public void updateUserLogged(UserLogged userLogged, final Client client){
-
-        loginApi.updateUserData(userLogged).enqueue(new Callback<UserLogged>() {
-            @Override
-            public void onResponse(Call<UserLogged> call, Response<UserLogged> response) {
-                if (response.code() > 199 && response.code() < 300) {
-                    if (response.body() != null) {
-                        Log.i(SERVICE_TAG, response.body().toString());
-                        client.onResponseSuccess(response.body());
-                    } else {
-                        Log.i(SERVICE_TAG, "NO RESPONSE");
-                        client.onResponseError(null);
-                    }
-                } else {
-                    if(response.body() != null) {
-                        Log.e(SERVICE_TAG, response.body().toString());
-                    }else {
-                        Log.e(SERVICE_TAG, "NO RESPONSE");
-                    }
-                    client.onResponseError(null);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserLogged> call, Throwable t) {
-                Log.e(SERVICE_TAG, t.getMessage());
-                client.onResponseError(null);
-            }
-        });
-    }
 }

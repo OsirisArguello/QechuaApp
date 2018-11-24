@@ -18,7 +18,4 @@ public interface LoginApi {
     @GET("/api/account")
     Call<UserLogged> getUserLogged(@Header("Authorization")String apiToken);
 
-    @GET("/api/users")
-    Call<UserLogged> updateUserData(@Body UserLogged userLogged);
-
 }

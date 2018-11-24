@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -16,7 +19,9 @@ import android.widget.Toast;
 
 import com.tdp2.quechuaapp.login.model.UserLogged;
 import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.model.Alumno;
 import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.networking.LoginService;
 import com.tdp2.quechuaapp.professor.InscripcionColoquioActivity;
 import com.tdp2.quechuaapp.professor.NuevoColoquioActivity;
@@ -26,7 +31,10 @@ public class MisDatosActivity extends AppCompatActivity {
 
     private UserSessionManager userSessionManager;
     private UserLogged userLogged;
-    private LoginService loginService;
+    private Alumno alumno;
+    private EstudianteService estudianteService;
+    private EditText nombreUsuarioEdit;
+    private EditText apellidoUsuarioEdit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,8 +42,9 @@ public class MisDatosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mis_datos);
         userSessionManager = new UserSessionManager(this);
         userLogged=userSessionManager.getUserLogged();
+        alumno = (Alumno) getIntent().getSerializableExtra("alumno");
 
-        loginService=new LoginService();
+        estudianteService=new EstudianteService();
         setupUI();
         attachEvents();
     }
@@ -45,18 +54,38 @@ public class MisDatosActivity extends AppCompatActivity {
         actualizarDatosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mostrarMensajeConfirmacion();
+                if(validarIngresos()){
+                    mostrarMensajeConfirmacion();
+                } else {
+                    return;
+                }
             }
         });
     }
 
+    private boolean validarIngresos() {
+        if (TextUtils.isEmpty(nombreUsuarioEdit.getText())) {
+            nombreUsuarioEdit.setError("Complete el nombre");
+            nombreUsuarioEdit.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(apellidoUsuarioEdit.getText())) {
+            apellidoUsuarioEdit.setError("Complete el apellido");
+            apellidoUsuarioEdit.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     private void setupUI() {
-        EditText nombreUsuarioEdit=findViewById(R.id.nombreUsuarioEdit);
-        EditText apellidoUsuarioEdit=findViewById(R.id.apellidoUsuarioEdit);
+        nombreUsuarioEdit=findViewById(R.id.nombreUsuarioEdit);
+        apellidoUsuarioEdit=findViewById(R.id.apellidoUsuarioEdit);
         TextView mailUsuarioEdit=findViewById(R.id.mailUsuarioEdit);
 
         nombreUsuarioEdit.setHint(userLogged.firstName);
         apellidoUsuarioEdit.setHint(userLogged.lastName);
+
         mailUsuarioEdit.setText(userLogged.email);
 
     }
@@ -65,12 +94,12 @@ public class MisDatosActivity extends AppCompatActivity {
 
         String messageToDisplay="¿Está seguro que desea actualizar sus datos?";
         showConfirmationAlert(MisDatosActivity.this, "Confirmación de Actualización de Datos", messageToDisplay, "Aceptar","Cancelar",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        modificarDatos();
-                    }
-                });
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    modificarDatos();
+                }
+            });
     }
 
     private void modificarDatos() {
@@ -81,27 +110,32 @@ public class MisDatosActivity extends AppCompatActivity {
         EditText nombreUsuarioEdit=findViewById(R.id.nombreUsuarioEdit);
         EditText apellidoUsuarioEdit=findViewById(R.id.apellidoUsuarioEdit);
 
-        this.userLogged.firstName=nombreUsuarioEdit.getText().toString();
-        this.userLogged.lastName=apellidoUsuarioEdit.getText().toString();
+        alumno.nombre=nombreUsuarioEdit.getText().toString();
+        alumno.apellido=apellidoUsuarioEdit.getText().toString();
 
         //Invocar servicio
-        loginService.updateUserLogged(this.userLogged, new Client() {
+        estudianteService.updateAlumno(alumno, new Client() {
             @Override
             public void onResponseSuccess(Object responseBody) {
-                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                ProgressBar loadingView = findViewById(R.id.loading_mis_datos);
                 loadingView.setVisibility(View.INVISIBLE);
 
-                DialogBuilder.showAlert("Sus datos han sido actualizado correctamente", "Fecha de Final Asignada", MisDatosActivity.this, new DialogInterface.OnClickListener() {
+                userLogged.firstName=alumno.nombre;
+                userLogged.lastName=alumno.apellido;
+
+                userSessionManager.saveUserLogged(userLogged,userSessionManager.getAuthorizationToken());
+
+                DialogBuilder.showAlert("Sus datos han sido actualizado correctamente", "Actualización de Datos", MisDatosActivity.this, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //finish();
+                        finish();
                     }
                 });
             }
 
             @Override
             public void onResponseError(String errorMessage) {
-                ProgressBar loadingView = findViewById(R.id.loading_profesor_cursos_finales);
+                ProgressBar loadingView = findViewById(R.id.loading_mis_datos);
                 loadingView.setVisibility(View.INVISIBLE);
 
                 Toast.makeText(MisDatosActivity.this, "No fue posible conectarse al servidor, por favor reintente más tarde",
@@ -138,28 +172,25 @@ public class MisDatosActivity extends AppCompatActivity {
 
 
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, negativeMessage,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
         alertDialog.show();
     }
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        String messageToDisplay="¿Desea descartar los cambios?";
-        showConfirmationAlert(MisDatosActivity.this, "Confirmación de Actualización de Datos", messageToDisplay, "Continuar","Cancelar",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        String messageToDisplay="¿Desea descartar los cambios realizados?";
+        showConfirmationAlert(MisDatosActivity.this, "Confirmación de Actualización de Datos", messageToDisplay, "Descartar Cambios","Cancelar",
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-                        //Intent mainIntent = new Intent(MisDatosActivity.this,MainActivity.class);
-                        //startActivity(mainIntent);
-                        goBack();
-                    }
-                });
+                    goBack();
+                }
+            });
     }
 
     public void goBack(){

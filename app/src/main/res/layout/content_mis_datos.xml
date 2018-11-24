@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MisDatosActivity"
-    tools:showIn="@layout/activity_mis_datos">
+    tools:showIn="@layout/activity_mis_datos"
+    >
 
     <TextView
         android:id="@+id/nombreUsuarioText"
@@ -28,7 +29,7 @@
         android:layout_marginEnd="52dp"
         android:layout_marginRight="52dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:singleLine="true"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +55,7 @@
         android:layout_marginEnd="52dp"
         android:layout_marginRight="52dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:singleLine="true"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

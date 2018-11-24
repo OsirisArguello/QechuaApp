@@ -13,9 +13,11 @@ import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -68,4 +70,7 @@ public interface EstudianteApi {
 
     @GET("/api/inscripcion-cursos/byAlumno")
     Call<ArrayList<Inscripcion>> getInscripcionesActivas(@Header("Authorization")String apiToken);
+
+    @PUT("/api/alumnos")
+    Call<Alumno> updateAlumno(@Header("Authorization")String apiToken, @Body Alumno alumno);
 }
