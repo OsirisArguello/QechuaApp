@@ -40,7 +40,10 @@
                     android:layout_marginStart="11dp"
                     android:text="Juan Perez"
                     android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="11dp"
+                    android:onClick="verMisDatos"/>
 
                 <TextView
                     android:id="@+id/user_logged_email"
@@ -49,7 +52,9 @@
                     android:layout_alignStart="@+id/user_logged"
                     android:layout_below="@+id/user_logged"
                     android:text="juan.perez@gmail.com"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:layout_alignLeft="@+id/user_logged"
+                    android:onClick="verMisDatos"/>
 
                 <ImageView
                     android:id="@+id/logout"
@@ -58,7 +63,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="13dp"
-                    app:srcCompat="@drawable/logout" />
+                    app:srcCompat="@drawable/logout"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="13dp" />
 
                 <ImageView
                     android:id="@+id/cambiar_perfil"
@@ -67,7 +74,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="56dp"
-                    app:srcCompat="@drawable/cambiar_perfil" />
+                    app:srcCompat="@drawable/cambiar_perfil"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="56dp" />
 
             </RelativeLayout>
 

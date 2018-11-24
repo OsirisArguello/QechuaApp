@@ -553,4 +553,50 @@ public class EstudianteService {
             }
         });
     }
+
+    public void updateAlumno(Alumno alumno, final Client client ){
+        String apiToken=new UserSessionManager(client.getContext()).getAuthorizationToken();
+        estudianteApi.updateAlumno(AUTHORIZATION_PREFIX+apiToken,alumno).enqueue(new Callback<Alumno>() {
+            @Override
+            public void onResponse(Call<Alumno> call, Response<Alumno> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", response.body().toString());
+                        client.onResponseSuccess(response.body());
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError(null);
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    if (response.code() == 400) {
+                        Converter<ResponseBody, ApiError> converter =
+                                ApiClient.getInstance().getRetrofit().responseBodyConverter(ApiError.class, new Annotation[0]);
+
+                        ApiError error;
+
+                        try {
+                            error = converter.convert(response.errorBody());
+                            Log.e("error message", error.message);
+                            client.onResponseError(error.message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        client.onResponseError(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Alumno> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(null);
+            }
+        });
+    }
 }

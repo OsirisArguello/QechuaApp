@@ -161,4 +161,9 @@ public class MockEstudianteApi implements EstudianteApi {
     public Call<ArrayList<Inscripcion>> getInscripcionesActivas(String apiToken) {
         return null;
     }
+
+    @Override
+    public Call<Alumno> updateAlumno(String apiToken, Alumno alumno) {
+        return null;
+    }
 }

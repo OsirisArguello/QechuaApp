@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 2;
     private UserSessionManager userSessionManager;
     private UserLogged userLogged;
     private EstudianteService estudianteService;
@@ -263,6 +264,24 @@ public class MainActivity extends AppCompatActivity {
         } else {
             docenteService.getAccionesPeriodo(client);
         }
+    }
+
+    public void verMisDatos(View v){
+
+        if (userLogged.perfilActual.equals(PerfilActual.ALUMNO)) {
+            Intent misDatosIntent = new Intent(MainActivity.this, MisDatosActivity.class);
+            misDatosIntent.putExtra("alumno",alumno);
+
+            startActivityForResult(misDatosIntent, REQUEST_CODE);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        userLogged=userSessionManager.getUserLogged();
+        setupUI();
     }
 
 }

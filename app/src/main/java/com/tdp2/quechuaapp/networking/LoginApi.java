@@ -17,4 +17,5 @@ public interface LoginApi {
 
     @GET("/api/account")
     Call<UserLogged> getUserLogged(@Header("Authorization")String apiToken);
+
 }
