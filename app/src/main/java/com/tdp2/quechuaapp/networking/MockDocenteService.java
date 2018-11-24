@@ -5,6 +5,7 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
+import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
 
 import java.util.ArrayList;
@@ -62,6 +63,16 @@ public class MockDocenteService implements DocenteApi {
 
     @Override
     public Call<Void> eliminarColoquio(String apiToken, Integer coloquioId) {
+        return null;
+    }
+
+    @Override
+    public Call<Profesor> getProfData(String apiToken) {
+        return null;
+    }
+
+    @Override
+    public Call<ArrayList<Coloquio>> getMisFinales(String apiToken) {
         return null;
     }
 

@@ -29,6 +29,7 @@ import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
+import com.tdp2.quechuaapp.professor.FinalesActivity;
 import com.tdp2.quechuaapp.professor.MostrarCursosDocenteActivity;
 import com.tdp2.quechuaapp.student.CursadasActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
@@ -195,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
             misfinales.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(MainActivity.this, "En Construccion",
-                            Toast.LENGTH_LONG).show();
+                    Intent finalesIntent = new Intent(MainActivity.this, FinalesActivity.class);
+
+                    startActivity(finalesIntent);
                 }
             });
             LinearLayout historiaacademica = findViewById(R.id.historiaacademica_action);
