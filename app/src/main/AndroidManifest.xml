@@ -75,6 +75,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".student.PrioridadActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".professor.NuevoColoquioActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -89,7 +94,8 @@
             android:name=".MisDatosActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+	        android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
