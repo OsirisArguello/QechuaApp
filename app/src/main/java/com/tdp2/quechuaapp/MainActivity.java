@@ -3,8 +3,10 @@ package com.tdp2.quechuaapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.tdp2.quechuaapp.login.LoginActivity;
 import com.tdp2.quechuaapp.login.SeleccionarPerfilActivity;
 import com.tdp2.quechuaapp.login.model.UserLogged;
@@ -97,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupActions() {
 
-
-
         final LinearLayout miscursos = findViewById(R.id.miscursos_action);
         LinearLayout misfinales = findViewById(R.id.misfinales_action);
 
@@ -117,6 +121,34 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponseSuccess(Object responseBody) {
                     alumno=(Alumno) responseBody;
+
+                    // Actualizo el token de Firebase para recibir notificaciones
+                    Task<InstanceIdResult> task = FirebaseInstanceId.getInstance().getInstanceId();
+                    task.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            String token = task.getResult().getToken();
+                            Log.d("Firebase", "getToken: " + token);
+
+                            alumno.firebaseToken = token;
+                            estudianteService.updateAlumno(alumno, new Client() {
+                                @Override
+                                public void onResponseSuccess(Object responseBody) {
+                                    Log.i("Firebase", "Firebase token actualizado correctamente");
+                                }
+
+                                @Override
+                                public void onResponseError(String errorMessage) {
+                                    Log.e("Firebase", errorMessage);
+                                }
+
+                                @Override
+                                public Context getContext() {
+                                    return MainActivity.this;
+                                }
+                            });
+                        }
+                    });
                 }
 
                 @Override

@@ -26,5 +26,8 @@ public class Alumno implements Serializable {
     @SerializedName("userId")
     @Expose
     public Integer userId;
+    @SerializedName("firebaseToken")
+    @Expose
+    public String firebaseToken;
 
 }
