@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
 import com.tdp2.quechuaapp.model.Coloquio;
@@ -28,6 +30,7 @@ import com.tdp2.quechuaapp.networking.Client;
 import com.tdp2.quechuaapp.networking.DocenteService;
 import com.tdp2.quechuaapp.networking.EstudianteService;
 import com.tdp2.quechuaapp.networking.model.ColoquioRequest;
+import com.tdp2.quechuaapp.professor.FinalesActivity;
 import com.tdp2.quechuaapp.student.InscripcionColoquioActivity;
 import com.tdp2.quechuaapp.student.MisFinalesActivity;
 
@@ -88,10 +91,20 @@ public class FinalesAdapter extends BaseExpandableListAdapter {
                                         builder.setPositiveButton("Ok", null);
                                         AlertDialog alertDialog = builder.create();
                                         alertDialog.show();
+                                        List<String> child =
+                                                finalesCollections.get(finales.get(groupPosition));
+                                        child.remove(childPosition);
+                                        notifyDataSetChanged();
                                     }
 
                                     @Override
                                     public void onResponseError(String errorMessage) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                        builder.setMessage("No fue posible conectarse al servidor, por favor reintente más tarde.");
+                                        builder.setCancelable(false);
+                                        builder.setPositiveButton("Ok", null);
+                                        AlertDialog alertDialog = builder.create();
+                                        alertDialog.show();
                                     }
 
 
@@ -101,10 +114,7 @@ public class FinalesAdapter extends BaseExpandableListAdapter {
                                     }
                                 });
 
-                                List<String> child =
-                                        finalesCollections.get(finales.get(groupPosition));
-                                child.remove(childPosition);
-                                notifyDataSetChanged();
+
                             }
                         });
                 builder.setNegativeButton("Cancelar",
