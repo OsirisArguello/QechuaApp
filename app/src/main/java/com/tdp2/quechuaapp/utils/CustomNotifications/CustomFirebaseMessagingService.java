@@ -9,9 +9,16 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.tdp2.quechuaapp.MainActivity;
 import com.tdp2.quechuaapp.R;
+import com.tdp2.quechuaapp.login.model.UserLogged;
+import com.tdp2.quechuaapp.login.model.UserSessionManager;
+import com.tdp2.quechuaapp.model.Alumno;
+import com.tdp2.quechuaapp.networking.Client;
+import com.tdp2.quechuaapp.networking.EstudianteService;
 
 public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -83,10 +90,28 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-//        sendRegistrationToServer(token);
+        // Actualizar el token de Firebase para recibir notificaciones si hay alumno loggeado
+        UserSessionManager userSessionManager = new UserSessionManager(this);
+        UserLogged userLogged=userSessionManager.getUserLogged();
+        if (userLogged != null && userLogged.perfilActual.equals(UserLogged.PerfilActual.ALUMNO)) {
+            EstudianteService estudianteService = new EstudianteService();
+            estudianteService.updateFirebaseToken(token, new Client() {
+                @Override
+                public void onResponseSuccess(Object responseBody) {
+                    Log.i("Firebase", "Firebase token actualizado correctamente");
+                }
+
+                @Override
+                public void onResponseError(String errorMessage) {
+                    Log.e("Firebase", errorMessage);
+                }
+
+                @Override
+                public Context getContext() {
+                    return CustomFirebaseMessagingService.this;
+                }
+            });
+        }
     }
 
 }

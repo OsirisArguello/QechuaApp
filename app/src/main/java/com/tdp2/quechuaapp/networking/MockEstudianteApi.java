@@ -11,7 +11,10 @@ import com.tdp2.quechuaapp.model.Materia;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.model.Prioridad;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.mock.BehaviorDelegate;
@@ -170,6 +173,11 @@ public class MockEstudianteApi implements EstudianteApi {
 
     @Override
     public Call<ArrayList<Prioridad>> getPrioridad(String apiToken) {
+        return null;
+    }
+
+    @Override
+    public Call<Void> updateFirebaseToken(String apiToken, Map<String,String> token) {
         return null;
     }
 }

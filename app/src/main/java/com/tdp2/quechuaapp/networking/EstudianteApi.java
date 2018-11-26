@@ -12,6 +12,7 @@ import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.model.Prioridad;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -78,4 +79,6 @@ public interface EstudianteApi {
     @GET("/api/alumnos/prioridad")
     Call<ArrayList<Prioridad>> getPrioridad(@Header("Authorization") String apiToken);
 
+    @POST("/api/alumnos/setFirebaseToken")
+    Call<Void> updateFirebaseToken(@Header("Authorization")String apiToken, @Body Map<String,String> token);
 }

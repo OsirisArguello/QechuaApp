@@ -10,18 +10,15 @@ import com.tdp2.quechuaapp.model.Curso;
 import com.tdp2.quechuaapp.model.Coloquio;
 import com.tdp2.quechuaapp.model.Inscripcion;
 import com.tdp2.quechuaapp.model.InscripcionColoquio;
-import com.tdp2.quechuaapp.model.Horario;
-import com.tdp2.quechuaapp.model.Periodo;
-import com.tdp2.quechuaapp.model.PeriodoActividad;
 import com.tdp2.quechuaapp.model.PeriodoAdministrativo;
 import com.tdp2.quechuaapp.model.Prioridad;
-import com.tdp2.quechuaapp.model.Profesor;
 import com.tdp2.quechuaapp.model.Materia;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -633,7 +630,39 @@ public class EstudianteService {
         });
     }
 
+    public void updateFirebaseToken(String newToken, final Client client) {
+        String apiToken= new UserSessionManager(client.getContext()).getAuthorizationToken();
+        Map<String,String> tokenObject = new HashMap<>();
+        tokenObject.put("token",newToken);
 
+        estudianteApi.updateFirebaseToken(AUTHORIZATION_PREFIX + apiToken, tokenObject).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() > 199 && response.code() < 300) {
+                    if(response.body() != null) {
+                        Log.i("ESTUDIANTESERVICE", "Firebase Token actualizado");
+                        client.onResponseSuccess("Firebase Token actualizado");
+                    }else {
+                        Log.i("ESTUDIANTESERVICE", "NO RESPONSE");
+                        client.onResponseError("NO RESPONSE");
+                    }
+                } else {
+                    if(response.body() != null) {
+                        Log.e("ESTUDIANTESERVICE", response.body().toString());
+                    }else {
+                        Log.e("ESTUDIANTESERVICE", "NO RESPONSE");
+                    }
+                    client.onResponseError("NO RESPONSE");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("ESTUDIANTESERVICE", t.getMessage());
+                client.onResponseError(t.getMessage());
+            }
+        });
+    }
 
 
 }

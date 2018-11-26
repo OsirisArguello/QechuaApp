@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Firebase", "getToken: " + token);
 
                             alumno.firebaseToken = token;
-                            estudianteService.updateAlumno(alumno, new Client() {
+                            estudianteService.updateFirebaseToken(token, new Client() {
                                 @Override
                                 public void onResponseSuccess(Object responseBody) {
                                     Log.i("Firebase", "Firebase token actualizado correctamente");
